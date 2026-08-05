@@ -26,7 +26,7 @@ export const POST = defineRoute(
     if (error) throw error
 
     const result = (Array.isArray(data) ? data[0] : data) as ConfirmCompletionResult
-    void track(ANALYTICS_EVENTS.JOB_COMPLETED, { userId: user!.id })
+    await track(ANALYTICS_EVENTS.JOB_COMPLETED, { userId: user!.id })
     return ok(result)
   },
 )

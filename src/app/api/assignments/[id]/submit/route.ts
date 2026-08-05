@@ -28,7 +28,7 @@ export const POST = defineRoute(
     })
 
     if (error) throw error
-    void track(ANALYTICS_EVENTS.JOB_SUBMITTED, { userId: user!.id })
+    await track(ANALYTICS_EVENTS.JOB_SUBMITTED, { userId: user!.id })
     return ok(Array.isArray(data) ? data[0] : data)
   },
 )

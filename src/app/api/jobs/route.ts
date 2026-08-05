@@ -50,9 +50,9 @@ export const GET = defineRoute(
     const total = rows[0]?.total_count ?? 0
 
     // Record the search so the suggestion engine and the admin funnel have
-    // something real to work with. Fire-and-forget.
+    // something real to work with.
     if (query.q) {
-      void track(ANALYTICS_EVENTS.SEARCH_PERFORMED, {
+      await track(ANALYTICS_EVENTS.SEARCH_PERFORMED, {
         userId: user?.id,
         properties: {
           result_count: rows.length,
@@ -174,7 +174,7 @@ export const POST = defineRoute(
       )
     }
 
-    void track(ANALYTICS_EVENTS.JOB_CREATED, {
+    await track(ANALYTICS_EVENTS.JOB_CREATED, {
       userId: user!.id,
       properties: {
         budget_bucket: budgetBucket(body.budgetMinMinor),
