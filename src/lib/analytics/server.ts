@@ -1,6 +1,6 @@
 import 'server-only'
 
-import { publicEnv } from '@/lib/config/env'
+import { PostHog } from 'posthog-node'
 import { createAdminClient } from '@/lib/supabase/admin'
 import {
   sanitizeProperties,
@@ -15,8 +15,7 @@ export type { AnalyticsEvent, AnalyticsProperties } from './events'
 /**
  * Server-side event tracking.
  *
- * Never throws and never blocks the caller's critical path — an analytics
- * failure must not roll back a job posting or a payment.
+ * Never throws, so an analytics failure cannot roll back a job posting or payment.
  */
 export async function track(
   event: AnalyticsEvent,
@@ -49,31 +48,35 @@ export async function track(
     console.warn('[analytics] failed to record event', { event, error })
   }
 
-  // Optional forwarding. Fire-and-forget with a short timeout.
-  if (publicEnv.NEXT_PUBLIC_POSTHOG_KEY) {
-    void forwardToPostHog(event, options.userId ?? options.anonymousId ?? 'anonymous', properties)
+  // PostHog server events require a stable distinct id. Unauthenticated
+  // activity remains personless in the internal analytics table rather than
+  // being forwarded under a fabricated shared identity.
+  const distinctId = options.userId ?? options.anonymousId
+  const projectToken = process.env.NEXT_PUBLIC_POSTHOG_KEY
+  const host = process.env.NEXT_PUBLIC_POSTHOG_HOST
+  if (projectToken && host && distinctId) {
+    try {
+      const posthog = getPostHogClient(projectToken, host)
+      posthog.capture({
+        distinctId,
+        event,
+        properties: { ...properties, $lib: 'hustle-street-server' },
+      })
+      await posthog.flush()
+    } catch {
+      // Deliberately silent: the internal table already has the event.
+    }
   }
 }
 
-async function forwardToPostHog(
-  event: string,
-  distinctId: string,
-  properties: AnalyticsProperties,
-): Promise<void> {
-  try {
-    await fetch(`${publicEnv.NEXT_PUBLIC_POSTHOG_HOST}/capture/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        api_key: publicEnv.NEXT_PUBLIC_POSTHOG_KEY,
-        event,
-        distinct_id: distinctId,
-        properties: { ...properties, $lib: 'hustle-street-server' },
-        timestamp: new Date().toISOString(),
-      }),
-      signal: AbortSignal.timeout(5_000),
-    })
-  } catch {
-    // Deliberately silent: the internal table already has the event.
-  }
+let posthogClient: PostHog | undefined
+
+function getPostHogClient(projectToken: string, host: string): PostHog {
+  posthogClient ??= new PostHog(projectToken, {
+    host,
+    flushAt: 1,
+    flushInterval: 0,
+    enableExceptionAutocapture: true,
+  })
+  return posthogClient
 }

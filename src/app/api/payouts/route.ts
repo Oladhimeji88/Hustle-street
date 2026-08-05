@@ -38,7 +38,7 @@ export const POST = defineRoute(
 
     const payout = (Array.isArray(data) ? data[0] : data) as Payout
 
-    void track(ANALYTICS_EVENTS.PAYOUT_REQUESTED, {
+    await track(ANALYTICS_EVENTS.PAYOUT_REQUESTED, {
       userId: user!.id,
       properties: { budget_bucket: budgetBucket(body.amountMinor) },
     })

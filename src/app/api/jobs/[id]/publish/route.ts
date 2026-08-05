@@ -27,7 +27,7 @@ export const POST = defineRoute(
 
     const job = Array.isArray(data) ? data[0] : data
 
-    void track(ANALYTICS_EVENTS.JOB_PUBLISHED, {
+    await track(ANALYTICS_EVENTS.JOB_PUBLISHED, {
       userId: user!.id,
       properties: {
         budget_bucket: budgetBucket(job?.budget_min_minor),

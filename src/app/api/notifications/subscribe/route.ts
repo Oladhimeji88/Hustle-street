@@ -35,7 +35,7 @@ export const POST = defineRoute(
       .from('notification_preferences')
       .upsert({ user_id: user!.id, push_enabled: true }, { onConflict: 'user_id' })
 
-    void track(ANALYTICS_EVENTS.PUSH_ENABLED, { userId: user!.id })
+    await track(ANALYTICS_EVENTS.PUSH_ENABLED, { userId: user!.id })
     return ok({ subscribed: true })
   },
 )

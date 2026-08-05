@@ -83,7 +83,7 @@ export const POST = defineRoute(
 
     const application = Array.isArray(data) ? data[0] : data
 
-    void track(ANALYTICS_EVENTS.APPLICATION_SUBMITTED, {
+    await track(ANALYTICS_EVENTS.APPLICATION_SUBMITTED, {
       userId: user!.id,
       properties: { budget_bucket: budgetBucket(body.proposedPriceMinor) },
     })
