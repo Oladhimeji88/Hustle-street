@@ -20,7 +20,9 @@
     "db:seed": "tsx scripts/seed.ts",
     "db:reset": "tsx scripts/migrate.ts --reset && tsx scripts/seed.ts",
     "keys:vapid": "tsx scripts/generate-vapid-keys.ts",
-    "worker:cron": "tsx scripts/run-cron.ts"
+    "worker:cron": "tsx scripts/run-cron.ts",
+    "media": "tsx scripts/generate-media.ts",
+    "icons": "tsx scripts/generate-icons.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

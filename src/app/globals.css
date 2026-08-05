@@ -62,6 +62,10 @@
     --input: 36 12% 86%;
     --ring: 18 100% 56%;
 
+    /* Fixed brand ink. Deliberately NOT theme-dependent: a device bezel and a
+       video letterbox must stay dark even in dark mode. */
+    --ink: 210 24% 6%;
+
     --shadow-color: 210 30% 12%;
 
     --radius: 14px;

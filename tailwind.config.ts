@@ -30,6 +30,7 @@ const config: Config = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
+        ink: 'hsl(var(--ink))',
         foreground: 'hsl(var(--foreground))',
         surface: {
           DEFAULT: 'hsl(var(--surface))',
