@@ -154,23 +154,62 @@ begin
 end;
 $$;
 
+/*
+ * unaccent() wrapper.
+ *
+ * Two problems make the raw function unusable inside an index expression:
+ *
+ *  1. CREATE INDEX parses expressions under a RESTRICTED search_path
+ *     (pg_catalog only), so an unqualified `unaccent(...)` fails with
+ *     "function unaccent(text) does not exist" even though it resolves fine in
+ *     an ordinary query. This is deliberate on PostgreSQL's part — an index
+ *     whose meaning depends on the caller's search_path would silently corrupt.
+ *
+ *  2. unaccent() is declared STABLE, not IMMUTABLE, because it reads a text
+ *     search dictionary.
+ *
+ * Pinning search_path here fixes (1) and additionally makes this function
+ * non-inlinable, so the index stores a call rather than re-parsing the body.
+ * The IMMUTABLE assertion covers (2): it is safe only because we never modify
+ * the `unaccent` dictionary. If that ever changes, every index built on this
+ * function must be REINDEXed.
+ *
+ * The search_path lists both schemas because Supabase installs some extensions
+ * into `extensions` while a vanilla PostgreSQL puts them in `public`.
+ */
+create or replace function app.immutable_unaccent(input text)
+returns text
+language sql
+immutable
+parallel safe
+set search_path = public, extensions, pg_temp
+as $$
+  select unaccent(coalesce(input, ''))
+$$;
+
 -- Normalises free text into a search-friendly form (lowercase, unaccented).
+-- Calls the wrapper schema-qualified so it resolves under any search_path.
 create or replace function app.normalize_text(input text)
 returns text
 language sql
 immutable
 parallel safe
 as $$
-  select lower(trim(regexp_replace(unaccent(coalesce(input, '')), '\s+', ' ', 'g')))
+  select lower(trim(regexp_replace(app.immutable_unaccent(coalesce(input, '')), '\s+', ' ', 'g')))
 $$;
 
 -- Builds a geography point from lat/lng. Immutable so it can back a generated
 -- column and a GIST index.
+--
+-- search_path is pinned for the same reason as app.immutable_unaccent above:
+-- generated-column and index expressions are parsed under a restricted
+-- search_path, so the PostGIS calls would otherwise fail to resolve.
 create or replace function app.point_from_lat_lng(lat double precision, lng double precision)
 returns geography(Point, 4326)
 language sql
 immutable
 parallel safe
+set search_path = public, extensions, pg_temp
 as $$
   select case
     when lat is null or lng is null then null
