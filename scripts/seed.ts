@@ -15,6 +15,7 @@
 
 import { createClient } from '@supabase/supabase-js'
 import { config } from 'dotenv'
+import { Client } from 'pg'
 
 config({ path: '.env.local' })
 config({ path: '.env' })
@@ -132,7 +133,20 @@ async function ensureUser(email: string, metadata: Record<string, unknown>) {
   return data.user!.id
 }
 
+/*
+ * Direct PostgreSQL connection.
+ *
+ * The escrow RPCs authorise against app.current_user_id(), which reads
+ * request.jwt.claim.sub. The service-role REST client has no subject, so the
+ * seed impersonates each party over a plain connection instead.
+ */
+const sql_client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+})
+
 async function main() {
+  await sql_client.connect()
   console.log(`→ seeding ${APP_ENV} environment\n`)
 
   const { data: categories } = await admin.from('categories').select('id, slug')
@@ -367,33 +381,63 @@ async function main() {
     const { data: job } = await admin.from('jobs').select('poster_id').eq('id', jobId).single()
     if (!job) continue
 
-    const fee = Math.floor(application.proposed_price_minor * 0.1)
+    /*
+     * Drive the REAL money pipeline rather than inserting a completed
+     * assignment. Writing `status: 'completed'` directly would produce seed
+     * data that looks right on screen while the escrow, the double-entry
+     * ledger and the commission split had never executed — precisely the kind
+     * of fake functionality that hides bugs until production.
+     *
+     * The four calls below are the same ones the API routes make:
+     *   accept_application     poster hires, escrow transaction created
+     *   record_escrow_funding  what the verified Paystack webhook invokes
+     *   submit_job_completion  hustler marks the work done
+     *   confirm_job_completion poster confirms, ledger posts the release
+     *
+     * `request.jwt.claim.sub` is set per call because those RPCs authorise
+     * against app.current_user_id(); the service-role REST client has no
+     * subject and would be rejected with "Authentication required".
+     */
+    const assignment = await (async () => {
+      const asUser = async (userId: string, sql: string, params: unknown[] = []) => {
+        await sql_client.query(`select set_config('request.jwt.claim.sub', $1, false)`, [userId])
+        return sql_client.query(sql, params)
+      }
 
-    const { data: assignment } = await admin
-      .from('job_assignments')
-      .insert({
-        job_id: jobId,
-        application_id: application.id,
-        hustler_id: application.hustler_id,
-        poster_id: job.poster_id,
-        status: 'completed',
-        agreed_price_minor: application.proposed_price_minor,
-        currency: application.currency,
-        platform_fee_minor: fee,
-        hustler_net_minor: application.proposed_price_minor - fee,
-        commission_rate_bps: 1000,
-        confirmed_at: new Date().toISOString(),
-      })
-      .select('id')
-      .single()
+      try {
+        const hired = await asUser(job.poster_id, 'select * from accept_application($1)', [
+          application.id,
+        ])
+        const { assignment_id, transaction_id } = hired.rows[0]
+
+        // Stand in for the payment provider confirming the charge.
+        await sql_client.query(`select set_config('request.jwt.claim.sub', '', false)`)
+        await sql_client.query('select record_escrow_funding($1, $2, $3, $4)', [
+          transaction_id,
+          `seed_${transaction_id.slice(0, 8)}`,
+          0,
+          null,
+        ])
+
+        await asUser(application.hustler_id, 'select submit_job_completion($1, $2, $3)', [
+          assignment_id,
+          'All done — please take a look.',
+          [],
+        ])
+
+        await asUser(job.poster_id, 'select * from confirm_job_completion($1, false)', [
+          assignment_id,
+        ])
+
+        return { id: assignment_id as string }
+      } catch (error) {
+        console.warn(`\n  ! money pipeline failed for job ${jobId}:`,
+          error instanceof Error ? error.message : error)
+        return null
+      }
+    })()
 
     if (!assignment) continue
-
-    await admin.from('job_applications').update({ status: 'accepted' }).eq('id', application.id)
-    await admin
-      .from('jobs')
-      .update({ status: 'COMPLETED', completed_at: new Date().toISOString() })
-      .eq('id', jobId)
 
     // Both directions, so the double-blind publish trigger fires.
     await admin.from('reviews').insert([
@@ -438,7 +482,7 @@ async function main() {
   console.log(`  Password: ${SEED_PASSWORD}\n`)
 }
 
-main().catch((error) => {
+main().finally(() => sql_client.end().catch(() => {})).catch((error) => {
   console.error('\n✗ seed failed')
   console.error(error)
   process.exit(1)
