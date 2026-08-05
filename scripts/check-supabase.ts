@@ -11,10 +11,69 @@
  * Nothing here writes anything. It is safe to run repeatedly.
  */
 
+import { readFileSync, writeFileSync } from 'node:fs'
 import { config } from 'dotenv'
 import { Client } from 'pg'
 
 config({ path: '.env.local' })
+
+const ENV_FILE = '.env.local'
+const FIX = process.argv.includes('--fix')
+
+/**
+ * Supabase's dashboard hands you a copy-paste block using its own variable
+ * names. Next.js only exposes a variable to the browser when it is prefixed
+ * `NEXT_PUBLIC_`, so those names cannot simply be read as-is — the anon key
+ * and project URL genuinely have to be re-prefixed.
+ *
+ * Rather than making that the user's problem, `--fix` maps them across.
+ */
+const ALIASES: Record<string, string[]> = {
+  NEXT_PUBLIC_SUPABASE_URL: ['SUPABASE_URL', 'SUPABASE_PROJECT_URL'],
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: [
+    'SUPABASE_PUBLISHABLE_KEY',
+    'SUPABASE_ANON_KEY',
+    'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
+  ],
+  SUPABASE_SERVICE_ROLE_KEY: ['SUPABASE_SECRET_KEY', 'SUPABASE_SERVICE_KEY'],
+}
+
+function looksUnset(value: string | undefined): boolean {
+  return (
+    !value ||
+    value.includes('PASTE_') ||
+    value.includes('your-') ||
+    value.startsWith('local-') ||
+    value.includes('placeholder')
+  )
+}
+
+/** Copies any alias values onto the names the app actually reads. */
+function applyAliases(): string[] {
+  const applied: string[] = []
+  let file = readFileSync(ENV_FILE, 'utf8')
+
+  for (const [canonical, aliases] of Object.entries(ALIASES)) {
+    if (!looksUnset(process.env[canonical])) continue
+
+    const source = aliases.find((alias) => !looksUnset(process.env[alias]))
+    if (!source) continue
+
+    const value = process.env[source]!
+    process.env[canonical] = value
+    applied.push(`${source} → ${canonical}`)
+
+    if (FIX) {
+      const line = `${canonical}=${value}`
+      file = new RegExp(`^${canonical}=.*$`, 'm').test(file)
+        ? file.replace(new RegExp(`^${canonical}=.*$`, 'm'), line)
+        : `${file.trimEnd()}\n${line}\n`
+    }
+  }
+
+  if (FIX && applied.length) writeFileSync(ENV_FILE, file)
+  return applied
+}
 
 const PASS = '\x1b[32m✓\x1b[0m'
 const FAIL = '\x1b[31m✗\x1b[0m'
@@ -128,27 +187,43 @@ async function checkRest() {
     return
   }
 
+  /*
+   * Probe a real table, not `/rest/v1/`.
+   *
+   * The API root rejects publishable/anon keys outright ("Secret API key
+   * required"), so testing there reports a perfectly good anon key as broken.
+   * Hitting a table exercises the path the app actually uses.
+   *
+   * A 404/PGRST205 means the key authenticated and only the schema is missing —
+   * which is the expected state before the first migration.
+   */
   for (const [label, key] of [
     ['anon key', anon],
     ['service role key', service],
   ] as const) {
     if (!key) continue
     try {
-      const response = await fetch(`${url}/rest/v1/`, {
+      const response = await fetch(`${url}/rest/v1/categories?select=slug&limit=1`, {
         headers: { apikey: key, Authorization: `Bearer ${key}` },
         signal: AbortSignal.timeout(15_000),
       })
-      if (response.ok || response.status === 404) {
-        pass(`Reachable with ${label}`, `HTTP ${response.status}`)
+      const body = await response.text()
+
+      if (response.ok) {
+        pass(`Authenticated with ${label}`, 'schema present')
+      } else if (response.status === 404 && body.includes('PGRST205')) {
+        pass(`Authenticated with ${label}`, 'schema not migrated yet — expected')
       } else if (response.status === 401) {
         fail(`${label} rejected (401)`, 'Key does not belong to this project, or has been rotated')
       } else {
-        warn(`${label} returned HTTP ${response.status}`, await response.text().then((t) => t.slice(0, 120)))
+        warn(`${label} returned HTTP ${response.status}`, body.slice(0, 140))
       }
     } catch (error) {
       fail(
         `Cannot reach ${url} with ${label}`,
-        error instanceof Error ? error.message : 'Network error — check the project URL and that the project is not paused',
+        error instanceof Error
+          ? error.message
+          : 'Network error — check the project URL and that the project is not paused',
       )
     }
   }
@@ -234,6 +309,22 @@ async function checkDatabase() {
 
 async function main() {
   console.log('\n\x1b[1m\x1b[38;5;208mHustle Street — Supabase preflight\x1b[0m')
+
+  const aliased = applyAliases()
+  if (aliased.length) {
+    console.log('\n\x1b[1mVariable names\x1b[0m')
+    for (const mapping of aliased) {
+      console.log(`  ${FIX ? PASS : WARN} ${mapping}`)
+    }
+    if (!FIX) {
+      console.log(
+        `      \x1b[2m→ Run \x1b[0m\x1b[1mpnpm db:check --fix\x1b[0m\x1b[2m to write these into ${ENV_FILE}\x1b[0m`,
+      )
+      console.log(
+        `      \x1b[2m  (Next.js only exposes NEXT_PUBLIC_* to the browser, so the rename is required)\x1b[0m`,
+      )
+    }
+  }
 
   checkEnv()
   await checkRest()
