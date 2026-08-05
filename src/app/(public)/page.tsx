@@ -146,7 +146,7 @@ export default async function LandingPage() {
                     id="hero-search"
                     name="q"
                     type="search"
-                    placeholder="Plumber, cleaner, designer…"
+                    placeholder="Plumber, cleaner…"
                     className="h-14 w-full rounded-2xl border border-input bg-surface py-4 pl-12 pr-32 text-[15px] shadow-sm placeholder:text-muted-foreground/70 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25"
                   />
                   <Button type="submit" className="absolute right-2 top-1/2 h-11 -translate-y-1/2">

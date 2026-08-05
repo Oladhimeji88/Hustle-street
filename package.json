@@ -22,7 +22,8 @@
     "keys:vapid": "tsx scripts/generate-vapid-keys.ts",
     "worker:cron": "tsx scripts/run-cron.ts",
     "media": "tsx scripts/generate-media.ts",
-    "icons": "tsx scripts/generate-icons.ts"
+    "icons": "tsx scripts/generate-icons.ts",
+    "db:check": "tsx scripts/check-supabase.ts"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

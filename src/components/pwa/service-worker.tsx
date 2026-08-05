@@ -19,10 +19,20 @@ export function ServiceWorkerRegistrar() {
 
     let registration: ServiceWorkerRegistration | undefined
 
+    /*
+     * Only reload when the USER asked for the update.
+     *
+     * `clients.claim()` in the worker's activate handler fires
+     * `controllerchange` on first install too. Reloading on that would throw
+     * away whatever a first-time visitor was reading or typing, seconds after
+     * they arrived — so the reload is gated on this flag, which is only set
+     * when someone taps "Reload" on the update prompt.
+     */
+    let updateAccepted = false
+
     function promptForUpdate(waiting: ServiceWorker) {
       toast.update('Update available', 'Reload to get the latest version of Hustle Street.', () => {
-        // The worker skips waiting and takes control; `controllerchange` below
-        // then reloads the page exactly once.
+        updateAccepted = true
         waiting.postMessage({ type: 'SKIP_WAITING' })
       })
     }
@@ -57,7 +67,8 @@ export function ServiceWorkerRegistrar() {
 
     let refreshing = false
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return
+      // First install also fires this. Ignore it unless the user opted in.
+      if (!updateAccepted || refreshing) return
       refreshing = true
       window.location.reload()
     })
