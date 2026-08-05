@@ -145,25 +145,39 @@ async function verifyDiscovery() {
   const LNG = 3.4736
 
   const near = await db.query(
-    `select id, title, area_label, round(distance_m::numeric) as m, total_count
-       from search_jobs($1, $2, 10, null, null, null, null, null, null, null, null, 'nearest', 5, 0)`,
+    `select id, title, area_label, location_kind, round(distance_m::numeric) as m, total_count
+       from search_jobs($1, $2, 10, null, null, null, null, null, null, null, null, 'nearest', 8, 0)`,
     [LAT, LNG],
   )
   assert(near.rows.length > 0, 'search_jobs returns jobs near Lekki',
     `${near.rows.length} of ${near.rows[0]?.total_count ?? 0}`)
 
-  const ordered = near.rows.every(
-    (r, i) => i === 0 || Number(r.m ?? 0) >= Number(near.rows[i - 1].m ?? 0),
-  )
-  assert(ordered, 'Results are ordered by ascending distance')
+  /*
+   * Remote jobs legitimately have no distance: they carry no coordinates and
+   * deliberately bypass the radius filter, because "must be within 10 km" is
+   * meaningless for work done over the internet. So the ordering guarantee is
+   * that on-site jobs ascend by distance and remote jobs sort last — not that
+   * every row has a distance.
+   */
+  const onsite = near.rows.filter((r) => r.m !== null)
+  const remote = near.rows.filter((r) => r.m === null)
 
-  const hasDistance = near.rows.every((r) => r.m !== null)
-  assert(hasDistance, 'Every result carries a computed distance')
+  const ordered = onsite.every((r, i) => i === 0 || Number(r.m) >= Number(onsite[i - 1].m))
+  assert(ordered, 'On-site results ascend by distance', `${onsite.length} located jobs`)
+
+  const firstRemote = near.rows.findIndex((r) => r.m === null)
+  const remoteSortLast = firstRemote === -1 || near.rows.slice(firstRemote).every((r) => r.m === null)
+  assert(remoteSortLast, 'Remote jobs sort after located ones', `${remote.length} remote`)
+
+  const remoteAreAllRemote = remote.every((r) => r.location_kind === 'remote')
+  assert(remoteAreAllRemote, 'Only remote jobs lack a distance',
+    remote.map((r) => r.location_kind).join(', '))
 
   if (near.rows.length) {
     console.log('\n    \x1b[2mNearest jobs to Lekki Phase 1:\x1b[0m')
-    for (const r of near.rows.slice(0, 5)) {
-      console.log(`      ${String(r.m / 1000).padStart(6)} km  ${String(r.area_label ?? '—').padEnd(16)} ${r.title}`)
+    for (const r of near.rows.slice(0, 6)) {
+      const where = r.m === null ? '  remote' : `${(Number(r.m) / 1000).toFixed(1).padStart(6)} km`
+      console.log(`      ${where}  ${String(r.area_label ?? '—').padEnd(16)} ${r.title}`)
     }
   }
 
