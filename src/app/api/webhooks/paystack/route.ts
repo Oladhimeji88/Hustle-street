@@ -136,7 +136,7 @@ async function processEvent(
 
       if (error) throw new Error(`record_escrow_funding failed: ${error.message}`)
 
-      void track(ANALYTICS_EVENTS.PAYMENT_COMPLETED, {
+      await track(ANALYTICS_EVENTS.PAYMENT_COMPLETED, {
         userId: transaction.payer_id ?? undefined,
         properties: { provider: 'paystack', status: 'success' },
       })
@@ -158,7 +158,7 @@ async function processEvent(
         .eq('reference', reference)
         .eq('status', 'PENDING')
 
-      void track(ANALYTICS_EVENTS.PAYMENT_FAILED, { properties: { provider: 'paystack' } })
+      await track(ANALYTICS_EVENTS.PAYMENT_FAILED, { properties: { provider: 'paystack' } })
       return
     }
 

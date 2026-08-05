@@ -49,7 +49,7 @@ export const PATCH = defineRoute(
 
         const result = (Array.isArray(data) ? data[0] : data) as AcceptApplicationResult
 
-        void track(ANALYTICS_EVENTS.APPLICATION_ACCEPTED, { userId: user!.id })
+        await track(ANALYTICS_EVENTS.APPLICATION_ACCEPTED, { userId: user!.id })
 
         // Out-of-band delivery. Failures here are logged inside the helpers and
         // never roll back the hire.
@@ -73,7 +73,7 @@ export const PATCH = defineRoute(
           .single()
 
         if (error) throw error
-        void track(ANALYTICS_EVENTS.APPLICATION_DECLINED, { userId: user!.id })
+        await track(ANALYTICS_EVENTS.APPLICATION_DECLINED, { userId: user!.id })
         return ok(data)
       }
 
@@ -118,7 +118,7 @@ export const DELETE = defineRoute(
     if (error) throw error
     if (!data) throw notFound('Application')
 
-    void track(ANALYTICS_EVENTS.APPLICATION_WITHDRAWN, { userId: user!.id })
+    await track(ANALYTICS_EVENTS.APPLICATION_WITHDRAWN, { userId: user!.id })
     return ok(data)
   },
 )

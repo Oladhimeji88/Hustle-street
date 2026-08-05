@@ -17,7 +17,7 @@ export const POST = defineRoute(
       .upsert({ user_id: user!.id, job_id: id }, { onConflict: 'user_id,job_id', ignoreDuplicates: true })
 
     if (error) throw error
-    void track(ANALYTICS_EVENTS.JOB_SAVED, { userId: user!.id })
+    await track(ANALYTICS_EVENTS.JOB_SAVED, { userId: user!.id })
     return ok({ saved: true })
   },
 )

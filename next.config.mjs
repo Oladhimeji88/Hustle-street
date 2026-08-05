@@ -19,19 +19,33 @@ const mapTileOrigin = (() => {
   }
 })()
 
+const posthogOrigins = (() => {
+  try {
+    const apiHost = new URL(process.env.NEXT_PUBLIC_POSTHOG_HOST).hostname
+    const assetsHost = apiHost.replace(/^[^.]+/, (region) => `${region}-assets`)
+    return {
+      api: `https://${apiHost}`,
+      assets: `https://${assetsHost}`,
+    }
+  } catch {
+    return null
+  }
+})()
+
 const connectSrc = [
   "'self'",
   supabaseOrigin,
   supabaseOrigin.replace(/^http/, 'ws'),
   mapTileOrigin,
   'https://api.paystack.co',
+  ...(posthogOrigins ? [posthogOrigins.api] : []),
 ]
 
 const csp = [
   `default-src 'self'`,
   // Next.js injects inline bootstrap scripts; 'unsafe-inline' is required for the
   // App Router runtime. Paystack's inline checkout is loaded from its own origin.
-  `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.paystack.co`,
+  `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.paystack.co${posthogOrigins ? ` ${posthogOrigins.assets}` : ''}`,
   `style-src 'self' 'unsafe-inline'`,
   `img-src 'self' blob: data: ${supabaseOrigin} ${mapTileOrigin} https://*.tile.openstreetmap.org`,
   `font-src 'self' data:`,

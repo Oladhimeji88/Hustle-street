@@ -98,7 +98,7 @@ export const POST = defineRoute(
         },
       })
 
-      void track(ANALYTICS_EVENTS.PAYMENT_STARTED, {
+      await track(ANALYTICS_EVENTS.PAYMENT_STARTED, {
         userId: user!.id,
         properties: {
           provider: provider.name,
@@ -116,7 +116,7 @@ export const POST = defineRoute(
       })
     } catch (error) {
       if (error instanceof PaymentProviderError) {
-        void track(ANALYTICS_EVENTS.PAYMENT_FAILED, {
+        await track(ANALYTICS_EVENTS.PAYMENT_FAILED, {
           userId: user!.id,
           properties: { provider: provider.name, error_code: error.providerCode ?? 'unknown' },
         })

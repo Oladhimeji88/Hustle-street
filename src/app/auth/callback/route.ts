@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    void track(ANALYTICS_EVENTS.ACCOUNT_CREATED, {
+    await track(ANALYTICS_EVENTS.ACCOUNT_CREATED, {
       userId: user.id,
       properties: { method: user.app_metadata?.provider ?? 'email', intent },
     })

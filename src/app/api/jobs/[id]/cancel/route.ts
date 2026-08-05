@@ -29,7 +29,7 @@ export const POST = defineRoute(
     })
 
     if (error) throw error
-    void track(ANALYTICS_EVENTS.JOB_CANCELLED, { userId: user!.id, properties: { reason: 'poster' } })
+    await track(ANALYTICS_EVENTS.JOB_CANCELLED, { userId: user!.id, properties: { reason: 'poster' } })
     return ok(Array.isArray(data) ? data[0] : data)
   },
 )

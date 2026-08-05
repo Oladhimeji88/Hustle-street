@@ -21,8 +21,6 @@ blob-report/
 .playwright/
 
 # environment — NEVER commit real secrets
-.env
-.env.local
 .env.development.local
 .env.staging.local
 .env.test.local
@@ -44,7 +42,6 @@ yarn-error.log*
 .DS_Store
 Thumbs.db
 .idea/
-.vscode/*
 !.vscode/extensions.json
 
 # typescript
@@ -52,3 +49,4 @@ Thumbs.db
 
 # generated PWA assets that are built from source icons
 public/icons/generated/
+config.bat
