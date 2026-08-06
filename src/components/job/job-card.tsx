@@ -11,6 +11,7 @@ import { formatSchedule, timeAgo } from '@/lib/format'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge, UrgencyBadge } from '@/components/ui/badge'
 import { RatingDisplay } from '@/components/ui/rating'
+import { JobContactActions } from './job-contact-actions'
 import type { JobSearchResult } from '@/types/database'
 
 /**
@@ -201,13 +202,15 @@ export function JobCard({
               className="shrink-0"
             />
           </div>
-          <time
-            className="shrink-0 text-xs text-muted-foreground"
-            dateTime={job.published_at ?? undefined}
-          >
-            {timeAgo(job.published_at)}
-          </time>
+          <JobContactActions jobId={job.id} posterName={job.poster_name} />
         </div>
+
+        <time
+          className="mt-2 block text-xs text-muted-foreground"
+          dateTime={job.published_at ?? undefined}
+        >
+          {timeAgo(job.published_at)}
+        </time>
       </div>
     </article>
   )

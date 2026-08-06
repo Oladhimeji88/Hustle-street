@@ -35,7 +35,9 @@ type CategoryRow = Pick<Category, 'id' | 'slug' | 'name' | 'icon' | 'job_count'>
 export function CategoryMarquee({ categories }: { categories: CategoryRow[] }) {
   // Duration scales with the number of tiles so the pixels-per-second rate
   // stays constant regardless of how many categories come back from the DB.
-  const seconds = Math.max(28, categories.length * 3.6)
+  // Raised alongside the tile width — wider cards cover more ground per tile,
+  // so the same per-tile duration would have sped the whole rail up.
+  const seconds = Math.max(36, categories.length * 4.6)
 
   if (categories.length === 0) return null
 
@@ -53,17 +55,17 @@ export function CategoryMarquee({ categories }: { categories: CategoryRow[] }) {
             {categories.map((category) => {
               const Icon = categoryIcon(category.icon, category.slug)
               return (
-                <li key={`${copy}-${category.id}`} className="w-[172px] shrink-0 sm:w-[196px]">
+                <li key={`${copy}-${category.id}`} className="w-[240px] shrink-0 sm:w-[288px]">
                   <Link
                     href={`/explore?categories=${category.id}`}
                     tabIndex={copy === 1 ? -1 : undefined}
-                    className="lift group flex h-full flex-col rounded-[8px] border border-border bg-surface p-5 hover:border-foreground/15 hover:bg-surface-muted"
+                    className="lift group flex h-full flex-col rounded-[8px] border border-border bg-surface p-7 hover:border-foreground/15 hover:bg-surface-muted"
                   >
-                    <Icon className="icon-hover size-5 text-muted-foreground" aria-hidden="true" />
-                    <span className="mt-8 font-display text-[15px] font-medium leading-snug tracking-tight">
+                    <Icon className="icon-hover size-6 text-muted-foreground" aria-hidden="true" />
+                    <span className="mt-14 font-display text-lg font-semibold leading-snug tracking-tight">
                       {category.name}
                     </span>
-                    <span className="mt-1 text-xs tabular-nums text-muted-foreground/70">
+                    <span className="mt-1.5 text-sm tabular-nums text-muted-foreground/70">
                       {category.job_count > 0
                         ? `${category.job_count.toLocaleString()} live`
                         : 'Be the first'}
