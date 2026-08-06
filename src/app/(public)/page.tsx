@@ -16,8 +16,8 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/server'
-import { categoryIcon } from '@/lib/categories'
 import { NearbyJobsPreview } from '@/components/marketing/nearby-jobs-preview'
+import { CategoryMarquee } from '@/components/marketing/category-marquee'
 import { FaqAccordion } from '@/components/marketing/faq-accordion'
 import { EscrowDiagram } from '@/components/marketing/escrow-diagram'
 import { VideoPlayer } from '@/components/media/video-player'
@@ -293,38 +293,15 @@ export default async function LandingPage() {
           </Button>
         </div>
 
-        {/* Tight 8px corners, deliberately squarer than the 20px+ the rest of
-            the page uses — fifteen small tiles read as a considered set at this
-            radius, where the panel radius made each look like its own card.
-            One icon colour throughout: the rotating four-way tint was giving
-            each tile an arbitrary meaning the categories don't actually have. */}
-        <RevealGroup
-          as="ul"
-          className="mt-10 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5"
-          stagger={0.05}
-        >
-          {categoryList.map((category) => {
-            const Icon = categoryIcon(category.icon, category.slug)
-            return (
-              <li key={category.id}>
-                <Link
-                  href={`/explore?categories=${category.id}`}
-                  className="lift group flex h-full flex-col rounded-[8px] border border-border bg-surface p-5 hover:border-foreground/15 hover:bg-surface-muted"
-                >
-                  <Icon className="icon-hover size-5 text-muted-foreground" aria-hidden="true" />
-                  <span className="mt-8 font-display text-[15px] font-medium leading-snug tracking-tight">
-                    {category.name}
-                  </span>
-                  <span className="mt-1 text-xs tabular-nums text-muted-foreground/70">
-                    {category.job_count > 0
-                      ? `${category.job_count.toLocaleString()} live`
-                      : 'Be the first'}
-                  </span>
-                </Link>
-              </li>
-            )
-          })}
-        </RevealGroup>
+        {/* A moving rail rather than a static grid. Fifteen categories in a
+            5-across grid was a wall of equal-weight tiles you had to read; in
+            motion they arrive one at a time and the section stops asking for a
+            decision up front. Tiles keep the tight 8px corner and the single
+            icon colour — the rotating four-way tint was giving each an
+            arbitrary meaning the categories don't actually have. */}
+        <div className="mt-10">
+          <CategoryMarquee categories={categoryList} />
+        </div>
       </Section>
 
       {/* ═══ How it works ═══════════════════════════════════════════════════ */}

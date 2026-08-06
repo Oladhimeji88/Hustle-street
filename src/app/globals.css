@@ -462,6 +462,46 @@
     background-size: 100% 1px;
   }
 
+  /* Continuously scrolling rail. Kept in CSS deliberately — see the note in
+     `category-marquee.tsx`: an infinite loop driven from JS would burn the main
+     thread forever on a page that is otherwise idle. */
+  .marquee {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 6%,
+      black 94%,
+      transparent
+    );
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  }
+
+  .marquee-track {
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
+
+  /* Pause on hover, so a tile you are reaching for stops moving. Also pauses on
+     focus-within: a keyboard user tabbing into the rail should not have the
+     focused link slide out from under them. */
+  @media (hover: hover) {
+    .marquee:hover .marquee-track {
+      animation-play-state: paused;
+    }
+  }
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* -50% lands copy 2 exactly where copy 1 began, so the reset is invisible. */
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .lift,
     .icon-hover,
@@ -473,6 +513,13 @@
     .group:hover .icon-hover,
     .group:hover .arrow-hover {
       transform: none;
+    }
+    /* Stop the rail and let it scroll by hand instead of animating forever. */
+    .marquee-track {
+      animation: none;
+    }
+    .marquee {
+      overflow-x: auto;
     }
   }
 }
