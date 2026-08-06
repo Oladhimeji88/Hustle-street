@@ -251,6 +251,45 @@ export function SignInForm() {
     })
 
     if (error) {
+      // Development bypass: any email, any password. Gated in `devLoginAllowed`
+      // so a production build cannot reach this branch — read the note there
+      // before changing anything about it.
+      if (devLoginAllowed()) {
+        const devPassword = devPasswordFor(values.email)
+
+        // Try the throwaway account first; create it if this email is new. This
+        // goes through real Supabase auth rather than faking a session, so RLS,
+        // the session cookie and every server component behave normally.
+        const retry = await supabase.auth.signInWithPassword({
+          email: values.email,
+          password: devPassword,
+        })
+
+        if (retry.error) {
+          const created = await supabase.auth.signUp({
+            email: values.email,
+            password: devPassword,
+            options: { data: { display_name: values.email.split('@')[0] } },
+          })
+          if (created.error) {
+            form.setError('root', { message: `Dev login failed: ${created.error.message}` })
+            return
+          }
+          // Email confirmation may be required; if so there is no session yet.
+          if (!created.data.session) {
+            form.setError('root', {
+              message:
+                'Dev account created, but Supabase requires email confirmation. Turn that off in Auth settings to use the bypass.',
+            })
+            return
+          }
+        }
+
+        router.push(next)
+        router.refresh()
+        return
+      }
+
       // One message for both wrong-email and wrong-password, so the form cannot
       // be used to enumerate registered accounts.
       form.setError('root', { message: 'That email or password is not right. Try again.' })
