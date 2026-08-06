@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import { Loader2, SlidersHorizontal, X } from 'lucide-react'
 import { useJobFeed, useSavedJobIds, useToggleSaveJob } from '@/hooks/use-jobs'
 import { useLocation } from '@/components/location/location-provider'
