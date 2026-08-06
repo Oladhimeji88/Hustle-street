@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { ArrowRight, CheckCircle2, Lock, Wallet } from 'lucide-react'
+import { CheckCircle2, Lock, Wallet } from 'lucide-react'
 import { computeCommission, formatMoney } from '@/lib/money'
 import { cn } from '@/lib/utils'
 
@@ -9,9 +9,16 @@ import { cn } from '@/lib/utils'
  * Three reasons this is markup and not a PNG:
  *  - the numbers are computed from the live commission rate, so the diagram
  *    cannot contradict the fee stated elsewhere on the page
- *  - it reads correctly in light and dark, and at any zoom
+ *  - it reads correctly at any zoom
  *  - a screen reader gets an ordered list of steps instead of alt text trying
  *    to describe a picture of a flow
+ *
+ * Presentation note: the steps used to be three differently tinted cards —
+ * neutral, orange, green — joined by arrow glyphs. Money UI is the last place
+ * that should look playful, and the tints implied a status difference the three
+ * steps do not have. They are now one uniform treatment on a single rail, with
+ * the stage carried by a numeral and the figures set in tabular numerals so the
+ * columns line up the way a statement's would.
  */
 export function EscrowDiagram({
   commissionPercent,
@@ -33,75 +40,100 @@ export function EscrowDiagram({
       icon: Wallet,
       label: 'You pay',
       amount: formatMoney(exampleMinor),
-      detail: 'Before any work starts',
-      tone: 'bg-surface text-foreground border-border',
+      detail: 'Before any work starts.',
     },
     {
       icon: Lock,
       label: 'Held securely',
       amount: formatMoney(exampleMinor),
-      detail: 'Not with us, not with them',
-      tone: 'bg-primary-soft text-primary border-primary/25',
+      detail: 'Not with us, not with them.',
     },
     {
       icon: CheckCircle2,
-      label: 'Released on confirmation',
+      label: 'Released',
       amount: formatMoney(netMinor),
-      detail: `to the hustler, after the ${commissionPercent}% fee`,
-      tone: 'bg-money-soft text-money border-money/25',
+      detail: `To the hustler, after the ${commissionPercent}% fee.`,
     },
   ]
 
   return (
     <div className={cn('mx-auto max-w-4xl', className)}>
-      <ol className="grid gap-3 md:grid-cols-[1fr_auto_1fr_auto_1fr] md:items-stretch md:gap-2">
+      {/* The rail. One hairline runs behind all three markers on desktop, which
+          says "one continuous process" far more plainly than arrows between
+          separate boxes did. */}
+      <ol className="relative grid gap-10 md:grid-cols-3 md:gap-8">
+        <div
+          className="pointer-events-none absolute left-0 right-0 top-[15px] hidden h-px bg-border md:block"
+          aria-hidden="true"
+        />
+
         {steps.map((step, index) => {
           const Icon = step.icon
+          const last = index === steps.length - 1
           return (
-            <React.Fragment key={step.label}>
-              <li className={cn('rounded-2xl border p-5 text-center', step.tone)}>
-                <div className="mx-auto flex size-11 items-center justify-center rounded-xl bg-current/10">
-                  <Icon className="size-5" aria-hidden="true" />
-                </div>
-                <p className="mt-3 font-display text-xl font-extrabold tabular-nums">
+            <li key={step.label} className="relative">
+              {/* Marker sits on the rail; the background gap is what makes the
+                  line appear to pass behind it rather than through it. */}
+              <div className="flex items-center gap-3 md:block">
+                <span
+                  className={cn(
+                    'relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border bg-background',
+                    last ? 'border-money/40 text-money' : 'border-border text-muted-foreground',
+                  )}
+                >
+                  <Icon className="size-4" aria-hidden="true" />
+                </span>
+              </div>
+
+              <div className="mt-0 md:mt-6">
+                <p className="eyebrow">
+                  Step {index + 1} — {step.label}
+                </p>
+                <p
+                  className={cn(
+                    'mt-2 font-display text-2xl font-semibold tabular-nums tracking-tight',
+                    last && 'text-money',
+                  )}
+                >
                   {step.amount}
                 </p>
-                <p className="mt-1 text-sm font-semibold">{step.label}</p>
-                <p className="mt-0.5 text-xs opacity-70">{step.detail}</p>
-              </li>
-
-              {index < steps.length - 1 && (
-                <li
-                  aria-hidden="true"
-                  className="flex items-center justify-center py-1 md:py-0"
-                >
-                  <ArrowRight className="size-5 rotate-90 text-muted-foreground md:rotate-0" />
-                </li>
-              )}
-            </React.Fragment>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{step.detail}</p>
+              </div>
+            </li>
           )
         })}
       </ol>
 
-      <div className="mt-4 rounded-2xl border border-border bg-surface p-5">
-        <p className="text-sm font-semibold">The worked example</p>
-        <dl className="mt-3 space-y-1.5 text-sm">
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">Job price</dt>
-            <dd className="font-medium tabular-nums">{formatMoney(exampleMinor)}</dd>
+      {/* The worked example, set as a statement: labels left, figures right,
+          aligned on a tabular column, total separated by a rule. */}
+      <div className="panel mt-14 overflow-hidden">
+        <div className="border-b border-border px-6 py-4">
+          <p className="eyebrow">Worked example</p>
+        </div>
+
+        <dl className="divide-y divide-border">
+          <div className="flex items-baseline justify-between gap-4 px-6 py-3.5">
+            <dt className="text-sm text-muted-foreground">Job price</dt>
+            <dd className="text-sm tabular-nums">{formatMoney(exampleMinor)}</dd>
           </div>
-          <div className="flex justify-between gap-4">
-            <dt className="text-muted-foreground">Platform fee ({commissionPercent}%)</dt>
-            <dd className="font-medium tabular-nums">−{formatMoney(feeMinor)}</dd>
+          <div className="flex items-baseline justify-between gap-4 px-6 py-3.5">
+            <dt className="text-sm text-muted-foreground">
+              Platform fee
+              <span className="ml-1.5 tabular-nums text-muted-foreground/70">
+                ({commissionPercent}%)
+              </span>
+            </dt>
+            <dd className="text-sm tabular-nums text-muted-foreground">−{formatMoney(feeMinor)}</dd>
           </div>
-          <div className="flex justify-between gap-4 border-t border-border pt-1.5">
-            <dt className="font-semibold">Hustler receives</dt>
-            <dd className="font-display font-extrabold tabular-nums text-money">
+          <div className="flex items-baseline justify-between gap-4 bg-surface-muted px-6 py-4">
+            <dt className="text-sm font-medium">Hustler receives</dt>
+            <dd className="font-display text-lg font-semibold tabular-nums text-money">
               {formatMoney(netMinor)}
             </dd>
           </div>
         </dl>
-        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
+
+        <p className="border-t border-border px-6 py-4 text-xs leading-relaxed text-muted-foreground">
           Hustle Street holds no customer funds and is not a bank. Payments are held by a licensed
           payment provider until the job is confirmed complete.
         </p>

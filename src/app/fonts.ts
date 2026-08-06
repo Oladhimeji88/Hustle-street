@@ -46,7 +46,10 @@ const displayFallback = Archivo({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  weight: ['600', '700', '800', '900'],
+  // 400/500 carry the headlines. Archivo only reads blocky in its heavy cuts —
+  // at these weights it is a clean, faintly condensed grotesque, which is what
+  // the quiet layout wants. 600/700 stay for the few places that need emphasis.
+  weight: ['400', '500', '600', '700'],
 })
 
 /*

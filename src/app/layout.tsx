@@ -71,10 +71,9 @@ export const viewport: Viewport = {
   // Never block zoom: pinch-to-zoom is an accessibility requirement (WCAG 1.4.4).
   maximumScale: 5,
   viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#FAF9F7' },
-    { media: '(prefers-color-scheme: dark)', color: '#0B0F13' },
-  ],
+  // One colour: the app renders light regardless of the OS setting, so offering
+  // a dark browser chrome would leave the address bar mismatched with the page.
+  themeColor: '#FAF9F7',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

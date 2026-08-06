@@ -52,7 +52,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      {/* Light only. `forcedTheme` rather than `defaultTheme` on purpose: it
+          overrides a `theme: dark` already sitting in localStorage from an
+          earlier visit, which a default alone would not. There is no theme
+          toggle anywhere in the app, so nothing loses functionality. */}
+      <ThemeProvider attribute="class" forcedTheme="light" disableTransitionOnChange>
         <TooltipProvider delayDuration={300}>
           <LocationProvider>
             {children}

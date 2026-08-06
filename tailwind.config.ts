@@ -78,14 +78,16 @@ const config: Config = {
           foreground: 'hsl(var(--popover-foreground))',
         },
       },
+      // --radius moved 14px → 20px, so the small steps subtract harder than they
+      // used to. Chips and badges still want 6–12px; only panels want the full 20+.
       borderRadius: {
-        xs: 'calc(var(--radius) - 6px)',
-        sm: 'calc(var(--radius) - 4px)',
-        md: 'calc(var(--radius) - 2px)',
+        xs: 'calc(var(--radius) - 14px)',
+        sm: 'calc(var(--radius) - 12px)',
+        md: 'calc(var(--radius) - 8px)',
         lg: 'var(--radius)',
         xl: 'calc(var(--radius) + 4px)',
-        '2xl': 'calc(var(--radius) + 10px)',
-        '3xl': 'calc(var(--radius) + 18px)',
+        '2xl': 'calc(var(--radius) + 8px)',
+        '3xl': 'calc(var(--radius) + 16px)',
       },
       fontFamily: {
         sans: ['var(--font-sans)'],
@@ -93,18 +95,22 @@ const config: Config = {
         mono: ['var(--font-mono)'],
       },
       fontSize: {
-        'display-xl': ['clamp(2.75rem, 7vw, 4.5rem)', { lineHeight: '0.98', letterSpacing: '-0.035em', fontWeight: '800' }],
-        'display-lg': ['clamp(2.25rem, 5.5vw, 3.5rem)', { lineHeight: '1.02', letterSpacing: '-0.03em', fontWeight: '800' }],
-        'display-md': ['clamp(1.75rem, 4vw, 2.5rem)', { lineHeight: '1.08', letterSpacing: '-0.025em', fontWeight: '750' }],
-        'display-sm': ['clamp(1.375rem, 3vw, 1.75rem)', { lineHeight: '1.15', letterSpacing: '-0.02em', fontWeight: '700' }],
+        // Semibold: enough presence to anchor a section without returning to the
+        // 800s, which read as a billboard and fought every surface they sat on.
+        'display-xl': ['clamp(2.5rem, 6vw, 4rem)', { lineHeight: '1.04', letterSpacing: '-0.035em', fontWeight: '600' }],
+        'display-lg': ['clamp(2rem, 4.5vw, 3rem)', { lineHeight: '1.06', letterSpacing: '-0.03em', fontWeight: '600' }],
+        'display-md': ['clamp(1.625rem, 3.2vw, 2.25rem)', { lineHeight: '1.12', letterSpacing: '-0.025em', fontWeight: '600' }],
+        'display-sm': ['clamp(1.25rem, 2.4vw, 1.5rem)', { lineHeight: '1.25', letterSpacing: '-0.015em', fontWeight: '600' }],
       },
+      // Halved across the board. Elevation now reads as a whisper — surfaces are
+      // told apart by fill and corner, and a shadow only marks what genuinely floats.
       boxShadow: {
-        xs: '0 1px 2px 0 hsl(var(--shadow-color) / 0.05)',
-        sm: '0 1px 3px 0 hsl(var(--shadow-color) / 0.08), 0 1px 2px -1px hsl(var(--shadow-color) / 0.06)',
-        md: '0 4px 12px -2px hsl(var(--shadow-color) / 0.10), 0 2px 6px -2px hsl(var(--shadow-color) / 0.06)',
-        lg: '0 12px 28px -8px hsl(var(--shadow-color) / 0.16), 0 4px 10px -4px hsl(var(--shadow-color) / 0.08)',
-        pop: '0 20px 48px -16px hsl(var(--shadow-color) / 0.24)',
-        'street': '0 8px 24px -8px hsl(var(--primary) / 0.45)',
+        xs: '0 1px 2px 0 hsl(var(--shadow-color) / 0.03)',
+        sm: '0 1px 2px 0 hsl(var(--shadow-color) / 0.04)',
+        md: '0 2px 8px -2px hsl(var(--shadow-color) / 0.06)',
+        lg: '0 8px 24px -12px hsl(var(--shadow-color) / 0.10)',
+        pop: '0 24px 60px -24px hsl(var(--shadow-color) / 0.16)',
+        'street': '0 8px 24px -12px hsl(var(--primary) / 0.30)',
       },
       keyframes: {
         'accordion-down': {

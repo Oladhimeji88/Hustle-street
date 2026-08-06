@@ -31,15 +31,27 @@
     --popover: 0 0% 100%;
     --popover-foreground: 210 24% 6%;
 
-    /* Hustle orange. */
-    --primary: 18 100% 56%;
+    /* Hustle orange, burnt rather than neon.
+     *
+     * This was `18 100% 56%` (#FF621F), which measures 2.82:1 against the paper
+     * background — under the 3.0 WCAG floor for even large text, so every
+     * `text-primary` link and white-on-orange button label was failing AA.
+     *
+     * Dropping lightness to 44% and pulling saturation off the ceiling gives
+     * 4.61:1 on paper and 4.90:1 for white on top: both pass AA for body text.
+     * It reads as earthier and more deliberate, which is what the quiet layout
+     * wanted anyway — full-saturation orange fought every surface it touched.
+     */
+    --primary: 14 82% 44%;
     --primary-foreground: 0 0% 100%;
-    --primary-soft: 18 100% 96%;
+    --primary-soft: 14 68% 96%;
 
-    /* Money green — value, earnings, success. Never used for a generic CTA. */
-    --money: 158 100% 33%;
+    /* Money green — value, earnings, success. Never used for a generic CTA.
+     * Was `158 100% 33%` (#00A86B) at 2.90:1 on paper, which failed AA the same
+     * way the old orange did. 27% lightness brings it to 4.51:1. */
+    --money: 158 90% 27%;
     --money-foreground: 0 0% 100%;
-    --money-soft: 158 60% 95%;
+    --money-soft: 158 50% 95%;
 
     --secondary: 40 16% 93%;
     --secondary-foreground: 210 24% 12%;
@@ -58,9 +70,11 @@
     --warning-foreground: 30 60% 12%;
     --warning-soft: 42 100% 95%;
 
-    --border: 36 12% 88%;
-    --input: 36 12% 86%;
-    --ring: 18 100% 56%;
+    /* Hairlines, not rules. At 92% they separate surfaces without drawing a box
+       around everything, which is most of what made the old page feel busy. */
+    --border: 36 10% 91%;
+    --input: 36 10% 88%;
+    --ring: 14 82% 44%;
 
     /* Fixed brand ink. Deliberately NOT theme-dependent: a device bezel and a
        video letterbox must stay dark even in dark mode. */
@@ -68,7 +82,8 @@
 
     --shadow-color: 210 30% 12%;
 
-    --radius: 14px;
+    /* Generous corners are doing the work shadows used to. */
+    --radius: 20px;
 
     /* Safe-area insets so the bottom nav clears the iOS home indicator. */
     --safe-top: env(safe-area-inset-top, 0px);
@@ -133,6 +148,10 @@
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
+    /* The app is light-only. Without this, a dark-mode OS still renders native
+       scrollbars, date pickers and autofill in their dark variants against a
+       pale page. */
+    color-scheme: light;
   }
 
   body {
@@ -160,13 +179,14 @@
     }
   }
 
-  /* Type scale defaults: display face for headings, tight tracking. */
+  /* Type scale defaults: display face for headings, tight tracking. Weight is
+     left to the `text-display-*` steps — a blanket `font-bold` here undid them. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
-    @apply font-bold tracking-tight text-balance;
+    @apply font-medium tracking-tight text-balance;
   }
 
   /* Prevent iOS zooming the viewport when a small input is focused. */
@@ -323,98 +343,136 @@
   }
 }
 
-/* ─── Atmosphere ─────────────────────────────────────────────────────────────
+/* ─── Composition ────────────────────────────────────────────────────────────
  *
- * Flat colour is what makes a page read as a template. These three utilities
- * give surfaces the sense of printed material — grain, a faint structural grid,
- * and edge-lit cards — without shipping a single image.
+ * What used to live here — film grain, a hairline grid, outlined numerals,
+ * edge-lit card borders, marker highlights — was five separate textures
+ * competing for the same surface. Stacked, they read as noise rather than
+ * craft, and every one of them was fighting the type for attention.
+ *
+ * The replacements below are structural rather than decorative: a label style,
+ * a panel, and a rule. Hierarchy now comes from space and scale, so a section
+ * needs no background of its own to be legible as a section.
  */
-@layer utilities {
-  /* Film grain. An inline SVG turbulence filter: no network request, no raster
-     asset, and it scales to any viewport. Kept very low opacity — it should be
-     felt rather than seen. */
-  .grain::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-  .dark .grain::before {
-    opacity: 0.06;
+@layer components {
+  /* Small caps label above a heading. Carries the section's topic so the
+     heading underneath is free to be a sentence rather than a signpost. */
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground;
   }
 
-  /* Hairline grid, fading out downward. Echoes graph paper and street plans;
-     gives the hero depth without a gradient blob. */
+  /* The page's one container shape: a large soft rectangle on the paper.
+     No shadow — the fill difference alone separates it from the background. */
+  .panel {
+    @apply rounded-3xl border border-border bg-surface;
+  }
+
+  /* Inverted panel. Used sparingly — one per screenful at most — as the single
+     dark mass that gives an otherwise pale page somewhere to rest. */
+  .panel-ink {
+    @apply rounded-3xl bg-ink text-white;
+  }
+
+  /* Section divider. A hairline at 60% of the border token: present enough to
+     group, faint enough that you read it as a pause, not a wall. */
+  .rule {
+    @apply border-t border-border/60;
+  }
+
+  /* Hairline grid for the hero. Deliberately weaker than the version this
+     replaces — 3.5% instead of 5.5% ink, on an 80px cell instead of 64px, so it
+     reads as ruled paper behind the type rather than as graph paper competing
+     with it. The mask fades it out well before the headline's baseline. */
   .grid-lines {
     background-image:
-      linear-gradient(to right, hsl(var(--foreground) / 0.055) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--foreground) / 0.055) 1px, transparent 1px);
-    background-size: 64px 64px;
-    -webkit-mask-image: linear-gradient(to bottom, black, transparent 78%);
-    mask-image: linear-gradient(to bottom, black, transparent 78%);
+      linear-gradient(to right, hsl(var(--foreground) / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.035) 1px, transparent 1px);
+    background-size: 80px 80px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 72%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 72%);
   }
+}
 
-  /* Oversized outlined numeral for editorial step lists. */
-  .numeral {
-    -webkit-text-stroke: 1.5px hsl(var(--primary) / 0.28);
-    color: transparent;
-    font-variant-numeric: tabular-nums;
-    line-height: 0.8;
-  }
-
-  /* A card that catches light along its top edge. */
-  .edge-lit {
-    position: relative;
-  }
-  .edge-lit::after {
-    content: '';
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(var(--primary) / 0.45) 22%,
-      hsl(var(--primary) / 0.45) 78%,
-      transparent
-    );
-    opacity: 0;
-    transition: opacity 0.25s ease;
+/* ─── Motion ─────────────────────────────────────────────────────────────────
+ *
+ * Entrance animation lives in `components/motion/reveal.tsx`, on Motion — the
+ * library Framer is built on. It handles anything with orchestration or
+ * physics: scroll triggers, staggered children, blur-in, spring settling.
+ *
+ * What stays here is hover feedback, which is genuinely better as CSS. It has
+ * to respond within a frame of the pointer arriving, it never needs to
+ * interrupt or sequence, and routing it through React would mean re-rendering
+ * on mouseenter for an effect the compositor can do on its own.
+ *
+ * Both halves respect `prefers-reduced-motion`; Motion reads it via
+ * `useReducedMotion`, and the media query at the end of this block covers these.
+ */
+@layer utilities {
+  /* Card lift. Guarded on a real pointer — on touch this fires on tap and reads
+     as lag rather than feedback. */
+  .lift {
+    transition:
+      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
   @media (hover: hover) {
-    .edge-lit:hover::after {
-      opacity: 1;
+    .lift:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px -16px hsl(var(--shadow-color) / 0.16);
+    }
+  }
+  .lift:active {
+    transform: translateY(0);
+    transition-duration: 0.1s;
+  }
+
+  /* Icon nudge on card hover. The parent carries `.group`. */
+  .icon-hover {
+    transition:
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+      color 0.25s ease;
+  }
+  @media (hover: hover) {
+    .group:hover .icon-hover {
+      transform: translateY(-2px) scale(1.08);
     }
   }
 
-  /* Marker-style underline for a single emphasised word. */
-  .marker {
-    background-image: linear-gradient(hsl(var(--primary) / 0.22), hsl(var(--primary) / 0.22));
+  /* Arrow that leans toward where it is taking you. */
+  .arrow-hover {
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @media (hover: hover) {
+    .group:hover .arrow-hover {
+      transform: translateX(3px);
+    }
+  }
+
+  /* Underline that draws in from the left rather than switching on. */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
     background-repeat: no-repeat;
-    background-position: 0 88%;
-    background-size: 100% 0.34em;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
   }
 
-  /* Staggered entrance. One orchestrated reveal beats scattered micro-motion. */
-  .reveal {
-    animation: reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
-  }
-  @keyframes reveal {
-    from {
-      opacity: 0;
-      transform: translateY(14px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .reveal {
-      animation: none;
+    .lift,
+    .icon-hover,
+    .arrow-hover,
+    .link-underline {
+      transition: none;
+    }
+    .lift:hover,
+    .group:hover .icon-hover,
+    .group:hover .arrow-hover {
+      transform: none;
     }
   }
 }

@@ -36,6 +36,9 @@ const buttonVariants = cva(
           'border border-input bg-transparent hover:bg-secondary hover:text-secondary-foreground',
         ghost: 'hover:bg-secondary hover:text-secondary-foreground',
         subtle: 'bg-primary-soft text-primary hover:bg-primary-soft/70',
+        // Quiet primary. Where orange would shout, ink states the action and
+        // lets the surrounding whitespace carry the emphasis.
+        ink: 'bg-ink text-white hover:bg-ink/88',
         destructive:
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
         link: 'text-primary underline-offset-4 hover:underline',
