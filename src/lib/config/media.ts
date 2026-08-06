@@ -38,7 +38,7 @@ export const HERO_VIDEO: LandingVideo = {
   title: 'How Hustle Street works',
   description:
     'A job posted in Lekki, three applications in nine minutes, and money released the moment the work was confirmed.',
-  poster: '/media/poster-how-it-works.png',
+  poster: '/media/poster-how-it-works.jpg',
   duration: '1:48',
   sources: [],
   transcript: `Kemi needs a sofa moved from a second-floor flat in Lekki. She opens Hustle Street and describes the job — two minutes, no forms, no phone calls.
@@ -61,7 +61,7 @@ export const ESCROW_VIDEO: LandingVideo = {
   title: 'Your money, held safely',
   description:
     'What actually happens between hiring someone and paying them — and what happens if something goes wrong.',
-  poster: '/media/poster-escrow.png',
+  poster: '/media/poster-escrow.jpg',
   duration: '2:12',
   sources: [],
   transcript: `The hardest part of hiring a stranger is trust. Both sides have the same fear: the poster worries about paying for work that never happens, and the hustler worries about doing work that never gets paid for.
@@ -141,11 +141,11 @@ export const HUSTLER_STORIES: HustlerStory[] = [
 
 /** Still imagery used across the marketing sections. */
 export const SCENES = {
-  post: '/media/scene-post.png',
-  hustlers: '/media/scene-hustlers.png',
-  payment: '/media/scene-payment.png',
-  categories: '/media/scene-categories.png',
-  coverage: '/media/coverage-lagos.png',
+  post: '/media/scene-post.jpg',
+  hustlers: '/media/scene-hustlers.jpg',
+  payment: '/media/scene-payment.jpg',
+  categories: '/media/scene-categories.jpg',
+  coverage: '/media/coverage-lagos.jpg',
 } as const
 
 /** App screenshots, regenerated from the real UI by `pnpm media`. */

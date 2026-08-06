@@ -17,12 +17,15 @@
 
 @layer base {
   :root {
-    /* Warm paper, not clinical white. */
-    --background: 40 20% 97%;
+    /* Near-white, with just enough warmth left that it does not read as a
+       clinical #FFFFFF. Panels sit on top at pure white and are told apart by
+       their border rather than by a fill difference, which is what keeps the
+       page feeling open rather than tiled. */
+    --background: 40 14% 99%;
     --foreground: 210 24% 6%;
 
     --surface: 0 0% 100%;
-    --surface-muted: 40 16% 94%;
+    --surface-muted: 40 12% 96%;
     --surface-raised: 0 0% 100%;
 
     --card: 0 0% 100%;
@@ -53,10 +56,10 @@
     --money-foreground: 0 0% 100%;
     --money-soft: 158 50% 95%;
 
-    --secondary: 40 16% 93%;
+    --secondary: 40 12% 95%;
     --secondary-foreground: 210 24% 12%;
 
-    --muted: 40 14% 94%;
+    --muted: 40 10% 96%;
     --muted-foreground: 215 12% 42%;
 
     --accent: 262 70% 56%;

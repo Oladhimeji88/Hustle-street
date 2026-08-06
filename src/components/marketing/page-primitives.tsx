@@ -60,11 +60,16 @@ export function PageHero({
   eyebrow,
   title,
   lede,
+  image,
+  imageAlt,
   children,
 }: {
   eyebrow: string
   title: string
   lede?: string
+  /** Photograph beneath the masthead. Omit for pages that do not want one. */
+  image?: string
+  imageAlt?: string
   children?: React.ReactNode
 }) {
   return (
@@ -93,6 +98,25 @@ export function PageHero({
           ) : null}
           {children ? <RevealItem className="mt-8">{children}</RevealItem> : null}
         </RevealOnMount>
+
+        {image ? (
+          <Reveal effect="scale" duration={1} className="mt-14 sm:mt-16">
+            {/* `priority` because this sits at the top of the page and is the
+                largest contentful paint on every route that uses it. Left to
+                lazy-load it would be fetched after the JS, which is exactly
+                backwards for the one image the user is waiting on. */}
+            <div className="relative aspect-[16/7] overflow-hidden rounded-3xl bg-muted">
+              <Image
+                src={image}
+                alt={imageAlt ?? ''}
+                fill
+                priority
+                sizes="(max-width: 1360px) 100vw, 1360px"
+                className="object-cover"
+              />
+            </div>
+          </Reveal>
+        ) : null}
       </div>
     </section>
   )
