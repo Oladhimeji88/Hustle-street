@@ -87,7 +87,7 @@ export function EscrowDiagram({
 
               <div className="mt-0 md:mt-6">
                 <p className="eyebrow">
-                  Step {index + 1} — {step.label}
+                  Step {index + 1}: {step.label}
                 </p>
                 <p
                   className={cn(

@@ -19,10 +19,9 @@ import { createClient } from '@/lib/supabase/server'
 import { NearbyJobsPreview } from '@/components/marketing/nearby-jobs-preview'
 import { CategoryMarquee } from '@/components/marketing/category-marquee'
 import { FaqAccordion } from '@/components/marketing/faq-accordion'
-import { EscrowDiagram } from '@/components/marketing/escrow-diagram'
 import { VideoPlayer } from '@/components/media/video-player'
 import { MediaFrame, PhoneMockup, StoryCard } from '@/components/media/media-frame'
-import { APP_SHOTS, ESCROW_VIDEO, HERO_VIDEO, HUSTLER_STORIES, SCENES } from '@/lib/config/media'
+import { APP_SHOTS, HERO_VIDEO, HUSTLER_STORIES, SCENES } from '@/lib/config/media'
 import { formatMoney } from '@/lib/money'
 import { ClosingCta, Section, SectionHead, Step } from '@/components/marketing/page-primitives'
 import { RevealGroup, RevealItem, RevealOnMount } from '@/components/motion/reveal'
@@ -59,24 +58,6 @@ const HOW_IT_WORKS = [
     icon: ShieldCheck,
     title: 'Pay when it’s done',
     body: 'Money is held securely and released only when you confirm the work.',
-  },
-]
-
-const TRUST_POINTS = [
-  {
-    icon: ShieldCheck,
-    title: 'Money held until you’re happy',
-    body: 'Payment is secured the moment you hire and released only when you confirm. If something goes wrong, open a dispute and a real person reviews it.',
-  },
-  {
-    icon: BadgeCheck,
-    title: 'Verified people, honest reviews',
-    body: 'Phone and ID verification, and reviews that can only come from completed jobs. Neither side sees the other’s review until both have submitted.',
-  },
-  {
-    icon: MapPin,
-    title: 'Your address stays yours',
-    body: 'Jobs show an area and a distance — never your street. Exact details reach only the hustler you actually hire.',
   },
 ]
 
@@ -137,7 +118,7 @@ export default async function LandingPage() {
               className="mx-auto mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground"
             >
               Hustle Street connects you with skilled people nearby who are ready to get the job
-              done — from moving a sofa to designing a flyer.
+              done, from moving a sofa to designing a flyer.
             </RevealItem>
 
             {/* Search stays the primary affordance. Pill-shaped so it agrees
@@ -226,40 +207,10 @@ export default async function LandingPage() {
             </p>
             <p className="mt-5 text-pretty leading-relaxed text-muted-foreground">
               Free to post. No subscription, no listing fees, no paying to apply. We take{' '}
-              {commissionPercent}% when a job completes — and nothing at all if it doesn’t.
+              {commissionPercent}% when a job completes, and nothing at all if it doesn’t.
             </p>
           </div>
         </div>
-
-        {/* One light card, two ink. The dark mass gives an otherwise pale page
-            somewhere to rest, and marks these three as the load-bearing claims. */}
-        <RevealGroup as="ul" className="mt-14 grid gap-4 md:grid-cols-3">
-          {TRUST_POINTS.map((point, index) => {
-            const Icon = point.icon
-            const inverted = index > 0
-            return (
-              <li
-                key={point.title}
-                className={`lift group flex flex-col p-7 ${inverted ? 'panel-ink' : 'panel bg-surface-muted'}`}
-              >
-                <Icon
-                  className={`icon-hover size-5 ${inverted ? 'text-white/70' : 'text-primary'}`}
-                  aria-hidden="true"
-                />
-                <h3
-                  className={`mt-16 font-display text-lg font-semibold leading-snug ${inverted ? 'text-white' : ''}`}
-                >
-                  {point.title}
-                </h3>
-                <p
-                  className={`mt-3 text-sm leading-relaxed ${inverted ? 'text-white/60' : 'text-muted-foreground'}`}
-                >
-                  {point.body}
-                </p>
-              </li>
-            )
-          })}
-        </RevealGroup>
 
         {/* Coverage as a quiet strip, where a logo wall would otherwise go. */}
         <div className="mt-14 flex flex-col gap-5 border-t border-border/60 pt-8 lg:flex-row lg:items-start lg:gap-12">
@@ -310,7 +261,7 @@ export default async function LandingPage() {
           eyebrow="How it works"
           id="how-heading"
           title="Four steps, about two minutes"
-          lede="Someone needs something done. Someone nearby knows how to do it. We connect them — and hold the money until everyone’s happy."
+          lede="Someone needs something done. Someone nearby knows how to do it. We connect them, and hold the money until everyone’s happy."
         />
 
         <RevealGroup as="ol" className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -377,7 +328,7 @@ export default async function LandingPage() {
               eyebrow="If you need something done"
               id="posters-heading"
               title="Stop asking around"
-              lede="No more calling three people who know a guy. Describe the job once, and people who actually do it — and who are actually near you — come to you."
+              lede="No more calling three people who know a guy. Describe the job once, and the people who actually do it, and who are actually near you, come to you."
             />
 
             <ul className="mt-7 space-y-3.5">
@@ -456,51 +407,6 @@ export default async function LandingPage() {
         </div>
       </Section>
 
-      {/* ═══ Escrow explainer + video ═══════════════════════════════════════ */}
-      <Section id="payments" aria-labelledby="escrow-heading">
-        <SectionHead
-          eyebrow="Secure payments"
-          id="escrow-heading"
-          title="Money that moves when the work is done"
-          lede="Neither side has to go first. The money is secured up front and released on confirmation."
-          align="center"
-        />
-
-        <div className="mt-12">
-          <EscrowDiagram commissionPercent={commissionPercent} exampleMinor={2_000_000} />
-        </div>
-
-        <div className="mt-16 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-16">
-          <div>
-            <h3 className="text-display-sm">What if something goes wrong?</h3>
-            <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
-              Don’t confirm. Open a dispute instead and the money stays held while a real person
-              reviews the messages, photos and evidence from both sides. They can refund you fully,
-              release fully, or split it.
-            </p>
-            <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
-              And if a poster simply goes quiet, payment releases to the hustler automatically after
-              72 hours — nobody’s earnings get held hostage.
-            </p>
-            <Button asChild variant="ghost" className="group mt-6 rounded-full px-5">
-              <Link href="/safety">
-                Trust &amp; safety
-                <ArrowUpRight className="arrow-hover" aria-hidden="true" />
-              </Link>
-            </Button>
-          </div>
-
-          <VideoPlayer
-            sources={ESCROW_VIDEO.sources}
-            poster={ESCROW_VIDEO.poster}
-            title={ESCROW_VIDEO.title}
-            description={ESCROW_VIDEO.description}
-            duration={ESCROW_VIDEO.duration}
-            transcript={ESCROW_VIDEO.transcript}
-          />
-        </div>
-      </Section>
-
       {/* ═══ Hustler stories ════════════════════════════════════════════════ */}
       <Section aria-labelledby="stories-heading">
         <SectionHead
@@ -531,7 +437,7 @@ export default async function LandingPage() {
           eyebrow="Installs like an app"
           id="app-heading"
           title="Built for the phone in your hand"
-          lede="Add it to your home screen — no app store, no 80MB download. It works on a weak connection and keeps your saved jobs available offline."
+          lede="Add it to your home screen. No app store, no 80MB download. It works on a weak connection and keeps your saved jobs available offline."
           align="center"
         />
 
@@ -547,7 +453,7 @@ export default async function LandingPage() {
               src: APP_SHOTS.discover,
               alt: 'Discover screen with a map of nearby jobs and filter chips',
               title: 'Find it on the map',
-              body: 'Filter by distance, budget and category. Approximate pins only — never an address.',
+              body: 'Filter by distance, budget and category. Approximate pins only, never an address.',
             },
             {
               src: APP_SHOTS.chat,

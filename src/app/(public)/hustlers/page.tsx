@@ -11,7 +11,7 @@ import { ClosingCta, PageHero } from '@/components/marketing/page-primitives'
 export const metadata: Metadata = {
   title: 'Find hustlers',
   description:
-    'Browse verified, rated people near you in Lagos — plumbers, cleaners, movers, designers and more. Message before you commit, and pay only when the work is done.',
+    'Browse verified, rated people near you in Lagos: plumbers, cleaners, movers, designers and more. Message before you commit, and pay only when the work is done.',
   alternates: { canonical: '/hustlers' },
 }
 

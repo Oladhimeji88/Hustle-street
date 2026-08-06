@@ -56,7 +56,7 @@ export default async function HelpPage() {
       <PageHero
         eyebrow="Help"
         title="Stuck on something?"
-        lede="Start with the questions below — they cover most of what comes up. If yours is not here, a person will answer it."
+        lede="Start with the questions below. They cover most of what comes up, and if yours is not here a person will answer it."
       />
 
       {/* ═══ Topics ═════════════════════════════════════════════════════════ */}
@@ -131,7 +131,7 @@ export default async function HelpPage() {
                     <p className="text-sm font-medium">In-app messaging</p>
                   </div>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    Fastest route for anything tied to a live job — the thread comes with it.
+                    Fastest route for anything tied to a live job, because the thread comes with it.
                   </p>
                   <Button asChild variant="ghost" size="sm" className="mt-3 rounded-full">
                     <Link href="/login?next=/home">

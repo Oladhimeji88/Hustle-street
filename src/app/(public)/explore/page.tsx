@@ -11,7 +11,7 @@ import { ClosingCta, PageHero } from '@/components/marketing/page-primitives'
 export const metadata: Metadata = {
   title: 'Find work',
   description:
-    'Browse jobs near you in Lagos — cleaning, repairs, moving, design and more. Free to apply, and payment is secured before you start.',
+    'Browse jobs near you in Lagos: cleaning, repairs, moving, design and more. Free to apply, and payment is secured before you start.',
   alternates: { canonical: '/explore' },
 }
 

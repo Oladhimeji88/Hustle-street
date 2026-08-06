@@ -102,7 +102,7 @@ export default async function HowItWorksPage() {
       </Section>
 
       {/* ═══ For hustlers ═══════════════════════════════════════════════════ */}
-      <Section aria-labelledby="hustlers-heading">
+      <Section id="getting-paid" aria-labelledby="hustlers-heading">
         <SectionHead
           eyebrow="If you have a skill"
           id="hustlers-heading"
@@ -141,7 +141,7 @@ export default async function HowItWorksPage() {
         />
         <RevealGroup as="ul" className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: ShieldCheck, title: 'Secured payments', body: 'Money is held by a licensed payment provider — not by us — until the job is confirmed.' },
+            { icon: ShieldCheck, title: 'Secured payments', body: 'Money is held by a licensed payment provider, not by us, until the job is confirmed.' },
             { icon: Star, title: 'Reviews that mean something', body: 'Only completed jobs can be reviewed, and neither side sees the other’s until both have submitted.' },
             { icon: MapPin, title: 'Location without exposure', body: 'Jobs advertise an area and a distance. Your street address reaches only the person you hire.' },
             { icon: MessageSquare, title: 'Everything on the record', body: 'Every conversation is attached to its job, its agreement and its payment.' },

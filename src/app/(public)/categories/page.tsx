@@ -11,7 +11,7 @@ import type { Category } from '@/types/database'
 export const metadata: Metadata = {
   title: 'Categories',
   description:
-    'Every kind of work on Hustle Street — cleaning, repairs, moving, design, tutoring and more. Browse a category to see live jobs near you.',
+    'Every kind of work on Hustle Street: cleaning, repairs, moving, design, tutoring and more. Browse a category to see live jobs near you.',
   alternates: { canonical: '/categories' },
 }
 
@@ -85,7 +85,9 @@ export default async function CategoriesPage() {
                         aria-hidden="true"
                       />
                       <span className="text-xs tabular-nums text-muted-foreground/70">
-                        {category.job_count > 0 ? `${category.job_count.toLocaleString()} live` : '—'}
+                        {category.job_count > 0
+                          ? `${category.job_count.toLocaleString()} live`
+                          : 'None yet'}
                       </span>
                     </div>
 

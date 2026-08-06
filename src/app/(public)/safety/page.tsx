@@ -18,7 +18,7 @@ import { RevealGroup } from '@/components/motion/reveal'
 export const metadata: Metadata = {
   title: 'Trust & safety',
   description:
-    'How Hustle Street handles verification, payments, privacy and disputes — and what to do when something goes wrong.',
+    'How Hustle Street handles verification, payments, privacy and disputes, and what to do when something goes wrong.',
   alternates: { canonical: '/safety' },
 }
 
@@ -38,7 +38,7 @@ const PILLARS = [
   {
     icon: MapPin,
     title: 'Your address is not public',
-    body: 'A posted job advertises an area and an approximate distance — never a street address. The exact location is released to one person: the hustler you actually hire, at the moment you hire them.',
+    body: 'A posted job advertises an area and an approximate distance, never a street address. The exact location is released to one person: the hustler you actually hire, at the moment you hire them.',
   },
   {
     icon: Star,
@@ -48,7 +48,7 @@ const PILLARS = [
   {
     icon: MessageSquare,
     title: 'Conversations stay on the record',
-    body: 'Every message is attached to its job. If a dispute is opened, that thread — with its photos, prices and timestamps — is the evidence. Moving a negotiation off-platform is the single most common way people get burned.',
+    body: 'Every message is attached to its job. If a dispute is opened, that thread, with its photos, prices and timestamps, is the evidence. Moving a negotiation off-platform is the single most common way people get burned.',
   },
   {
     icon: Scale,
@@ -60,7 +60,7 @@ const PILLARS = [
 const POSTER_RULES = [
   'Keep the conversation in the app until you have hired someone.',
   'Never pay outside Hustle Street. A request to do so is the clearest warning sign there is.',
-  'Read the reviews, not just the star count — check that past jobs resemble yours.',
+  'Read the reviews, not just the star count. Check that past jobs resemble yours.',
   'Agree the price and the scope in writing before work starts.',
   'Do not confirm completion until you have actually seen the finished work.',
 ]
@@ -140,7 +140,7 @@ export default function SafetyPage() {
       </Section>
 
       {/* ═══ When it goes wrong ═════════════════════════════════════════════ */}
-      <Section aria-labelledby="wrong-heading">
+      <Section id="report" aria-labelledby="wrong-heading">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
           <SectionHead
             eyebrow="When it goes wrong"
