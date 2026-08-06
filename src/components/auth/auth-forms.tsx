@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff, Mail, Phone } from 'lucide-react'
 import type { z } from 'zod'
+import { devLoginAllowed, devPasswordFor } from '@/lib/auth/dev-bypass'
 import { createClient } from '@/lib/supabase/client'
 import {
   phoneStartInput,
