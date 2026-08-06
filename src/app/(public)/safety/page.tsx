@@ -80,6 +80,8 @@ export default function SafetyPage() {
         eyebrow="Trust & safety"
         title="Built for hiring a stranger"
         lede="The hardest part of a marketplace like this is trust between two people who have never met. It is the thing the platform is designed around, not a policy page written afterwards."
+              image="/media/hero-safety.jpg"
+        imageAlt="A worker in a safety vest and helmet on site"
       />
 
       {/* ═══ Pillars ════════════════════════════════════════════════════════ */}

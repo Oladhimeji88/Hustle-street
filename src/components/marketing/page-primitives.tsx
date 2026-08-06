@@ -1,4 +1,5 @@
 import * as React from 'react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { Reveal, RevealOnMount, RevealItem } from '@/components/motion/reveal'
 

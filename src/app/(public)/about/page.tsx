@@ -40,6 +40,8 @@ export default function AboutPage() {
         eyebrow="About"
         title="Why this exists"
         lede="Finding someone reliable to do a job usually means calling three people who know a guy. Hustle Street is an attempt to make that a two-minute problem instead of a two-day one."
+              image="/media/hero-about.jpg"
+        imageAlt="People gathered together on a Lagos street"
       />
 
       <Section aria-labelledby="story-heading">

@@ -47,6 +47,8 @@ export default async function CategoriesPage() {
             ? `${parents.length} categories and ${totalLive.toLocaleString()} live jobs across Lagos. Pick one to see what is open near you.`
             : `${parents.length} categories, from a leaking tap to a brand identity. Pick one to see what is open near you.`
         }
+        image="/media/hero-categories.jpg"
+        imageAlt="A woman standing against a painted wall in Lagos"
       >
         <Button asChild size="lg" className="rounded-full px-7">
           <Link href="/explore">

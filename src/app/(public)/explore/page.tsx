@@ -38,6 +38,8 @@ export default async function ExplorePage() {
         eyebrow="Find work"
         title="Jobs near you, right now"
         lede="Free to apply, no subscription, and the payment is secured before you lift a finger. Set your location to rank them by distance."
+              image="/media/hero-explore.jpg"
+        imageAlt="A rider making their way through Lagos traffic"
       />
 
       <section className="container py-14 sm:py-20">

@@ -36,6 +36,8 @@ export default async function HustlersPage() {
         eyebrow="Find hustlers"
         title="Skilled people, already nearby"
         lede="Ratings and completed-job counts that can only come from finished work. Message anyone before you commit, and your payment stays held until you confirm."
+              image="/media/hero-hustlers.jpg"
+        imageAlt="A carpenter drilling into timber"
       />
 
       <section className="container py-14 sm:py-20">

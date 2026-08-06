@@ -70,6 +70,8 @@ export default async function HowItWorksPage() {
         eyebrow="How it works"
         title="Someone needs it done. Someone nearby can do it."
         lede="Hustle Street's whole job is connecting those two people and holding the money in between, so neither side has to trust the other on faith."
+              image="/media/hero-how-it-works.jpg"
+        imageAlt="Someone moving goods by hand cart through the city"
       >
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button asChild size="lg" className="rounded-full px-7">
