@@ -52,3 +52,5 @@ Thumbs.db
 
 # generated PWA assets that are built from source icons
 public/icons/generated/
+
+.vercel
