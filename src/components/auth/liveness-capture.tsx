@@ -119,8 +119,11 @@ export function LivenessCapture({
     <div>
       <div className="relative aspect-square w-full max-w-[260px] overflow-hidden rounded-2xl border border-border bg-surface-muted">
         {state === 'captured' && preview ? (
-          // eslint-disable-next-line @next/next/no-img-element -- a data: URL from
-          // the camera; next/image cannot optimise it and would only add a layer.
+          /* A data: URL straight from the camera. next/image cannot optimise a
+             data URL, so routing it through <Image> would add a layer and
+             change nothing. The directive must be the immediately preceding
+             line to apply, hence the block comment above rather than below. */
+          // eslint-disable-next-line @next/next/no-img-element
           <img src={preview} alt="Your liveness capture" className="size-full object-cover" />
         ) : (
           <video
