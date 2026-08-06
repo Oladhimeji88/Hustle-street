@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/server'
-import { CATEGORY_EMOJI } from '@/components/job/job-card'
+import { categoryAccent, categoryIcon } from '@/lib/categories'
 import { NearbyJobsPreview } from '@/components/marketing/nearby-jobs-preview'
 import { FaqAccordion } from '@/components/marketing/faq-accordion'
 import { EscrowDiagram } from '@/components/marketing/escrow-diagram'
@@ -103,15 +103,18 @@ export default async function LandingPage() {
   return (
     <>
       {/* ═══ Hero ═══════════════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden">
+      <section className="grain relative overflow-hidden">
+        {/* Two separate layers: an inline `background` would clobber the
+            background-image the .grid-lines utility relies on. */}
         <div
-          className="pointer-events-none absolute inset-0 -z-10"
+          className="pointer-events-none absolute inset-0 -z-20"
           aria-hidden="true"
           style={{
             background:
-              'radial-gradient(58rem 32rem at 10% -10%, hsl(var(--primary) / 0.18), transparent 62%), radial-gradient(42rem 26rem at 95% 4%, hsl(var(--money) / 0.13), transparent 60%)',
+              'radial-gradient(58rem 32rem at 10% -10%, hsl(var(--primary) / 0.16), transparent 62%), radial-gradient(42rem 26rem at 95% 4%, hsl(var(--money) / 0.12), transparent 60%)',
           }}
         />
+        <div className="grid-lines pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
 
         <div className="container py-14 sm:py-20 lg:py-24">
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
@@ -124,7 +127,7 @@ export default async function LandingPage() {
               <h1 className="text-display-xl">
                 Get things done.
                 <br />
-                <span className="text-primary">Find people who can.</span>
+                <span className="marker text-primary">Find people who can.</span>
               </h1>
 
               <p className="mt-5 max-w-lg text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -277,24 +280,32 @@ export default async function LandingPage() {
           </div>
 
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {categoryList.map((category) => (
-              <li key={category.id}>
-                <Link
-                  href={`/explore?categories=${category.id}`}
-                  className="street-card flex h-full flex-col gap-2 p-4"
-                >
-                  <span className="text-3xl" aria-hidden="true">
-                    {CATEGORY_EMOJI[category.slug] ?? '🛠️'}
-                  </span>
-                  <span className="font-display text-sm font-bold leading-snug">{category.name}</span>
-                  <span className="mt-auto text-xs text-muted-foreground">
-                    {category.job_count > 0
-                      ? `${category.job_count.toLocaleString()} ${category.job_count === 1 ? 'job' : 'jobs'}`
-                      : 'Be the first'}
-                  </span>
-                </Link>
-              </li>
-            ))}
+            {categoryList.map((category, index) => {
+              const Icon = categoryIcon(category.icon, category.slug)
+              return (
+                <li key={category.id}>
+                  <Link
+                    href={`/explore?categories=${category.id}`}
+                    className="street-card edge-lit reveal group flex h-full flex-col gap-3 p-4"
+                    style={{ animationDelay: `${Math.min(index, 10) * 35}ms` }}
+                  >
+                    <span
+                      className={`flex size-11 items-center justify-center rounded-xl transition-transform duration-300 group-hover:-rotate-6 ${categoryAccent(category.slug)}`}
+                    >
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <span className="font-display text-[15px] font-bold leading-snug tracking-tight">
+                      {category.name}
+                    </span>
+                    <span className="mt-auto text-xs tabular-nums text-muted-foreground">
+                      {category.job_count > 0
+                        ? `${category.job_count.toLocaleString()} ${category.job_count === 1 ? 'job' : 'jobs'} live`
+                        : 'Be the first'}
+                    </span>
+                  </Link>
+                </li>
+              )
+            })}
           </ul>
         </div>
       </section>
@@ -320,9 +331,9 @@ export default async function LandingPage() {
             {HOW_IT_WORKS.map((step, index) => {
               const Icon = step.icon
               return (
-                <li key={step.title} className="street-card relative p-5">
+                <li key={step.title} className="street-card edge-lit relative p-5">
                   <span
-                    className="absolute right-4 top-4 font-display text-4xl font-extrabold text-primary/10"
+                    className="numeral absolute right-4 top-3 font-display text-6xl font-extrabold"
                     aria-hidden="true"
                   >
                     {index + 1}

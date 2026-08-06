@@ -1,30 +1,9 @@
 import type { Metadata, Viewport } from 'next'
-import { Plus_Jakarta_Sans, Inter } from 'next/font/google'
+import { body, display } from './fonts'
 import { publicEnv } from '@/lib/config/env'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/toast'
 import './globals.css'
-
-/*
- * Type: Plus Jakarta Sans for display (geometric, slightly quirky, energetic —
- * it reads urban rather than corporate) over Inter for body copy (unbeatable
- * legibility at small sizes on cheap Android screens, which is most of our
- * market).
- */
-const display = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  variable: '--font-display',
-  weight: ['600', '700', '800'],
-  display: 'swap',
-  fallback: ['system-ui', 'sans-serif'],
-})
-
-const body = Inter({
-  subsets: ['latin'],
-  variable: '--font-sans',
-  display: 'swap',
-  fallback: ['system-ui', 'sans-serif'],
-})
 
 const APP_NAME = 'Hustle Street'
 const APP_DESCRIPTION =
