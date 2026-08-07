@@ -62,7 +62,7 @@ export function SignUpForm() {
   async function onSubmit(values: SignUpValues) {
     const supabase = createClient()
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: values.email,
       password: values.password,
       options: {
@@ -80,6 +80,20 @@ export function SignUpForm() {
           ? 'If that email is available you will receive a confirmation link shortly.'
           : errorMessage(error),
       })
+      return
+    }
+
+    // Whether a confirmation email is required is a Supabase project setting,
+    // not something this form can know in advance. The session tells us: with
+    // "Confirm email" off, signUp returns one and the user is already logged in.
+    //
+    // This used to show "check your email" unconditionally, which stranded
+    // people on a screen waiting for a message that was never going to arrive —
+    // the confirmation mail comes from Supabase's own mailer, whose free tier
+    // sends a couple an hour at best.
+    if (data.session) {
+      router.push('/onboarding')
+      router.refresh()
       return
     }
 
@@ -102,9 +116,18 @@ export function SignUpForm() {
           <span className="font-medium text-foreground">{form.getValues('email')}</span>. Click it to
           finish setting up your account.
         </p>
-        <Button asChild variant="ghost" size="sm" className="mt-6">
-          <Link href="/login">Back to log in</Link>
-        </Button>
+        <p className="mx-auto mt-4 max-w-sm text-pretty text-xs leading-relaxed text-muted-foreground">
+          Check your spam folder if it has not arrived within a few minutes. Signing in with Google
+          skips this step entirely, because Google has already verified the address.
+        </p>
+        <div className="mt-6 flex flex-col items-center gap-2">
+          <div className="w-full max-w-xs">
+            <GoogleButton next="/onboarding" />
+          </div>
+          <Button asChild variant="ghost" size="sm">
+            <Link href="/login">Back to log in</Link>
+          </Button>
+        </div>
       </div>
     )
   }
