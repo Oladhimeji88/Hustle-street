@@ -125,7 +125,7 @@ export function AppSidebar({
                         'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
                         'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                         active
-                          ? 'bg-primary-soft text-primary'
+                          ? 'bg-primary-soft text-primary-text'
                           : 'text-foreground/75 hover:bg-secondary hover:text-foreground',
                       )}
                     >

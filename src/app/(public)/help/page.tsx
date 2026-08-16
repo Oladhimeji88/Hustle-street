@@ -78,7 +78,7 @@ export default async function HelpPage() {
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
                     {topic.body}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium text-primary-text">
                     {topic.cta}
                     <ArrowUpRight className="arrow-hover size-4" aria-hidden="true" />
                   </span>

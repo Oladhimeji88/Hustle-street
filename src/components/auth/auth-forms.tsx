@@ -582,7 +582,7 @@ export function RequestPasswordResetForm() {
     return (
       <div className="text-center">
         <div
-          className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary-soft text-primary"
+          className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-primary-soft text-primary-text"
           aria-hidden="true"
         >
           <Mail className="size-6" />

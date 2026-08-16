@@ -104,7 +104,7 @@ function EmptyState({ icon, title, description, action, secondaryAction, classNa
     >
       {icon && (
         <div
-          className="flex size-14 items-center justify-center rounded-2xl bg-primary-soft text-primary [&_svg]:size-6"
+          className="flex size-14 items-center justify-center rounded-2xl bg-primary-soft text-primary-text [&_svg]:size-6"
           aria-hidden="true"
         >
           {icon}

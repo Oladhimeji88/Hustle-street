@@ -190,7 +190,7 @@ export function VideoPlayer({
                 type="button"
                 onClick={() => setShowTranscript((value) => !value)}
                 aria-expanded={showTranscript}
-                className="mt-1 text-sm font-semibold text-primary hover:underline"
+                className="mt-1 font-display text-button-sm text-primary-text hover:underline"
               >
                 {showTranscript ? 'Hide transcript' : 'Read the transcript'}
               </button>

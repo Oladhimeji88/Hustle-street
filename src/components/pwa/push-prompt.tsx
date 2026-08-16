@@ -107,7 +107,7 @@ export function PushPermissionPrompt() {
         <X className="size-4" />
       </button>
 
-      <div className="flex size-10 items-center justify-center rounded-xl bg-primary-soft text-primary">
+      <div className="flex size-10 items-center justify-center rounded-xl bg-primary-soft text-primary-text">
         <Bell className="size-5" aria-hidden="true" />
       </div>
 

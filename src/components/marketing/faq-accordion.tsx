@@ -71,7 +71,7 @@ export function FaqAccordion({
               <AccordionPrimitive.Trigger
                 className={cn(
                   'group flex w-full items-center justify-between gap-4 py-5 text-left',
-                  'font-display text-base font-medium transition-colors hover:text-primary',
+                  'font-display text-base font-medium transition-colors hover:text-primary-text',
                   'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                 )}
               >

@@ -109,7 +109,7 @@ export default async function CategoriesPage() {
                       </p>
                     ) : null}
 
-                    <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-medium text-primary">
+                    <span className="mt-auto inline-flex items-center gap-1.5 pt-6 text-sm font-medium text-primary-text">
                       See jobs
                       <ArrowRight className="arrow-hover size-4" aria-hidden="true" />
                     </span>

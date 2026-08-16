@@ -120,7 +120,7 @@ function describeAssignment(assignment: ActiveAssignment, isPoster: boolean) {
     case 'active':
       return {
         icon: CircleDot,
-        tone: 'bg-primary-soft text-primary',
+        tone: 'bg-primary-soft text-primary-text',
         detail: isPoster ? 'Work in progress' : 'Get it done, then submit for confirmation',
         badge: 'In progress',
         badgeVariant: 'primary' as const,

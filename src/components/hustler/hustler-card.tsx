@@ -179,7 +179,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
                   event.stopPropagation()
                   onInvite(hustler.id)
                 }}
-                className="relative z-10 ml-auto rounded-lg bg-primary-soft px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="relative z-10 ml-auto rounded-lg bg-primary-soft px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 Invite
               </button>

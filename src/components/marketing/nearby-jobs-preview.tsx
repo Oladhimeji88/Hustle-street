@@ -50,7 +50,7 @@ export function NearbyJobsPreview() {
         </p>
         <Link
           href="/explore"
-          className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
+          className="inline-flex items-center gap-1 font-display text-eyebrow font-medium text-primary-text hover:underline"
         >
           See all
           <ArrowRight className="size-3" aria-hidden="true" />

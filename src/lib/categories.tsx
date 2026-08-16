@@ -84,7 +84,7 @@ export function categoryIcon(icon?: string | null, slug?: string | null): Lucide
  * providing rhythm rather than noise.
  */
 const ACCENTS = [
-  'bg-primary-soft text-primary',
+  'bg-primary-soft text-primary-text',
   'bg-money-soft text-money',
   'bg-accent/10 text-accent',
   'bg-warning-soft text-warning-foreground',

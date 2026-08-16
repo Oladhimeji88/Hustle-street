@@ -99,7 +99,7 @@ export function BottomNav({
                 className={cn(
                   'tap-target relative flex h-full flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium transition-colors',
                   'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-                  active ? 'text-primary' : 'text-muted-foreground',
+                  active ? 'text-primary-text' : 'text-muted-foreground',
                 )}
               >
                 <span className="relative">
