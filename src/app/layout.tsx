@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { body, display } from './fonts'
+import { body, display, mono } from './fonts'
 import { publicEnv } from '@/lib/config/env'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/toast'
@@ -73,17 +73,23 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
   // One colour: the app renders light regardless of the OS setting, so offering
   // a dark browser chrome would leave the address bar mismatched with the page.
-  themeColor: '#FAF9F7',
+  // Matches `--background` (#FBFBF8) exactly — a browser chrome one shade off
+  // the page reads as a seam at the top of the viewport.
+  themeColor: '#FBFBF8',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-NG" suppressHydrationWarning className={`${display.variable} ${body.variable}`}>
+    <html
+      lang="en-NG"
+      suppressHydrationWarning
+      className={`${display.variable} ${body.variable} ${mono.variable}`}
+    >
       <body>
         {/* Keyboard users must be able to skip the nav on every page. */}
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-ink focus:px-4 focus:py-2 focus:font-display focus:text-button-sm focus:text-ink-foreground"
         >
           Skip to content
         </a>

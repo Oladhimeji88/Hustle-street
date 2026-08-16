@@ -56,7 +56,7 @@ export function BottomNav({
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface/95 backdrop-blur-lg md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface md:hidden"
       style={{ paddingBottom: 'var(--safe-bottom)' }}
     >
       <ul className="mx-auto flex h-16 max-w-lg items-stretch justify-around px-2">
@@ -81,7 +81,7 @@ export function BottomNav({
                   aria-current={active ? 'page' : undefined}
                   className={cn(
                     'tap-target -mt-6 flex size-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-street transition-transform',
-                    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+                    'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                     'active:scale-95',
                   )}
                 >
@@ -98,7 +98,7 @@ export function BottomNav({
                 aria-current={active ? 'page' : undefined}
                 className={cn(
                   'tap-target relative flex h-full flex-col items-center justify-center gap-0.5 rounded-lg text-[10px] font-medium transition-colors',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                  'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                   active ? 'text-primary' : 'text-muted-foreground',
                 )}
               >
@@ -106,7 +106,7 @@ export function BottomNav({
                   <Icon className="size-[22px]" aria-hidden="true" />
                   {badge > 0 && (
                     <span
-                      className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[9px] font-bold text-destructive-foreground"
+                      className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 font-mono text-[9px] text-destructive-foreground"
                       aria-label={`${badge} unread`}
                     >
                       {badge > 99 ? '99+' : badge}
@@ -116,7 +116,7 @@ export function BottomNav({
                 {item.label}
                 {active && (
                   <span
-                    className="absolute inset-x-4 top-0 h-0.5 rounded-full bg-primary"
+                    className="absolute inset-x-4 top-0 h-0.5 bg-primary"
                     aria-hidden="true"
                   />
                 )}

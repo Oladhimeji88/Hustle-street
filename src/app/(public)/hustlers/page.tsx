@@ -40,7 +40,7 @@ export default async function HustlersPage() {
         imageAlt="A carpenter drilling into timber"
       />
 
-      <section className="container py-14 sm:py-20">
+      <section className="gutter py-14 sm:py-20">
         <Suspense fallback={<ListSkeleton count={6} />}>
           <HustlerBrowser categories={categories} />
         </Suspense>
@@ -50,7 +50,7 @@ export default async function HustlersPage() {
         title="Would rather they came to you?"
         body="Post the job instead. People with the right skills in your area get notified straight away, and you pick from whoever replies."
       >
-        <Button asChild size="lg" className="rounded-full px-7">
+        <Button asChild size="lg">
           <Link href="/post">
             Post a Job
             <ArrowRight aria-hidden="true" />
@@ -59,8 +59,7 @@ export default async function HustlersPage() {
         <Button
           asChild
           size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
+          variant="invert-outline"
         >
           <Link href="/safety">Trust &amp; safety</Link>
         </Button>

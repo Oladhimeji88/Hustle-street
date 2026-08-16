@@ -6,22 +6,55 @@ import { Reveal, RevealOnMount, RevealItem } from '@/components/motion/reveal'
 /**
  * Shared furniture for the public marketing pages.
  *
- * These started as local helpers inside the landing page. Pulling them out is
- * what keeps six separate pages looking like one site: the vertical rhythm, the
- * eyebrow treatment and the heading scale are defined once here rather than
- * re-typed (and quietly drifting) on every new page.
+ * These are what keep ten separate pages looking like one site. The redesign
+ * changed what they are made of rather than what they are called, so every page
+ * that already used them picks up the new system without being touched.
+ *
+ * ── The band replaces the container ─────────────────────────────────────────
+ *
+ * Previously a section was a centred 1360px column with 80–112px of vertical
+ * padding, floating on the page with whitespace doing the separating. Now it is a
+ * **band**: full-bleed, bounded top and bottom by the 1px hairline, with its
+ * content held inside the ruled column that runs the whole height of the site.
+ *
+ * That is why the padding came down (56/80px from 80/112px). When a rule marks
+ * where a section ends, the section no longer has to prove it with air. The old
+ * spacing would now read as a gap rather than as rhythm.
+ *
+ * The ruled column itself lives on `<main>` in the public layout, so these only
+ * supply the band and the gutter.
  */
 
-/** Standard section: shared horizontal container, shared vertical rhythm. */
+/** Standard section: a band, with the shared gutter and vertical rhythm. */
 export function Section({ children, className, ...props }: React.ComponentProps<'section'>) {
   return (
-    <section className={cn('container py-20 sm:py-28', className)} {...props}>
-      <Reveal effect="up">{children}</Reveal>
+    <section className={cn('band', className)} {...props}>
+      <div className="gutter py-14 sm:py-20">
+        <Reveal effect="up">{children}</Reveal>
+      </div>
     </section>
   )
 }
 
-/** Eyebrow + heading + optional lede, at the standard spacing. */
+/**
+ * A band with no padding of its own, for sections that manage their own interior
+ * grid — a row of cells that must reach the ruled column's edges, for instance.
+ */
+export function Band({ children, className, ...props }: React.ComponentProps<'section'>) {
+  return (
+    <section className={cn('band', className)} {...props}>
+      {children}
+    </section>
+  )
+}
+
+/**
+ * Eyebrow + heading + optional lede.
+ *
+ * The eyebrow is mono and uppercase. That single choice carries most of the
+ * technical register: it reads as a field label on a drawing rather than as a
+ * marketing kicker, which is what lets the heading beneath it be a plain sentence.
+ */
 export function SectionHead({
   eyebrow,
   title,
@@ -39,13 +72,20 @@ export function SectionHead({
 }) {
   const centered = align === 'center'
   return (
-    <div className={cn(centered ? 'mx-auto max-w-2xl text-center' : 'max-w-2xl', className)}>
+    <div className={cn(centered ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl', className)}>
       {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-      <h2 id={id} className={cn('text-display-md', eyebrow && 'mt-4')}>
+      <h2 id={id} className={cn('text-h2', eyebrow && 'mt-4')}>
         {title}
       </h2>
       {lede ? (
-        <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">{lede}</p>
+        <p
+          className={cn(
+            'mt-5 max-w-2xl text-pretty text-body-lg text-muted-foreground',
+            centered && 'mx-auto',
+          )}
+        >
+          {lede}
+        </p>
       ) : null}
     </div>
   )
@@ -54,8 +94,10 @@ export function SectionHead({
 /**
  * The masthead every non-landing public page opens with.
  *
- * Carries the same ruled-paper grid as the landing hero so arriving on
- * /safety from / does not feel like arriving at a different product.
+ * Carries the same ruled paper as the landing hero, so arriving on /safety from /
+ * does not feel like arriving at a different product. The photograph below it is
+ * a grid cell — square corners, hairline border — and wipes in with the clip-path
+ * reveal rather than scaling up.
  */
 export function PageHero({
   eyebrow,
@@ -74,25 +116,26 @@ export function PageHero({
   children?: React.ReactNode
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-border/60">
+    <section className="band relative overflow-hidden">
+      {/* Its own absolutely positioned layer rather than a class on the section:
+          the mask that fades the grid out would otherwise clip the content
+          painted on top of it. */}
       <div
-        className="grid-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-[30rem]"
+        className="grid-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-[28rem]"
         aria-hidden="true"
       />
-      <div className="container py-16 sm:py-24">
-        {/* Blur-in on the masthead: the heading resolves into focus rather than
-            sliding, which is the one place on a page worth spending that on. */}
-        <RevealOnMount className="max-w-3xl">
+      <div className="gutter py-14 sm:py-20">
+        <RevealOnMount className="max-w-4xl">
           <RevealItem effect="fade" as="p" className="eyebrow">
             {eyebrow}
           </RevealItem>
-          <RevealItem effect="blur" duration={1} className="mt-4">
-            <h1 className="text-display-lg">{title}</h1>
+          <RevealItem effect="up" className="mt-4">
+            <h1 className="text-h1">{title}</h1>
           </RevealItem>
           {lede ? (
             <RevealItem
               as="p"
-              className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground"
+              className="mt-6 max-w-2xl text-pretty text-body-lg text-muted-foreground"
             >
               {lede}
             </RevealItem>
@@ -101,18 +144,18 @@ export function PageHero({
         </RevealOnMount>
 
         {image ? (
-          <Reveal effect="scale" duration={1} className="mt-14 sm:mt-16">
+          <Reveal effect="reveal" className="mt-12 sm:mt-16">
             {/* `priority` because this sits at the top of the page and is the
                 largest contentful paint on every route that uses it. Left to
                 lazy-load it would be fetched after the JS, which is exactly
                 backwards for the one image the user is waiting on. */}
-            <div className="relative aspect-[16/7] overflow-hidden rounded-3xl bg-muted">
+            <div className="relative aspect-[16/7] overflow-hidden border border-border bg-surface-muted">
               <Image
                 src={image}
                 alt={imageAlt ?? ''}
                 fill
                 priority
-                sizes="(max-width: 1360px) 100vw, 1360px"
+                sizes="(max-width: 1728px) 100vw, 1728px"
                 className="object-cover"
               />
             </div>
@@ -126,6 +169,10 @@ export function PageHero({
 /**
  * Numbered editorial step. Shared by /how-it-works and the landing page so the
  * two descriptions of the same process cannot drift apart visually.
+ *
+ * The index is set in the mono face at full contrast rather than as a faded
+ * display numeral. A step number is data — a position in a sequence — and the
+ * mono says so.
  */
 export function Step({
   index,
@@ -142,16 +189,22 @@ export function Step({
   // animating parent to trigger the variant, so it simply renders as-is.
   return (
     <RevealItem as="li" className="border-t border-border pt-5">
-      <span className="font-display text-sm tabular-nums text-muted-foreground/60">
+      <span className="font-mono text-eyebrow-sm tabular-nums text-primary-text">
         {String(index).padStart(2, '0')}
       </span>
-      <h3 className="mt-3 font-display text-lg font-semibold">{title}</h3>
-      <div className="mt-2 text-sm leading-relaxed text-muted-foreground">{children}</div>
+      <h3 className="mt-3 font-display text-h6">{title}</h3>
+      <div className="mt-2 text-body-sm leading-relaxed text-muted-foreground">{children}</div>
     </RevealItem>
   )
 }
 
-/** Closing call to action. One ink panel, repeated verbatim across pages. */
+/**
+ * Closing call to action. One ink band, repeated verbatim across pages.
+ *
+ * Full-bleed navy rather than a rounded panel inset from the page. It is the last
+ * band before the footer, and letting it run to the edges is what makes it read
+ * as the page closing rather than as one more card on it.
+ */
 export function ClosingCta({
   title = 'Need it done? Ready to hustle?',
   body = 'One account does both. Posting is free, and you only pay when someone actually does the work.',
@@ -162,16 +215,16 @@ export function ClosingCta({
   children: React.ReactNode
 }) {
   return (
-    <section className="container pb-24 pt-4 sm:pb-32">
-      <Reveal effect="scale" duration={1} className="panel-ink px-6 py-20 text-center sm:px-12 sm:py-28">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="text-display-lg text-white">{title}</h2>
-          <p className="mx-auto mt-5 max-w-lg text-pretty text-lg leading-relaxed text-white/60">
+    <section className="panel-ink border-t border-border">
+      <div className="gutter py-20 sm:py-28">
+        <Reveal effect="up" className="mx-auto max-w-3xl text-center">
+          <h2 className="text-h2 text-ink-foreground">{title}</h2>
+          <p className="mx-auto mt-6 max-w-xl text-pretty text-body-lg text-ink-foreground/60">
             {body}
           </p>
-          <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">{children}</div>
-        </div>
-      </Reveal>
+          <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">{children}</div>
+        </Reveal>
+      </div>
     </section>
   )
 }

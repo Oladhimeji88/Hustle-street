@@ -131,7 +131,7 @@ export function HustlerBrowser({ categories }: { categories: CategoryOption[] })
             <p className="text-xs text-muted-foreground">
               {activeFilters} filter{activeFilters === 1 ? '' : 's'} active
             </p>
-            <Button variant="ghost" size="xs" onClick={clearAll} className="ml-auto rounded-full">
+            <Button variant="ghost" size="xs" onClick={clearAll} className="ml-auto">
               <X aria-hidden="true" />
               Clear
             </Button>

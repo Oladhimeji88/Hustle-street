@@ -18,7 +18,7 @@ const Switch = React.forwardRef<
     ref={ref}
     className={cn(
       'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+      'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
       className,
@@ -75,7 +75,7 @@ const Checkbox = React.forwardRef<
     ref={ref}
     className={cn(
       'peer size-5 shrink-0 rounded-md border-2 border-input transition-colors',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
       'data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground',
@@ -145,7 +145,7 @@ const RadioGroupItem = React.forwardRef<
     ref={ref}
     className={cn(
       'aspect-square size-5 shrink-0 rounded-full border-2 border-input transition-colors',
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+      'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
       'disabled:cursor-not-allowed disabled:opacity-50',
       'data-[state=checked]:border-primary',
       className,
@@ -223,7 +223,7 @@ const Slider = React.forwardRef<
         key={index}
         className={cn(
           'block size-6 rounded-full border-2 border-primary bg-surface shadow-md transition-transform',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
           'active:scale-110 disabled:pointer-events-none disabled:opacity-50',
         )}
       />

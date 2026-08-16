@@ -154,7 +154,7 @@ export function LivenessCapture({
         ) : null}
 
         {state === 'captured' ? (
-          <span className="absolute right-3 top-3 flex size-7 items-center justify-center rounded-full bg-money text-white">
+          <span className="absolute right-3 top-3 flex size-7 items-center justify-center rounded-md bg-money text-white">
             <Check className="size-4" aria-hidden="true" />
           </span>
         ) : null}

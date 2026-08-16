@@ -108,7 +108,7 @@ export function JobContactActions({
         type="button"
         onClick={handleMessage}
         aria-label={`Message ${posterName} about this job`}
-        className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground/20 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-foreground/20 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <MessageSquare className="size-[17px]" aria-hidden="true" />
       </button>
@@ -118,7 +118,7 @@ export function JobContactActions({
         onClick={handleCall}
         disabled={loading}
         aria-label={`Call ${posterName} about this job`}
-        className="flex size-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors hover:border-foreground/20 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+        className="flex size-9 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:border-foreground/20 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50"
       >
         {loading ? (
           <Loader2 className="size-[17px] animate-spin" aria-hidden="true" />

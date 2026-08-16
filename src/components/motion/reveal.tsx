@@ -1,70 +1,132 @@
 'use client'
 
 import * as React from 'react'
-import { motion, useReducedMotion, type TargetAndTransition, type Variants } from 'motion/react'
+import { motion, useReducedMotion, type Transition, type TargetAndTransition, type Variants } from 'motion/react'
+import { cn } from '@/lib/utils'
 
 /**
  * Entrance animation primitives.
  *
- * These replace a hand-rolled IntersectionObserver + CSS-transition setup. The
- * observer version worked, but it could only ever do what a CSS transition can:
- * no spring physics, no per-child orchestration, no interruption handling, and
- * `filter: blur()` transitions that janked on mid-range Android. Motion is the
- * library Framer itself is built on, so the vocabulary below is the same one
- * Framer's "Appear" effects use.
+ * ── The vocabulary changed with the redesign ────────────────────────────────
+ *
+ * The previous set was built around long, soft entrances on an expo curve:
+ * things faded up 24px over 0.9s, or resolved out of a 10px blur. That is the
+ * house style of a soft, rounded, shadowed interface, and it no longer matches
+ * a design language made of flat planes and hairlines.
+ *
+ * This set is physical instead. Its centrepiece is `fall`: a block drops in from
+ * above, lands, squashes to 95%, overshoots to 102%, and settles. Staggered at
+ * 60ms across a row it reads as a set of objects with real weight arriving on the
+ * page — which is precisely why Mistral uses it for its block grids, and it is
+ * the single most recognisable piece of motion on that site.
+ *
+ * The other effects follow the same logic. Directional entrances travel 60px
+ * (far enough to read as arriving *from somewhere*, which a 16px nudge does not),
+ * on `ease-out` over 0.7s. `reveal` wipes with a clip-path rather than moving —
+ * the block is already in place and the paper is being pulled off it. Nothing
+ * blurs: a blur is a soft edge, and this system has no soft edges.
  *
  * ── Timing ──────────────────────────────────────────────────────────────────
  *
- * `EASE_OUT_EXPO` is the curve Framer reaches for on entrances: almost all of
- * the distance is covered in the first third, then it settles. That is what
- * makes a slow animation read as *considered* rather than sluggish — the eye
- * registers the movement immediately and the tail is just the element coming
- * to rest.
- *
- * Durations here are deliberately long (0.8–1.1s). Fast entrances draw
- * attention to the fact that something animated; slow ones on this curve are
- * felt more than seen.
+ * Durations came down (0.5–0.7s from 0.8–1.1s) and the curves changed direction.
+ * `fall` uses ease-IN, which is unusual for an entrance and load-bearing here:
+ * the block accelerates downward like something dropped, instead of decelerating
+ * into place like something being placed. That is the whole effect.
  */
 
-/** Framer's entrance curve. Sharp departure, long settle. */
-const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
+/** Mistral's clip-path curve. The negative first control point is anticipation. */
+const EASE_REVEAL = [0.51, -0.01, 0.49, 1] as const
 
-/** For elements that move a longer distance and need a touch more weight. */
-const EASE_OUT_QUINT = [0.22, 1, 0.36, 1] as const
+/** Fast departure, long settle. For anything that slides. */
+const EASE_OUT_QUART = [0.25, 1, 0.5, 1] as const
 
-export type RevealEffect = 'fade' | 'up' | 'blur' | 'scale' | 'left' | 'right'
+export type RevealEffect = 'fade' | 'up' | 'fall' | 'reveal' | 'scale' | 'left' | 'right' | 'down'
 
-const EFFECTS: Record<RevealEffect, { hidden: TargetAndTransition; shown: TargetAndTransition }> = {
-  // Plain opacity. For things that are already in place and only need to arrive.
+type Effect = {
+  hidden: TargetAndTransition
+  shown: TargetAndTransition
+  /** Per-effect timing. Overrides the caller's `duration` when it sets `times`. */
+  transition?: Transition
+  /** Extra classes the effect needs to work (e.g. a transform origin). */
+  className?: string
+}
+
+const EFFECTS: Record<RevealEffect, Effect> = {
+  // Plain opacity, linear. For things already in place that only need to arrive.
   fade: {
     hidden: { opacity: 0 },
     shown: { opacity: 1 },
+    transition: { ease: 'linear' },
   },
-  // The workhorse: rise and fade. 24px is far enough to read as motion and
-  // short enough that it never looks like the layout is settling.
+
+  // The quiet workhorse. 8px — deliberately short, because in this system most
+  // things are cells in a grid and a grid that slides looks like it is loading.
   up: {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 8 },
     shown: { opacity: 1, y: 0 },
+    transition: { ease: EASE_OUT_QUART },
   },
-  // Framer's signature. The blur does most of the work — it reads as the
-  // element resolving into focus rather than sliding in from somewhere.
-  blur: {
-    hidden: { opacity: 0, y: 16, filter: 'blur(10px)' },
-    shown: { opacity: 1, y: 0, filter: 'blur(0px)' },
+
+  // The signature. Drop, land, squash, overshoot, settle.
+  //
+  // `transformOrigin: bottom` is what makes the squash read as the block taking
+  // its own weight on the surface rather than as a scale animation. It is applied
+  // as a class rather than a style prop because `style` is stripped from this
+  // component's prop surface — see DomProps below.
+  fall: {
+    hidden: { opacity: 0, y: -120, scaleY: 1 },
+    shown: {
+      opacity: [0, 1, 1, 1, 1],
+      y: [-120, 0, 0, 0, 0],
+      scaleY: [1, 1, 0.95, 1.02, 1],
+    },
+    transition: { duration: 0.55, times: [0, 0.5, 0.65, 0.8, 1], ease: 'easeIn' },
+    className: 'origin-bottom',
   },
-  // For panels and cards that should feel like they are coming forward.
+
+  // Clip-path wipe, rising slightly as it goes. For editorial blocks and images.
+  reveal: {
+    hidden: { opacity: 1, clipPath: 'polygon(0 0, 0 0, 0 0, 0 0)', y: 20 },
+    shown: { opacity: 1, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', y: 0 },
+    transition: { duration: 1, ease: EASE_REVEAL },
+  },
+
+  // Snap up from nothing, with a touch of overshoot. Small elements only —
+  // badges, marks, counters.
   scale: {
-    hidden: { opacity: 0, scale: 0.96, y: 12 },
-    shown: { opacity: 1, scale: 1, y: 0 },
+    hidden: { opacity: 0, scale: 0.94 },
+    shown: { opacity: 1, scale: [0.94, 1.02, 1] },
+    transition: { duration: 0.4, times: [0, 0.6, 1], ease: 'easeOut' },
   },
+
   left: {
-    hidden: { opacity: 0, x: -28 },
+    hidden: { opacity: 0, x: -60 },
     shown: { opacity: 1, x: 0 },
+    transition: { duration: 0.7, ease: 'easeOut' },
   },
   right: {
-    hidden: { opacity: 0, x: 28 },
+    hidden: { opacity: 0, x: 60 },
     shown: { opacity: 1, x: 0 },
+    transition: { duration: 0.7, ease: 'easeOut' },
   },
+  down: {
+    hidden: { opacity: 0, y: -60 },
+    shown: { opacity: 1, y: 0 },
+    transition: { duration: 0.7, ease: 'easeOut' },
+  },
+}
+
+/**
+ * Builds the transition for an effect.
+ *
+ * The effect's own timing wins over the caller's `duration`. That matters for the
+ * keyframed effects (`fall`, `scale`): their `times` arrays are fractions of a
+ * specific duration, so letting a caller stretch it would desynchronise the
+ * squash from the landing. Effects without their own duration accept whatever the
+ * caller asks for.
+ */
+function transitionFor(effect: RevealEffect, duration: number, delay = 0): Transition {
+  return { duration, ...EFFECTS[effect].transition, delay }
 }
 
 /**
@@ -82,7 +144,7 @@ type DomProps = Omit<
 
 interface RevealProps extends DomProps {
   effect?: RevealEffect
-  /** Seconds. Long by default — see the timing note above. */
+  /** Seconds. Ignored by the keyframed effects, which carry their own timing. */
   duration?: number
   /** Seconds to wait before starting. */
   delay?: number
@@ -102,10 +164,11 @@ interface RevealProps extends DomProps {
  */
 export function Reveal({
   effect = 'up',
-  duration = 0.9,
+  duration = 0.6,
   delay = 0,
   as = 'div',
   repeat = false,
+  className,
   children,
   ...props
 }: RevealProps) {
@@ -113,16 +176,17 @@ export function Reveal({
   const Comp = motion[as] as React.ElementType
 
   // Reduced motion: render in the final state, no transition at all.
-  if (reduced) return <Comp {...props}>{children}</Comp>
+  if (reduced) return <Comp className={className} {...props}>{children}</Comp>
 
-  const { hidden, shown } = EFFECTS[effect]
+  const { hidden, shown, className: effectClass } = EFFECTS[effect]
 
   return (
     <Comp
       initial={hidden}
       whileInView={shown}
       viewport={{ once: !repeat, amount: 0.15, margin: '0px 0px -10% 0px' }}
-      transition={{ duration, delay, ease: EASE_OUT_EXPO }}
+      transition={transitionFor(effect, duration, delay)}
+      className={cn(effectClass, className)}
       {...props}
     >
       {children}
@@ -141,21 +205,26 @@ export function Reveal({
  *
  * A child that is already a Motion component, or any non-element (a string, a
  * conditional `null`), is passed through untouched.
+ *
+ * The default stagger is 60ms, matching the interval Mistral uses across its
+ * block grids. It is short enough that a row of eight still feels like one
+ * gesture rather than eight separate events.
  */
 export function RevealGroup({
-  stagger = 0.12,
+  stagger = 0.06,
   delay = 0.05,
   as = 'div',
   repeat = false,
   effect = 'up',
-  duration = 0.8,
+  duration = 0.6,
+  className,
   children,
   ...props
 }: RevealProps & { stagger?: number }) {
   const reduced = useReducedMotion()
   const Comp = motion[as] as React.ElementType
 
-  if (reduced) return <Comp {...props}>{children}</Comp>
+  if (reduced) return <Comp className={className} {...props}>{children}</Comp>
 
   const container: Variants = {
     hidden: {},
@@ -164,10 +233,10 @@ export function RevealGroup({
     },
   }
 
-  const { hidden, shown } = EFFECTS[effect]
+  const { hidden, shown, className: effectClass } = EFFECTS[effect]
   const item: Variants = {
     hidden,
-    shown: { ...shown, transition: { duration, ease: EASE_OUT_QUINT } },
+    shown: { ...shown, transition: transitionFor(effect, duration) },
   }
 
   const sequenced = React.Children.map(children, (child) => {
@@ -178,10 +247,13 @@ export function RevealGroup({
 
     const tag = child.type as keyof typeof motion
     const MotionTag = motion[tag] as React.ElementType
-    const { children: inner, ...rest } = child.props as { children?: React.ReactNode }
+    const { children: inner, className: childClass, ...rest } = child.props as {
+      children?: React.ReactNode
+      className?: string
+    }
 
     return (
-      <MotionTag key={child.key} variants={item} {...rest}>
+      <MotionTag key={child.key} variants={item} className={cn(effectClass, childClass)} {...rest}>
         {inner}
       </MotionTag>
     )
@@ -193,6 +265,7 @@ export function RevealGroup({
       whileInView="shown"
       viewport={{ once: !repeat, amount: 0.1, margin: '0px 0px -8% 0px' }}
       variants={container}
+      className={className}
       {...props}
     >
       {sequenced}
@@ -203,24 +276,25 @@ export function RevealGroup({
 /** A single child of `<RevealGroup>`. Inherits the group's sequencing. */
 export function RevealItem({
   effect = 'up',
-  duration = 0.8,
+  duration = 0.6,
   as = 'div',
+  className,
   children,
   ...props
 }: Omit<RevealProps, 'delay' | 'repeat'>) {
   const reduced = useReducedMotion()
   const Comp = motion[as] as React.ElementType
 
-  if (reduced) return <Comp {...props}>{children}</Comp>
+  if (reduced) return <Comp className={className} {...props}>{children}</Comp>
 
-  const { hidden, shown } = EFFECTS[effect]
+  const { hidden, shown, className: effectClass } = EFFECTS[effect]
   const item: Variants = {
     hidden,
-    shown: { ...shown, transition: { duration, ease: EASE_OUT_QUINT } },
+    shown: { ...shown, transition: transitionFor(effect, duration) },
   }
 
   return (
-    <Comp variants={item} {...props}>
+    <Comp variants={item} className={cn(effectClass, className)} {...props}>
       {children}
     </Comp>
   )
@@ -232,16 +306,17 @@ export function RevealItem({
  * mean it never animates at all.
  */
 export function RevealOnMount({
-  stagger = 0.1,
+  stagger = 0.08,
   delay = 0.1,
   as = 'div',
+  className,
   children,
   ...props
 }: Omit<RevealProps, 'effect' | 'duration' | 'repeat'> & { stagger?: number }) {
   const reduced = useReducedMotion()
   const Comp = motion[as] as React.ElementType
 
-  if (reduced) return <Comp {...props}>{children}</Comp>
+  if (reduced) return <Comp className={className} {...props}>{children}</Comp>
 
   const container: Variants = {
     hidden: {},
@@ -249,7 +324,7 @@ export function RevealOnMount({
   }
 
   return (
-    <Comp initial="hidden" animate="shown" variants={container} {...props}>
+    <Comp initial="hidden" animate="shown" variants={container} className={className} {...props}>
       {children}
     </Comp>
   )

@@ -5,141 +5,204 @@
 /*
  * ─── HUSTLE STREET DESIGN TOKENS ─────────────────────────────────────────────
  *
- * The brand is built on three colour ideas, deliberately away from SaaS blue:
+ * The system is built on the same four ideas that hold Mistral's site together.
+ * They are worth stating up front, because most of the decisions below are
+ * consequences of them rather than independent choices:
  *
- *   street  #FF5A1F   hustle orange — energy, action, every primary CTA
- *   ink     #0B0F13   near-black — structure, type, confidence
- *   money   #00A86B   a green reserved strictly for value and success
+ *   1. PAPER, NOT WHITE.   The canvas is a warm off-white (#FBFBF8) with two
+ *      deeper fills above it. Nothing on the page is #FFFFFF. Surfaces are told
+ *      apart by fill and hairline, never by shadow.
  *
- * Neutrals are warm (a hint of the orange) rather than cold grey, so the whole
- * surface feels like street signage rather than a dashboard.
+ *   2. THE HAIRLINE GRID.  A single 1px rule at #E4E3DE does all the structural
+ *      work. Sections are bounded by it, content sits inside a ruled column, and
+ *      rows stack against it. The page reads as a technical drawing — a set of
+ *      cells — rather than as floating cards.
+ *
+ *   3. NEAR-SQUARE GEOMETRY.  8px is the largest radius on a panel and 6px on a
+ *      control. Full-bleed cells are square. Nothing is a pill. Tight corners
+ *      are what let the hairline grid actually line up.
+ *
+ *   4. COLOUR IS A BLOCK, NOT A TINT.  Brand colour arrives as a flat saturated
+ *      plane — orange, tangerine, blue, navy — never as a gradient, glow or wash.
+ *
+ * ── Colour roles ────────────────────────────────────────────────────────────
+ *
+ *   street  #FF5229   hustle orange. A BLOCK FILL and an accent, not a link
+ *                     colour: it measures 3.12:1 on paper, which clears AA for
+ *                     large text only. `--primary-text` below is the darker cut
+ *                     to reach for whenever orange has to be read as a word.
+ *   ink     #09090B   near-black. Every primary action. This is the largest
+ *                     departure from the old system, where the primary button
+ *                     was orange — but a black action with orange reserved for
+ *                     brand is exactly the hierarchy that makes the orange land.
+ *   money   #1F6B4C   green, still reserved strictly for value and success.
+ *
+ * Every colour is an HSL triplet consumed through `hsl(var(--x))`, so opacity
+ * modifiers (`bg-primary/10`) keep working across the whole palette.
  */
 
 @layer base {
   :root {
-    /* Near-white, with just enough warmth left that it does not read as a
-       clinical #FFFFFF. Panels sit on top at pure white and are told apart by
-       their border rather than by a fill difference, which is what keeps the
-       page feeling open rather than tiled. */
-    --background: 40 14% 99%;
-    --foreground: 210 24% 6%;
+    /* ── Paper ──────────────────────────────────────────────────────────────
+       Three fills, deliberately close together. The whole tonal range from
+       background to raised spans 8% lightness; any more and the grid stops
+       reading as one continuous sheet. */
+    --background: 60 27% 98%; /* #FBFBF8 */
+    --foreground: 240 6% 10%; /* #18181B */
 
-    --surface: 0 0% 100%;
-    --surface-muted: 40 12% 96%;
-    --surface-raised: 0 0% 100%;
+    /* Cards sit at the SAME fill as the page. This is the single most important
+       line in the file: in this system a panel is defined by its border, not by
+       being lighter than what is behind it. */
+    --surface: 60 27% 98%;
+    --surface-muted: 50 23% 95%; /* #F5F4EF — section fills, inputs, hovers */
+    --surface-raised: 49 22% 90%; /* #EBE9E0 — the deepest fill, used sparingly */
 
-    --card: 0 0% 100%;
-    --card-foreground: 210 24% 6%;
+    --card: 60 27% 98%;
+    --card-foreground: 240 6% 10%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 24% 6%;
+    --popover: 60 27% 98%;
+    --popover-foreground: 240 6% 10%;
 
-    /* Hustle orange, burnt rather than neon.
-     *
-     * This was `18 100% 56%` (#FF621F), which measures 2.82:1 against the paper
-     * background — under the 3.0 WCAG floor for even large text, so every
-     * `text-primary` link and white-on-orange button label was failing AA.
-     *
-     * Dropping lightness to 44% and pulling saturation off the ceiling gives
-     * 4.61:1 on paper and 4.90:1 for white on top: both pass AA for body text.
-     * It reads as earthier and more deliberate, which is what the quiet layout
-     * wanted anyway — full-saturation orange fought every surface it touched.
-     */
-    --primary: 14 82% 44%;
-    --primary-foreground: 0 0% 100%;
-    --primary-soft: 14 68% 96%;
+    /* ── Brand orange ───────────────────────────────────────────────────────
+       Full saturation, unlike the burnt 44% the old system dropped to for
+       contrast. It can be full-strength here precisely because it is no longer
+       doing the job of a text colour: it fills blocks and marks accents, and
+       `--primary-text` handles the cases that need to be legible as type. */
+    --primary: 11 100% 58%; /* #FF5229 */
+    /* Ink on orange, not white. White measures 3.24:1 and fails AA for a 14px
+       button label; ink measures 6.15:1 and passes comfortably. It is also how
+       Mistral labels its own orange planes. */
+    --primary-foreground: 240 10% 4%;
+    --primary-soft: 15 100% 96%; /* #FFF0EB */
+    /* The readable cut. 4.87:1 on paper — use for orange links and orange body
+       text, never `--primary`. */
+    --primary-text: 26 98% 36%; /* #B75002 */
 
-    /* Money green — value, earnings, success. Never used for a generic CTA.
-     * Was `158 100% 33%` (#00A86B) at 2.90:1 on paper, which failed AA the same
-     * way the old orange did. 27% lightness brings it to 4.51:1. */
-    --money: 158 90% 27%;
-    --money-foreground: 0 0% 100%;
-    --money-soft: 158 50% 95%;
+    /* Secondary brand planes, for a block sequence that needs more than one
+       colour. Straight from Mistral's own set. */
+    --tangerine: 30 100% 51%; /* #FF8204 */
+    --sun: 41 100% 50%; /* #FFAF01 */
+    --sky: 206 95% 66%; /* #55B3FB */
+    --azure: 206 100% 45%; /* #0082E6 */
 
-    --secondary: 40 12% 95%;
-    --secondary-foreground: 210 24% 12%;
+    /* ── Money ──────────────────────────────────────────────────────────────
+       Dark enough to set as text (6.20:1 on paper). `--money-block` is the
+       saturated plane version for fills. */
+    --money: 155 55% 27%; /* #1F6B4C */
+    --money-foreground: 0 0% 98%;
+    --money-soft: 159 67% 95%;
+    --money-block: 152 46% 50%; /* #44BA82 */
 
-    --muted: 40 10% 96%;
-    --muted-foreground: 215 12% 42%;
+    --secondary: 50 23% 95%;
+    --secondary-foreground: 240 4% 16%;
 
-    --accent: 262 70% 56%;
-    --accent-foreground: 0 0% 100%;
+    --muted: 50 23% 95%;
+    /* 43% rather than the 46% the source palette uses: at 46% this fails AA
+       (4.39:1) against the secondary fill it most often sits on. 43% clears
+       4.5:1 on all three paper fills. */
+    --muted-foreground: 240 5% 43%; /* #686873 */
 
-    --destructive: 358 72% 51%;
+    /* Accent is the deep navy, not a purple. It is the one large dark mass the
+       page is allowed, and it belongs to the same family as the borders. */
+    --accent: 240 26% 11%; /* #151524 */
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 5 100% 45%; /* #E51300 — 4.58:1, passes AA as text */
     --destructive-foreground: 0 0% 100%;
-    --destructive-soft: 358 90% 97%;
+    --destructive-soft: 5 100% 97%;
 
-    --warning: 38 95% 50%;
-    --warning-foreground: 30 60% 12%;
-    --warning-soft: 42 100% 95%;
+    --warning: 41 100% 50%;
+    --warning-foreground: 23 100% 20%;
+    --warning-soft: 45 100% 91%;
 
-    /* Hairlines, not rules. At 92% they separate surfaces without drawing a box
-       around everything, which is most of what made the old page feel busy. */
-    --border: 36 10% 91%;
-    --input: 36 10% 88%;
-    --ring: 14 82% 44%;
+    /* ── The grid ───────────────────────────────────────────────────────────
+       `--border` is the structural hairline and gets used everywhere. `--input`
+       is one step darker for the edges that have to look interactive. */
+    --border: 50 10% 88%; /* #E4E3DE */
+    --border-strong: 60 4% 78%; /* #C9C9C4 */
+    --input: 60 4% 78%;
+    /* Focus ring is ink, not orange: it has to be visible on top of an orange
+       block as well as on paper, and orange-on-orange is invisible. */
+    --ring: 240 10% 4%;
 
     /* Fixed brand ink. Deliberately NOT theme-dependent: a device bezel and a
        video letterbox must stay dark even in dark mode. */
-    --ink: 210 24% 6%;
+    --ink: 240 26% 11%;
+    --ink-foreground: 0 0% 98%;
+    /* Hairline for use *inside* an inverted panel. */
+    --border-invert: 240 8% 21%; /* #31313A */
 
-    --shadow-color: 210 30% 12%;
+    --shadow-color: 240 26% 11%;
 
-    /* Generous corners are doing the work shadows used to. */
-    --radius: 20px;
+    /* 8px. Was 20px. Panels get 8, controls get 6, full-bleed cells get 0. */
+    --radius: 8px;
 
     /* Safe-area insets so the bottom nav clears the iOS home indicator. */
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
     --bottom-nav-height: 64px;
 
-    --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+    /* The header is one 56px cell. Sections that pin to it read this. */
+    --nav-height: 56px;
   }
 
   .dark {
-    --background: 210 24% 5%;
-    --foreground: 40 16% 96%;
+    /* Dark mode inverts to the navy family rather than to neutral grey, so the
+       hairline grid stays the same hue it is in light mode. */
+    --background: 240 26% 11%; /* #151524 */
+    --foreground: 0 0% 98%;
 
-    --surface: 210 20% 8%;
-    --surface-muted: 210 18% 11%;
-    --surface-raised: 210 18% 10%;
+    --surface: 240 26% 11%;
+    --surface-muted: 240 17% 17%; /* #242433 */
+    --surface-raised: 240 15% 24%; /* #343446 */
 
-    --card: 210 20% 8%;
-    --card-foreground: 40 16% 96%;
+    --card: 240 26% 11%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 210 20% 9%;
-    --popover-foreground: 40 16% 96%;
+    --popover: 240 17% 17%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Slightly brighter on dark so the orange keeps its punch. */
-    --primary: 18 100% 60%;
-    --primary-foreground: 210 30% 6%;
-    --primary-soft: 18 60% 14%;
+    /* Orange holds at full strength on navy — it reads brighter against dark, so
+       it needs no lift. Ink stays the label colour. */
+    --primary: 11 100% 58%;
+    --primary-foreground: 240 10% 4%;
+    --primary-soft: 240 20% 18%;
+    /* On dark, the *light* cut is the readable one. */
+    --primary-text: 17 100% 80%; /* #FFB598 */
 
-    --money: 158 72% 45%;
-    --money-foreground: 210 30% 6%;
-    --money-soft: 158 40% 13%;
+    --tangerine: 30 100% 51%;
+    --sun: 41 100% 50%;
+    --sky: 206 95% 66%;
+    --azure: 206 95% 66%;
 
-    --secondary: 210 16% 14%;
-    --secondary-foreground: 40 16% 94%;
+    --money: 159 67% 75%; /* #94EACC — light cut for dark surfaces */
+    --money-foreground: 240 26% 11%;
+    --money-soft: 240 20% 18%;
+    --money-block: 152 46% 50%;
 
-    --muted: 210 16% 13%;
-    --muted-foreground: 215 14% 62%;
+    --secondary: 240 17% 17%;
+    --secondary-foreground: 0 0% 98%;
 
-    --accent: 262 72% 66%;
-    --accent-foreground: 210 30% 6%;
+    --muted: 240 17% 17%;
+    --muted-foreground: 240 16% 76%; /* #B8B8CC — 9.24:1 on the navy ground */
 
-    --destructive: 358 76% 58%;
-    --destructive-foreground: 0 0% 100%;
-    --destructive-soft: 358 40% 15%;
+    --accent: 0 0% 98%;
+    --accent-foreground: 240 26% 11%;
 
-    --warning: 38 92% 56%;
-    --warning-foreground: 30 60% 8%;
-    --warning-soft: 38 45% 14%;
+    --destructive: 5 89% 67%;
+    --destructive-foreground: 240 10% 4%;
+    --destructive-soft: 240 20% 18%;
 
-    --border: 210 14% 18%;
-    --input: 210 14% 20%;
-    --ring: 18 100% 60%;
+    --warning: 43 99% 61%;
+    --warning-foreground: 240 10% 4%;
+    --warning-soft: 240 20% 18%;
 
+    --border: 240 8% 21%; /* #31313A */
+    --border-strong: 240 15% 24%;
+    --input: 240 15% 24%;
+    --ring: 0 0% 98%;
+
+    --border-invert: 240 8% 21%;
     --shadow-color: 0 0% 0%;
   }
 
@@ -155,19 +218,29 @@
        scrollbars, date pickers and autofill in their dark variants against a
        pale page. */
     color-scheme: light;
+    /* Anchored scroll targets clear the fixed header. */
+    scroll-padding-top: var(--nav-height);
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-sans);
+    /* Body copy carries a hair of negative tracking at every size. It is the
+       detail that makes Inter look set rather than defaulted. */
+    letter-spacing: -0.01em;
     /* Stops iOS Safari bouncing the whole app shell. */
     overscroll-behavior-y: none;
     text-rendering: optimizeLegibility;
   }
 
-  /* Visible, branded focus. Never remove the ring — only shape it. */
+  /* Focus is a hard 2px ink outline rather than a soft ring — same reasoning as
+     the geometry: this system draws lines, it does not glow. `outline` rather
+     than `ring` so it follows the element's own border radius and is never
+     clipped by an `overflow-hidden` ancestor. */
   :focus-visible {
-    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+    @apply outline-none;
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
   }
 
   /* Respect the OS setting rather than assuming everyone wants motion. */
@@ -182,14 +255,17 @@
     }
   }
 
-  /* Type scale defaults: display face for headings, tight tracking. Weight is
-     left to the `text-display-*` steps — a blanket `font-bold` here undid them. */
+  /* Headings take the display face at 500 and nothing heavier. The type scale
+     steps (`text-h1`…`text-h6`) carry their own size, leading and tracking, so
+     this only establishes the family and the weight ceiling. */
   h1,
   h2,
   h3,
-  h4 {
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-display);
-    @apply font-medium tracking-tight text-balance;
+    @apply font-medium text-balance;
   }
 
   /* Prevent iOS zooming the viewport when a small input is focused. */
@@ -216,12 +292,155 @@
     -moz-appearance: textfield;
   }
 
+  /* Orange selection, at the one opacity where the text under it stays readable. */
   ::selection {
-    background: hsl(var(--primary) / 0.22);
+    background: hsl(var(--primary) / 0.24);
   }
 }
 
+/* ─── Composition ────────────────────────────────────────────────────────────
+ *
+ * The vocabulary of the grid. These are the pieces that make six different
+ * pages read as one site: a ruled column, a bounded section, a cell, a corner
+ * mark, and a label. Everything here is structural — there is no decorative
+ * class in this layer, which is why the page can carry as many of them as it
+ * needs without turning into noise.
+ */
 @layer components {
+  /* ── The ruled column ───────────────────────────────────────────────────
+     The site's spine. Content is bounded left and right by the hairline, so
+     every section shares one continuous pair of vertical rules from the header
+     all the way to the footer. Below `2xl` the rules sit at the viewport edge
+     and effectively disappear, which is correct — on a phone the grid should
+     read as full-bleed. */
+  .ruled {
+    @apply mx-auto w-full border-border sm:border-x;
+    max-width: 1728px;
+  }
+
+  /* Horizontal padding that matches the ruled column's rhythm. Every cell that
+     holds text uses this so type lines up across sections. */
+  .gutter {
+    @apply px-4 sm:px-6 lg:px-10;
+  }
+
+  /* ── The bounded section ────────────────────────────────────────────────
+     A section is a band with a rule under it. `border-b` rather than `border-t`
+     so consecutive sections never double up, and the last one before the footer
+     still closes cleanly. Vertical rhythm is deliberately tighter than the old
+     20/28 scale — with rules doing the separating, sections no longer need
+     whitespace to prove they are separate. */
+  .band {
+    @apply border-b border-border;
+  }
+
+  /* ── The cell ───────────────────────────────────────────────────────────
+     A single square of the grid. Square corners, hairline edge, paper fill. Its
+     `-outline-offset` twin is used where cells sit edge to edge and a border
+     would double up into 2px. */
+  .cell {
+    @apply border border-border bg-surface;
+  }
+
+  /* An interactive cell. Hover is a fill change, never a lift — this system has
+     no z-axis. */
+  .cell-interactive {
+    @apply cell transition-colors duration-150;
+  }
+  @media (hover: hover) {
+    .cell-interactive:hover {
+      @apply bg-surface-muted;
+    }
+  }
+
+  /* ── Corner marks ───────────────────────────────────────────────────────
+     A 4px ink square pinned to a cell's corner, straddling the border so it
+     reads as a registration mark on a drawing. Mistral's most distinctive small
+     detail, and the cheapest way to make a plain rectangle look deliberate.
+     Requires a positioned ancestor. */
+  .tech-dot::after {
+    content: '';
+    @apply absolute z-20 block size-1 bg-ink;
+  }
+  .tech-dot-tl::after {
+    top: -2px;
+    left: -2px;
+  }
+  .tech-dot-tr::after {
+    top: -2px;
+    right: -2px;
+  }
+  .tech-dot-bl::after {
+    bottom: -2px;
+    left: -2px;
+  }
+  .tech-dot-br::after {
+    bottom: -2px;
+    right: -2px;
+  }
+
+  /* All four corners at once, for the hero's anchor cells. Two pseudo-elements
+     carry two marks each via a box-shadow trick, so no extra DOM is needed. */
+  .tech-dots-all {
+    @apply relative;
+  }
+  .tech-dots-all::before,
+  .tech-dots-all::after {
+    content: '';
+    @apply absolute z-20 block size-1 bg-ink;
+  }
+  .tech-dots-all::before {
+    top: -2px;
+    left: -2px;
+    box-shadow: calc(100% + 2px) 0 0 hsl(var(--ink));
+  }
+  .tech-dots-all::after {
+    bottom: -2px;
+    left: -2px;
+    box-shadow: calc(100% + 2px) 0 0 hsl(var(--ink));
+  }
+
+  /* ── Labels ─────────────────────────────────────────────────────────────
+     The eyebrow is mono, not small-caps sans. That single swap is most of what
+     signals the technical register: it says "field label" rather than
+     "marketing kicker". Tracking is near-zero because the mono is already wide. */
+  .eyebrow {
+    @apply font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground;
+  }
+
+  /* Larger eyebrow, for a section head rather than a cell. */
+  .eyebrow-lg {
+    @apply font-mono text-[0.8125rem] tracking-[0.02em] text-muted-foreground;
+  }
+
+  /* ── Panels ─────────────────────────────────────────────────────────────
+     Kept for the places that genuinely want a detached container rather than a
+     grid cell — dialogs, sheets, the odd standalone module. 8px, hairline, no
+     shadow. */
+  .panel {
+    @apply rounded-lg border border-border bg-surface;
+  }
+
+  /* The one dark mass. On the navy rather than pure black, so it belongs to the
+     border family, and its internal hairlines use `--border-invert`. */
+  .panel-ink {
+    @apply bg-ink text-ink-foreground;
+  }
+
+  /* A flat brand plane. The block-colour treatment: no radius, no shadow,
+     hairline outline so it still snaps to the grid. */
+  .plane {
+    @apply relative outline outline-1 -outline-offset-1 outline-border;
+  }
+
+  /* ── Legacy aliases ─────────────────────────────────────────────────────
+     `street-card` predates this system and is referenced from a dozen feed
+     components. Rather than touch all of them, it now resolves to a grid cell —
+     so the app screens pick up the new geometry without a rewrite. */
+  .street-card {
+    @apply cell-interactive rounded-md;
+  }
+
   /* App shell scroll container that accounts for the fixed bottom nav. */
   .app-scroll {
     padding-bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + 1rem);
@@ -259,19 +478,6 @@
     }
   }
 
-  /* The signature card: soft, rounded, lifts on hover, presses on tap. */
-  .street-card {
-    @apply rounded-2xl border border-border bg-card shadow-sm transition-all duration-200;
-  }
-  @media (hover: hover) {
-    .street-card:hover {
-      @apply -translate-y-0.5 border-border shadow-md;
-    }
-  }
-  .street-card:active {
-    @apply translate-y-0 shadow-sm;
-  }
-
   /* Skeleton shimmer that works in both themes. */
   .shimmer {
     @apply relative overflow-hidden bg-muted;
@@ -288,12 +494,13 @@
     transform: translateX(-100%);
   }
 
-  /* "Available now" pulse on hustler cards. */
+  /* "Available now" indicator. A square that pulses an expanding square ring —
+     the round dot with a round halo was the last pill-shaped thing left. */
   .live-dot {
-    @apply relative inline-flex h-2 w-2 rounded-full bg-money;
+    @apply relative inline-flex size-1.5 bg-money-block;
   }
   .live-dot::before {
-    @apply absolute inset-0 animate-pulse-ring rounded-full bg-money;
+    @apply absolute inset-0 animate-dot-pulse border border-money-block;
     content: '';
   }
 }
@@ -344,111 +551,107 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
-}
 
-/* ─── Composition ────────────────────────────────────────────────────────────
- *
- * What used to live here — film grain, a hairline grid, outlined numerals,
- * edge-lit card borders, marker highlights — was five separate textures
- * competing for the same surface. Stacked, they read as noise rather than
- * craft, and every one of them was fighting the type for attention.
- *
- * The replacements below are structural rather than decorative: a label style,
- * a panel, and a rule. Hierarchy now comes from space and scale, so a section
- * needs no background of its own to be legible as a section.
- */
-@layer components {
-  /* Small caps label above a heading. Carries the section's topic so the
-     heading underneath is free to be a sentence rather than a signpost. */
-  .eyebrow {
-    @apply text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground;
-  }
-
-  /* The page's one container shape: a large soft rectangle on the paper.
-     No shadow — the fill difference alone separates it from the background. */
-  .panel {
-    @apply rounded-3xl border border-border bg-surface;
-  }
-
-  /* Inverted panel. Used sparingly — one per screenful at most — as the single
-     dark mass that gives an otherwise pale page somewhere to rest. */
-  .panel-ink {
-    @apply rounded-3xl bg-ink text-white;
-  }
-
-  /* Section divider. A hairline at 60% of the border token: present enough to
-     group, faint enough that you read it as a pause, not a wall. */
-  .rule {
-    @apply border-t border-border/60;
-  }
-
-  /* Hairline grid for the hero. Deliberately weaker than the version this
-     replaces — 3.5% instead of 5.5% ink, on an 80px cell instead of 64px, so it
-     reads as ruled paper behind the type rather than as graph paper competing
-     with it. The mask fades it out well before the headline's baseline. */
+  /* ── The ruled background ───────────────────────────────────────────────
+     Graph paper behind the hero. Cell size matches the 56px header so the lines
+     land on the same rhythm as the chrome, and the mask fades it out before it
+     reaches the headline's baseline. Stronger than the version this replaces
+     (4.5% vs 3.5%) because in this system the grid is a feature, not a texture
+     apologising for itself. */
   .grid-lines {
     background-image:
-      linear-gradient(to right, hsl(var(--foreground) / 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--foreground) / 0.035) 1px, transparent 1px);
-    background-size: 80px 80px;
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 72%);
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 72%);
+      linear-gradient(to right, hsl(var(--foreground) / 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.045) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent 85%);
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
   }
 }
 
 /* ─── Motion ─────────────────────────────────────────────────────────────────
  *
- * Entrance animation lives in `components/motion/reveal.tsx`, on Motion — the
- * library Framer is built on. It handles anything with orchestration or
- * physics: scroll triggers, staggered children, blur-in, spring settling.
+ * Two halves, split by what each is good at.
  *
- * What stays here is hover feedback, which is genuinely better as CSS. It has
- * to respond within a frame of the pointer arriving, it never needs to
- * interrupt or sequence, and routing it through React would mean re-rendering
- * on mouseenter for an effect the compositor can do on its own.
+ * Orchestration lives in `components/motion/reveal.tsx` on Motion: scroll
+ * triggers, staggered children, the drop-and-settle the block sequences use.
+ * Anything with a sequence or a physical settle belongs there.
  *
- * Both halves respect `prefers-reduced-motion`; Motion reads it via
- * `useReducedMotion`, and the media query at the end of this block covers these.
+ * What stays here is hover and state feedback, which is genuinely better as CSS.
+ * It has to respond within a frame of the pointer arriving, it never needs to
+ * interrupt or sequence, and routing it through React would mean re-rendering on
+ * mouseenter for something the compositor can do alone.
+ *
+ * The vocabulary changed with the redesign. The old system moved things on the
+ * z-axis — cards lifted, shadows bloomed. This one has no z-axis, so feedback is
+ * a fill change, a 1px settle, or a slide along a track. `--ease-out-quart` is
+ * the curve underneath all of it: fast departure, long quiet settle.
  */
 @layer utilities {
-  /* Card lift. Guarded on a real pointer — on touch this fires on tap and reads
-     as lag rather than feedback. */
+  :root {
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    /* Mistral's own curve, lifted verbatim from its clip-path reveal. The
+       negative first control point gives a hair of anticipation. */
+    --ease-reveal: cubic-bezier(0.51, -0.01, 0.49, 1);
+  }
+
+  /* Interactive cell feedback. Replaces `.lift`, which translated on the
+     y-axis and dropped a shadow — both of which this system doesn't have.
+     What is left is honest: the fill deepens and the border firms up. */
   .lift {
     transition:
-      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
+      background-color 0.15s ease,
+      border-color 0.15s ease;
   }
   @media (hover: hover) {
     .lift:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 32px -16px hsl(var(--shadow-color) / 0.16);
+      @apply border-border-strong bg-surface-muted;
     }
   }
+  /* A 1px downward settle on press. Small enough to read as the surface taking
+     the weight rather than as the layout moving. */
   .lift:active {
-    transform: translateY(0);
-    transition-duration: 0.1s;
+    transform: translateY(1px);
+    transition-duration: 0.05s;
   }
 
-  /* Icon nudge on card hover. The parent carries `.group`. */
+  /* Icon nudge on cell hover. The parent carries `.group`. Up-and-right, since
+     almost every one of these sits next to a link. */
   .icon-hover {
-    transition:
-      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-      color 0.25s ease;
+    transition: transform 0.3s var(--ease-out-quart);
   }
   @media (hover: hover) {
     .group:hover .icon-hover {
-      transform: translateY(-2px) scale(1.08);
+      transform: translate(2px, -2px);
     }
   }
 
   /* Arrow that leans toward where it is taking you. */
   .arrow-hover {
-    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.25s var(--ease-out-quart);
   }
   @media (hover: hover) {
     .group:hover .arrow-hover {
       transform: translateX(3px);
+    }
+  }
+
+  /* Arrow that leaves the frame while a copy of it arrives from the left. The
+     signature link animation on Mistral's nav and cards. The outgoing arrow
+     carries `.arrow-swap-out`, the incoming one `.arrow-swap-in`, and both live
+     inside an `overflow-hidden` box so they clip at its edges. */
+  .arrow-swap-out,
+  .arrow-swap-in {
+    transition: transform 0.4s var(--ease-out-quart);
+  }
+  .arrow-swap-in {
+    transform: translateX(-140%);
+  }
+  @media (hover: hover) {
+    .group:hover .arrow-swap-out {
+      transform: translateX(140%);
+    }
+    .group:hover .arrow-swap-in {
+      transform: translateX(0);
     }
   }
 
@@ -458,11 +661,24 @@
     background-repeat: no-repeat;
     background-position: 0 100%;
     background-size: 0% 1px;
-    transition: background-size 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: background-size 0.3s var(--ease-out-quart);
   }
   .link-underline:hover,
   .link-underline:focus-visible {
     background-size: 100% 1px;
+  }
+
+  /* A fill that wipes up from the bottom edge on hover, rather than switching.
+     Used on the block planes, where a plain colour swap on something that large
+     reads as a flash. Needs `.group` and `overflow-hidden` on the parent. */
+  .wipe-up {
+    transform: translateY(100%);
+    transition: transform 0.4s var(--ease-out-quart);
+  }
+  @media (hover: hover) {
+    .group:hover .wipe-up {
+      transform: translateY(0);
+    }
   }
 
   /* Continuously scrolling rail. Kept in CSS deliberately — see the note in
@@ -509,13 +725,25 @@
     .lift,
     .icon-hover,
     .arrow-hover,
-    .link-underline {
+    .arrow-swap-out,
+    .arrow-swap-in,
+    .link-underline,
+    .wipe-up {
       transition: none;
     }
-    .lift:hover,
+    .lift:active,
     .group:hover .icon-hover,
     .group:hover .arrow-hover {
       transform: none;
+    }
+    /* The swap and the wipe are position-dependent: with motion off, the
+       incoming half must sit where it lands rather than off-screen. */
+    .arrow-swap-in,
+    .wipe-up {
+      transform: none;
+    }
+    .arrow-swap-out {
+      display: none;
     }
     /* Stop the rail and let it scroll by hand instead of animating forever. */
     .marquee-track {

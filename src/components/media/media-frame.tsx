@@ -37,7 +37,7 @@ export interface MediaFrameProps {
   imageClassName?: string
   /** Soft brand tint behind the image while it loads. */
   tint?: 'primary' | 'money' | 'accent' | 'neutral'
-  rounded?: 'lg' | 'xl' | '2xl' | '3xl'
+  rounded?: 'none' | 'lg' | 'xl' | '2xl' | '3xl'
   caption?: React.ReactNode
 }
 
@@ -50,7 +50,7 @@ export function MediaFrame({
   className,
   imageClassName,
   tint = 'neutral',
-  rounded = '2xl',
+  rounded = 'none',
   caption,
 }: MediaFrameProps) {
   const tints = {
@@ -61,6 +61,7 @@ export function MediaFrame({
   }
 
   const radii = {
+    none: 'rounded-none',
     lg: 'rounded-lg',
     xl: 'rounded-xl',
     '2xl': 'rounded-2xl',
@@ -130,9 +131,9 @@ export function PhoneMockup({
       )}
     >
       {/* Device body */}
-      <div className="relative rounded-[2.6rem] border-[10px] border-ink bg-ink p-0 shadow-pop">
+      <div className="relative rounded-[1.75rem] border-[10px] border-ink bg-ink p-0">
         {/* Screen */}
-        <div className="relative aspect-[390/844] overflow-hidden rounded-[2rem] bg-background">
+        <div className="relative aspect-[390/844] overflow-hidden rounded-[1.15rem] bg-background">
           <Image
             src={src}
             alt={alt}
@@ -151,11 +152,6 @@ export function PhoneMockup({
         />
       </div>
 
-      {/* Grounding shadow so the device does not float on a flat background */}
-      <div
-        className="absolute inset-x-6 -bottom-4 h-8 rounded-[50%] bg-foreground/20 blur-xl"
-        aria-hidden="true"
-      />
     </div>
   )
 }
@@ -181,7 +177,7 @@ export function StoryCard({
 }) {
   return (
     <figure className={cn('m-0', className)}>
-      <div className="relative aspect-[3/4] overflow-hidden rounded-2xl border border-border bg-surface-muted">
+      <div className="relative aspect-[3/4] overflow-hidden border border-border bg-surface-muted">
         <Image
           src={poster}
           alt={`${name}, ${trade} in ${area}`}
@@ -195,9 +191,11 @@ export function StoryCard({
           aria-hidden="true"
         />
         <div className="absolute inset-x-0 bottom-0 p-4">
-          <p className="font-display text-lg font-bold text-white">{name}</p>
-          <p className="text-sm font-semibold text-primary">{trade}</p>
-          <p className="text-xs text-white/60">{area}</p>
+          <p className="font-display text-h6 text-ink-foreground">{name}</p>
+          {/* Orange measures 4.98:1 against the ink scrim, so it can be type
+              here — which it cannot be on paper. */}
+          <p className="mt-0.5 font-display text-button-sm text-primary">{trade}</p>
+          <p className="mt-0.5 font-mono text-eyebrow-sm text-ink-foreground/60">{area}</p>
         </div>
       </div>
 

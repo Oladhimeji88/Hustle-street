@@ -74,13 +74,13 @@ export default async function HowItWorksPage() {
         imageAlt="Someone moving goods by hand cart through the city"
       >
         <div className="flex flex-col gap-3 sm:flex-row">
-          <Button asChild size="lg" className="rounded-full px-7">
+          <Button asChild size="lg">
             <Link href="/post">
               Post a Job
               <ArrowRight aria-hidden="true" />
             </Link>
           </Button>
-          <Button asChild size="lg" variant="ink" className="rounded-full px-7">
+          <Button asChild size="lg" variant="ink">
             <Link href="/signup?intent=hustle">Start hustling</Link>
           </Button>
         </div>
@@ -163,7 +163,7 @@ export default async function HowItWorksPage() {
       </Section>
 
       <ClosingCta>
-        <Button asChild size="lg" className="rounded-full px-7">
+        <Button asChild size="lg">
           <Link href="/post">
             Post a Job
             <ArrowRight aria-hidden="true" />
@@ -172,8 +172,7 @@ export default async function HowItWorksPage() {
         <Button
           asChild
           size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
+          variant="invert-outline"
         >
           <Link href="/explore">Find Work</Link>
         </Button>

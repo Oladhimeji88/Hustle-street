@@ -225,14 +225,13 @@ export default function SafetyPage() {
         title="Questions we have not answered?"
         body="If something here is unclear, ask. A person reads every message that comes through the help channel."
       >
-        <Button asChild size="lg" className="rounded-full px-7">
+        <Button asChild size="lg">
           <Link href="/help">Talk to us</Link>
         </Button>
         <Button
           asChild
           size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
+          variant="invert-outline"
         >
           <Link href="/how-it-works">How it works</Link>
         </Button>

@@ -7,50 +7,85 @@ import { cn } from '@/lib/utils'
 /**
  * The button.
  *
- * Design intent: primary actions are loud and physical — a solid orange block
- * with a soft coloured shadow that presses down on tap. On a phone in daylight
- * this is what makes "Post a Job" impossible to miss.
+ * ── The hierarchy changed ───────────────────────────────────────────────────
  *
- * Every size meets the 44px minimum touch target from WCAG 2.2 AA except `xs`,
- * which is only for inline text actions inside an already-tappable row.
+ * `primary` used to be a solid orange block with a coloured shadow. It is now
+ * near-black, and orange has moved to its own `brand` variant. This is not a
+ * demotion of the brand — it is what makes the brand land. When every action on
+ * the page is orange, orange stops meaning anything and becomes the colour of
+ * "button". Reserving it for one or two moments per screen is what lets it read
+ * as the product's colour rather than as a widget style.
+ *
+ * It is also the only way the flat-plane treatment works: an orange CTA sitting
+ * on an orange block is invisible, whereas ink on orange is 6.15:1.
+ *
+ * ── Labels are set in the display face ─────────────────────────────────────
+ *
+ * At weight 500 with *positive* tracking, per the type scale. Buttons are the
+ * one place the system pushes letter-spacing out rather than pulling it in:
+ * short all-caps-adjacent labels at 13–16px need the air, and it is what stops
+ * a tight grotesque from looking cramped inside a small box.
+ *
+ * ── No z-axis ───────────────────────────────────────────────────────────────
+ *
+ * No shadow, and no `active:scale` — a button that shrinks is imitating a
+ * physical key this design language does not have. Press feedback is a 1px
+ * settle, matching every other interactive surface.
+ *
+ * Every size meets the 44px minimum touch target from WCAG 2.2 AA except `xs`
+ * and `sm`, which are for inline actions inside an already-tappable row.
  */
 const buttonVariants = cva(
   [
     'relative inline-flex items-center justify-center gap-2 whitespace-nowrap',
-    'font-semibold transition-all duration-150',
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+    'font-display transition-colors duration-150',
+    'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
     'disabled:pointer-events-none disabled:opacity-50',
     '[&_svg]:pointer-events-none [&_svg]:shrink-0',
-    'active:scale-[0.98]',
+    'active:translate-y-px',
   ],
   {
     variants: {
       variant: {
-        primary:
-          'bg-primary text-primary-foreground shadow-street hover:bg-primary/92 active:shadow-sm',
-        money:
-          'bg-money text-money-foreground shadow-sm hover:bg-money/92',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/70',
-        outline:
-          'border border-input bg-transparent hover:bg-secondary hover:text-secondary-foreground',
-        ghost: 'hover:bg-secondary hover:text-secondary-foreground',
-        subtle: 'bg-primary-soft text-primary hover:bg-primary-soft/70',
-        // Quiet primary. Where orange would shout, ink states the action and
-        // lets the surrounding whitespace carry the emphasis.
-        ink: 'bg-ink text-white hover:bg-ink/88',
-        destructive:
-          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-        link: 'text-primary underline-offset-4 hover:underline',
+        /* The default action. Near-black, the darkest thing on the page. */
+        primary: 'bg-ink text-ink-foreground hover:bg-ink/88',
+        /* The brand plane. Ink label, not white — white measures 3.24:1 on this
+           orange and fails AA at button sizes. Ink measures 6.15:1, and matches
+           how the orange blocks label themselves. */
+        brand: 'bg-primary text-primary-foreground hover:bg-primary/88',
+        money: 'bg-money text-money-foreground hover:bg-money/88',
+        /* A filled cell. Reads as part of the grid rather than as a control. */
+        secondary: 'bg-surface-muted text-foreground hover:bg-surface-raised',
+        outline: 'border border-border-strong bg-transparent hover:bg-surface-muted',
+        /* Mistral's ghost: a 5% ink wash that deepens to 10%. A wash rather than
+           a transparent-to-filled jump, so the shape is visible at rest. */
+        ghost: 'bg-foreground/[0.05] text-foreground hover:bg-foreground/10',
+        /* Fully transparent until hovered. For dense toolbars where a resting
+           wash on every control would read as clutter. */
+        bare: 'bg-transparent text-muted-foreground hover:bg-foreground/[0.05] hover:text-foreground',
+        subtle: 'bg-primary-soft text-primary-text hover:bg-primary-soft/70',
+        /* Kept as an alias: `ink` and `primary` are the same thing now, and a
+           dozen call sites still ask for it by name. */
+        ink: 'bg-ink text-ink-foreground hover:bg-ink/88',
+        /* For use *on* an ink panel, where the contrast is inverted. */
+        invert: 'bg-ink-foreground text-ink hover:bg-ink-foreground/88',
+        'invert-outline':
+          'border border-border-invert bg-transparent text-ink-foreground hover:bg-ink-foreground/10',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/88',
+        link: 'text-foreground underline-offset-4 hover:underline',
       },
       size: {
-        xs: 'h-8 rounded-md px-2.5 text-xs [&_svg]:size-3.5',
-        sm: 'h-10 rounded-lg px-3.5 text-sm [&_svg]:size-4',
-        md: 'h-11 rounded-xl px-5 text-sm [&_svg]:size-4',
-        lg: 'h-12 rounded-xl px-6 text-base [&_svg]:size-5',
-        xl: 'h-14 rounded-2xl px-8 text-base [&_svg]:size-5',
-        icon: 'size-11 rounded-xl [&_svg]:size-5',
-        'icon-sm': 'size-9 rounded-lg [&_svg]:size-4',
+        xs: 'h-8 rounded-sm px-2.5 text-button-sm [&_svg]:size-3.5',
+        sm: 'h-10 rounded-md px-3.5 text-button-sm [&_svg]:size-4',
+        md: 'h-11 rounded-md px-4 text-button-sm [&_svg]:size-4',
+        lg: 'h-12 rounded-md px-5 text-button-lg [&_svg]:size-4',
+        /* 56px — the header's own height, so a hero CTA lines up with the grid. */
+        xl: 'h-14 rounded-md px-6 text-button-lg [&_svg]:size-5',
+        icon: 'size-11 rounded-md [&_svg]:size-4',
+        'icon-sm': 'size-9 rounded-md [&_svg]:size-4',
+        /* A full-height square cell, for buttons that live inside the grid — the
+           header CTA, a toolbar end cap. No radius: it is a cell, not a control. */
+        cell: 'h-14 rounded-none px-5 text-button-sm [&_svg]:size-4',
       },
       block: {
         true: 'w-full',

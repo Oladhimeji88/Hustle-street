@@ -40,31 +40,42 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </footer>
       </div>
 
+      {/*
+       * The dark half. Two radial gradients used to bloom behind this copy; they
+       * are gone, because a soft glow is the one thing this design language has no
+       * vocabulary for. What replaces them is flat: the brand ramp as a vertical
+       * band down the left edge, and a border-left hairline tying the panel to the
+       * grid. Colour arrives as an object with edges, not as light.
+       */}
       <aside
-        className="relative hidden overflow-hidden bg-foreground p-12 text-background lg:flex lg:flex-col lg:justify-center"
+        className="relative hidden overflow-hidden border-l border-border-invert bg-ink text-ink-foreground lg:flex lg:flex-col lg:justify-center"
         aria-label="Why Hustle Street"
       >
-        <div
-          className="pointer-events-none absolute inset-0"
-          aria-hidden="true"
-          style={{
-            background:
-              'radial-gradient(38rem 26rem at 78% 14%, hsl(var(--primary) / 0.30), transparent 60%), radial-gradient(30rem 20rem at 12% 88%, hsl(var(--money) / 0.20), transparent 60%)',
-          }}
-        />
+        {/* The ramp. Five flat bands, full height, 12px wide. */}
+        <div className="absolute inset-y-0 left-0 flex w-3 flex-col" aria-hidden="true">
+          <div className="w-full flex-1 bg-sun" />
+          <div className="w-full flex-1 bg-tangerine" />
+          <div className="w-full flex-1 bg-primary" />
+          <div className="w-full flex-1 bg-primary" />
+          <div className="w-full flex-1 bg-money-block" />
+        </div>
 
-        <div className="relative max-w-md">
-          <p className="font-display text-4xl font-extrabold leading-tight tracking-tight">
+        <div className="relative max-w-md pl-20 pr-12">
+          <p className="text-h3">
             Need it done?
             <br />
             Find someone nearby.
             <br />
+            {/* Orange on the navy measures 4.98:1 — it can be type here, which it
+                cannot be on paper. */}
             <span className="text-primary">Ready to hustle?</span>
             <br />
             Find your next job.
           </p>
 
-          <ul className="mt-10 space-y-5">
+          {/* Hairline rows rather than floating list items, matching the bands
+              that structure every other page. */}
+          <ul className="mt-12 divide-y divide-border-invert border-y border-border-invert">
             {[
               {
                 icon: Zap,
@@ -84,13 +95,15 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             ].map((item) => {
               const Icon = item.icon
               return (
-                <li key={item.title} className="flex gap-4">
-                  <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-background/10">
-                    <Icon className="size-5 text-primary" aria-hidden="true" />
+                <li key={item.title} className="flex gap-4 py-5">
+                  <div className="flex size-9 shrink-0 items-center justify-center border border-border-invert">
+                    <Icon className="size-4 text-primary" aria-hidden="true" />
                   </div>
                   <div>
-                    <p className="font-display font-bold">{item.title}</p>
-                    <p className="mt-0.5 text-sm leading-relaxed text-background/70">{item.body}</p>
+                    <p className="font-display text-button-sm">{item.title}</p>
+                    <p className="mt-1 text-body-sm leading-relaxed text-ink-foreground/60">
+                      {item.body}
+                    </p>
                   </div>
                 </li>
               )

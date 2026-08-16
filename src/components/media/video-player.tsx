@@ -120,7 +120,7 @@ export function VideoPlayer({
               type="button"
               onClick={() => setMuted((value) => !value)}
               aria-label={muted ? 'Unmute' : 'Mute'}
-              className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur transition-colors hover:bg-black/75"
+              className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-md bg-ink/80 text-ink-foreground transition-colors hover:bg-ink"
             >
               {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
             </button>
@@ -158,7 +158,7 @@ export function VideoPlayer({
               // play button that does nothing.
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5">
                 <div className="min-w-0">
-                  <p className="font-display text-base font-bold text-white sm:text-lg">{title}</p>
+                  <p className="font-display text-base font-medium text-white sm:text-lg">{title}</p>
                   {description && (
                     <p className="mt-0.5 line-clamp-2 text-sm text-white/70">{description}</p>
                   )}
@@ -170,7 +170,7 @@ export function VideoPlayer({
             )}
 
             {hasVideo && duration && (
-              <span className="absolute bottom-3 right-3 rounded-full bg-black/65 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
+              <span className="absolute bottom-3 right-3 rounded-md bg-ink/80 px-2 py-1 font-mono text-eyebrow-sm tabular-nums text-ink-foreground">
                 {duration}
               </span>
             )}
@@ -196,9 +196,9 @@ export function VideoPlayer({
               </button>
 
               {showTranscript && (
-                <div className="mt-2 rounded-xl bg-surface-muted p-4">
+                <div className="mt-2 rounded-md bg-surface-muted p-4">
                   <div className="mb-2 flex items-center justify-between">
-                    <p className="text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                    <p className="eyebrow">
                       Transcript
                     </p>
                     <button

@@ -65,7 +65,7 @@ export default function CookiesPage() {
         lede="Everything Hustle Street puts on your device, and why. There is no advertising tracker in this list, because there is no advertising tracker."
       />
 
-      <div className="container pb-4">
+      <div className="gutter pb-4">
         <div className="mx-auto max-w-3xl">
           <div className="panel overflow-hidden">
             <table className="w-full text-left text-sm">

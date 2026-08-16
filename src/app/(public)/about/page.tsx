@@ -46,7 +46,7 @@ export default function AboutPage() {
 
       <Section aria-labelledby="story-heading">
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-          <h2 id="story-heading" className="text-display-lg">
+          <h2 id="story-heading" className="text-h2">
             The problem
           </h2>
           <div className="lg:pt-2">
@@ -109,7 +109,7 @@ export default function AboutPage() {
               </Link>{' '}
               page.
             </p>
-            <Button asChild variant="ink" className="mt-8 rounded-full px-6">
+            <Button asChild variant="ink" className="mt-8">
               <Link href="/how-it-works">How it works</Link>
             </Button>
           </div>
@@ -137,7 +137,7 @@ export default function AboutPage() {
       </Section>
 
       <ClosingCta>
-        <Button asChild size="lg" className="group rounded-full px-7">
+        <Button asChild size="lg" className="group">
           <Link href="/post">
             Post a Job
             <ArrowRight className="arrow-hover" aria-hidden="true" />
@@ -146,8 +146,7 @@ export default function AboutPage() {
         <Button
           asChild
           size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
+          variant="invert-outline"
         >
           <Link href="/explore">Find Work</Link>
         </Button>

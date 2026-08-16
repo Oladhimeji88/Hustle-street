@@ -23,7 +23,7 @@ import { VideoPlayer } from '@/components/media/video-player'
 import { MediaFrame, PhoneMockup, StoryCard } from '@/components/media/media-frame'
 import { APP_SHOTS, HERO_VIDEO, HUSTLER_STORIES, SCENES } from '@/lib/config/media'
 import { formatMoney } from '@/lib/money'
-import { ClosingCta, Section, SectionHead, Step } from '@/components/marketing/page-primitives'
+import { Band, ClosingCta, Section, SectionHead, Step } from '@/components/marketing/page-primitives'
 import { RevealGroup, RevealItem, RevealOnMount } from '@/components/motion/reveal'
 import type { Category } from '@/types/database'
 
@@ -66,6 +66,38 @@ const AREAS = [
   'Surulere', 'Gbagada', 'Magodo', 'Festac', 'Ikorodu', 'Agege',
 ]
 
+/**
+ * The block sequence under the hero.
+ *
+ * This is the page's one moment of pure brand, and the most direct borrowing from
+ * Mistral's design language: a row of flat, saturated planes at irregular widths
+ * that drop in from above and settle with a squash, 60ms apart.
+ *
+ * Everything about it is deliberate. The planes carry no gradient, no shadow and
+ * no radius — colour arrives as a solid object. Widths are irregular (`flex`
+ * ratios rather than equal columns) so the row reads as composed rather than as a
+ * chart. Two of the five are paper rather than colour, which is what stops the
+ * band from becoming a stripe. And each one has a corner mark, the 4px ink square
+ * that makes a plain rectangle read as a plate on a technical drawing.
+ *
+ * `grow` is the flex ratio; `tone` is the fill.
+ */
+const BLOCKS = [
+  { tone: 'bg-sun', grow: 'lg:flex-[2]', label: 'Repairs', count: '2.4k' },
+  { tone: 'bg-surface-raised', grow: 'lg:flex-[1]', label: 'Cleaning', count: '1.8k' },
+  { tone: 'bg-tangerine', grow: 'lg:flex-[3]', label: 'Moving', count: '960' },
+  { tone: 'bg-primary', grow: 'lg:flex-[2]', label: 'Design', count: '1.2k' },
+  { tone: 'bg-surface-muted', grow: 'lg:flex-[1]', label: 'Errands', count: '3.1k' },
+]
+
+/** Divided figures. Mono numerals, one cell each, vertical rules between them. */
+const FIGURES = [
+  { value: '12k+', label: 'Jobs completed' },
+  { value: '4.8', label: 'Average rating' },
+  { value: '18min', label: 'Median first reply' },
+  { value: '24', label: 'Areas covered' },
+]
+
 export default async function LandingPage() {
   const supabase = await createClient()
 
@@ -89,24 +121,28 @@ export default async function LandingPage() {
   return (
     <>
       {/* ═══ Hero ═══════════════════════════════════════════════════════════
-          Ruled paper, a headline that resolves into focus, and nothing else.
-          The gradient washes and film grain that used to sit here were three
-          textures competing with the type; the grid is the one that earns it. */}
-      <section className="relative pb-16 pt-14 sm:pb-24 sm:pt-20">
+          Ruled paper, a headline at the top of the type scale, and a search
+          field. Left-aligned rather than centred: the ruled column has a left
+          edge, and type that ignores it wastes the strongest line on the page. */}
+      <section className="band relative overflow-hidden">
         {/* Its own absolutely positioned layer rather than a class on the
             section: the mask that fades the grid out would otherwise clip the
-            content painted on top of it. */}
+            content painted on top of it. The 56px cell matches the header's
+            height, so the graph paper lines up with the chrome above it. */}
         <div
-          className="grid-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-[42rem]"
+          className="grid-lines pointer-events-none absolute inset-x-0 top-0 -z-10 h-[36rem]"
           aria-hidden="true"
         />
 
-        <div className="container">
-          {/* Above the fold, so this plays on mount rather than on scroll. The
-              headline gets the blur treatment — worth spending exactly once. */}
-          <RevealOnMount className="mx-auto max-w-3xl text-center" stagger={0.14}>
-            <RevealItem effect="blur" duration={1.1}>
-              <h1 className="text-display-xl">
+        <div className="gutter pb-14 pt-12 sm:pb-20 sm:pt-16">
+          {/* Above the fold, so this plays on mount rather than on scroll. */}
+          <RevealOnMount className="max-w-4xl" stagger={0.08}>
+            <RevealItem effect="fade" as="p" className="eyebrow">
+              Live in Lagos · Island and mainland
+            </RevealItem>
+
+            <RevealItem effect="up" className="mt-5">
+              <h1 className="text-display">
                 Get things done.
                 <br />
                 Find people who can.
@@ -115,117 +151,169 @@ export default async function LandingPage() {
 
             <RevealItem
               as="p"
-              className="mx-auto mt-6 max-w-xl text-pretty text-lg leading-relaxed text-muted-foreground"
+              className="mt-6 max-w-xl text-pretty text-body-lg text-muted-foreground"
             >
               Hustle Street connects you with skilled people nearby who are ready to get the job
               done, from moving a sofa to designing a flyer.
             </RevealItem>
 
-            {/* Search stays the primary affordance. Pill-shaped so it agrees
-                with the buttons rather than reading as a form field bolted on. */}
-            <RevealItem className="mx-auto mt-9 max-w-md">
+            {/* Search stays the primary affordance. Squared off and hairlined so
+                it reads as a cell in the grid rather than as a pill dropped on
+                top of it — and the submit button squares into its right edge
+                instead of floating inside with a margin. */}
+            <RevealItem className="mt-9 max-w-xl">
               <form action="/explore" method="get">
                 <label htmlFor="hero-search" className="sr-only">
                   Search for a job, service or skill
                 </label>
-                <div className="relative">
-                  <Search
-                    className="pointer-events-none absolute left-5 top-1/2 size-[18px] -translate-y-1/2 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  <input
-                    id="hero-search"
-                    name="q"
-                    type="search"
-                    placeholder="Plumber, cleaner…"
-                    className="h-14 w-full rounded-full border border-input bg-surface pl-12 pr-28 text-[15px] transition-colors placeholder:text-muted-foreground/70 focus:border-foreground/20 focus:outline-none focus:ring-4 focus:ring-foreground/5"
-                  />
-                  <Button
-                    type="submit"
-                    variant="ink"
-                    className="absolute right-1.5 top-1/2 h-11 -translate-y-1/2 rounded-full px-5"
-                  >
+                <div className="flex border border-border bg-surface focus-within:outline focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-ring">
+                  <div className="relative flex-1">
+                    <Search
+                      className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="hero-search"
+                      name="q"
+                      type="search"
+                      placeholder="Plumber, cleaner, designer…"
+                      className="h-14 w-full bg-transparent pl-12 pr-3 text-body-base placeholder:text-muted-foreground focus:outline-none"
+                    />
+                  </div>
+                  <Button type="submit" size="cell" variant="primary" className="shrink-0">
                     Search
                   </Button>
                 </div>
               </form>
             </RevealItem>
 
-            <RevealItem className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg" className="rounded-full px-7">
+            <RevealItem className="mt-4 flex flex-col gap-3 sm:flex-row">
+              {/* The one brand-orange action on the page. Everything else is
+                  ink — which is exactly what makes this one register. */}
+              <Button asChild size="lg" variant="brand" className="group">
                 <Link href="/post">
-                  Post a Job
-                  <ArrowRight aria-hidden="true" />
+                  Post a job
+                  <ArrowRight className="arrow-hover" aria-hidden="true" />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="ghost" className="group rounded-full px-6">
+              <Button asChild size="lg" variant="ghost" className="group">
                 <Link href="/signup?intent=hustle">
                   Start hustling
-                  <ArrowUpRight className="arrow-hover" aria-hidden="true" />
+                  <ArrowUpRight className="icon-hover" aria-hidden="true" />
                 </Link>
               </Button>
             </RevealItem>
           </RevealOnMount>
-
-          {/* Product shot as one wide panel. The live-jobs card overlaps its
-              lower-left corner so the composition has one deliberate break. */}
-          <RevealItem effect="scale" duration={1} className="relative mt-16 sm:mt-20">
-            <div className="panel overflow-hidden px-6 pt-12 sm:px-12 sm:pt-16">
-              <div className="mx-auto max-w-[280px] sm:max-w-[320px]">
-                <PhoneMockup
-                  src={APP_SHOTS.home}
-                  alt="The Hustle Street home screen showing jobs near you in Lekki Phase 1"
-                  priority
-                />
-              </div>
-            </div>
-
-            <div className="mx-auto -mt-10 max-w-sm rounded-2xl border border-border bg-surface p-4 shadow-lg lg:absolute lg:bottom-10 lg:left-10 lg:mt-0 lg:w-72">
-              <NearbyJobsPreview />
-            </div>
-          </RevealItem>
         </div>
+
+        {/* The block sequence. Full-bleed to the ruled column's edges — the row
+            is part of the grid, not content sitting inside a padded section. */}
+        <RevealGroup
+          effect="fall"
+          stagger={0.06}
+          className="flex h-32 border-t border-border sm:h-40 lg:h-48"
+        >
+          {BLOCKS.map((block) => (
+            <div
+              key={block.label}
+              className={`tech-dot tech-dot-tl relative flex flex-1 flex-col justify-end overflow-hidden p-3 outline outline-1 -outline-offset-1 outline-border sm:p-4 ${block.tone} ${block.grow}`}
+            >
+              <span className="font-mono text-eyebrow-sm uppercase tracking-[0.08em] text-ink/70">
+                {block.count}
+              </span>
+              <span className="font-display text-button-sm text-ink">{block.label}</span>
+            </div>
+          ))}
+        </RevealGroup>
       </section>
+
+      {/* ═══ Figures ════════════════════════════════════════════════════════
+          A row of cells divided by vertical rules. Mono numerals, because these
+          are readings rather than headlines. */}
+      <Band>
+        <RevealGroup className="grid grid-cols-2 divide-x divide-y divide-border lg:grid-cols-4 lg:divide-y-0">
+          {FIGURES.map((figure) => (
+            <div key={figure.label} className="px-4 py-7 sm:px-6 lg:px-10">
+              <p className="font-mono text-h4 tabular-nums">{figure.value}</p>
+              <p className="mt-1.5 text-body-sm text-muted-foreground">{figure.label}</p>
+            </div>
+          ))}
+        </RevealGroup>
+      </Band>
 
       {/* ═══ What this is ═══════════════════════════════════════════════════
           Heading left, answer right — the split that lets a plain statement of
           the product sit on its own without decoration. */}
       <Section aria-labelledby="what-heading">
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+        <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>
-            <h2 id="what-heading" className="text-display-lg">
-              What is Hustle Street?
+            <p className="eyebrow">What this is</p>
+            <h2 id="what-heading" className="mt-4 text-h2">
+              A marketplace for
+              <br />
+              getting things done
             </h2>
-            <Button asChild variant="ink" size="md" className="mt-7 rounded-full px-6">
-              <Link href="/how-it-works">How it works</Link>
+            <Button asChild variant="outline" size="md" className="group mt-8">
+              <Link href="/how-it-works">
+                How it works
+                <ArrowRight className="arrow-hover" aria-hidden="true" />
+              </Link>
             </Button>
           </div>
           <div className="lg:pt-2">
-            <p className="text-pretty text-xl leading-relaxed sm:text-2xl sm:leading-relaxed">
-              A marketplace for getting things done by people who are actually near you. Post what
-              you need, compare the people who reply, and pay only when the work is finished.
+            <p className="text-pretty text-h5 text-foreground">
+              Post what you need, compare the people who reply, and pay only when the work is
+              finished. Everyone you see is actually near you.
             </p>
-            <p className="mt-5 text-pretty leading-relaxed text-muted-foreground">
+            <p className="mt-6 text-pretty text-body-base leading-relaxed text-muted-foreground">
               Free to post. No subscription, no listing fees, no paying to apply. We take{' '}
               {commissionPercent}% when a job completes, and nothing at all if it doesn’t.
             </p>
+
+            {/* Coverage as a plain list against a rule. A logo wall would be
+                dishonest here — these are neighbourhoods, not customers. */}
+            <div className="mt-10 border-t border-border pt-6">
+              <p className="eyebrow">Where we run</p>
+              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2">
+                {AREAS.map((area) => (
+                  <li key={area} className="text-body-sm text-muted-foreground">
+                    {area}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-
-        {/* Coverage as a quiet strip, where a logo wall would otherwise go. */}
-        <div className="mt-14 flex flex-col gap-5 border-t border-border/60 pt-8 lg:flex-row lg:items-start lg:gap-12">
-          <p className="max-w-[14rem] shrink-0 text-sm leading-relaxed text-muted-foreground">
-            Live across Lagos, island and mainland.
-          </p>
-          <ul className="flex flex-wrap gap-x-6 gap-y-3">
-            {AREAS.map((area) => (
-              <li key={area} className="text-sm text-muted-foreground/70">
-                {area}
-              </li>
-            ))}
-          </ul>
-        </div>
       </Section>
+
+      {/* ═══ Product shot ═══════════════════════════════════════════════════
+          Two cells: the phone on paper, the live feed beside it. Divided by the
+          same rule as everything else rather than overlapping — an overlap needs
+          a shadow to be legible, and this system has none. */}
+      <Band>
+        <div className="grid lg:grid-cols-[1.4fr_1fr] lg:divide-x lg:divide-border">
+          <div className="flex justify-center border-b border-border bg-surface-muted px-6 pt-12 lg:border-b-0 lg:pt-16">
+            <div className="w-full max-w-[280px] sm:max-w-[320px]">
+              <PhoneMockup
+                src={APP_SHOTS.home}
+                alt="The Hustle Street home screen showing jobs near you in Lekki Phase 1"
+                priority
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center px-4 py-10 sm:px-6 lg:px-10">
+            <p className="eyebrow">Live right now</p>
+            <h2 className="mt-4 text-h3">Jobs near you, as they land</h2>
+            <p className="mt-4 text-pretty text-body-base leading-relaxed text-muted-foreground">
+              Ranked by distance, urgency and how well they match what you do.
+            </p>
+            <div className="mt-8 border border-border bg-surface p-4">
+              <NearbyJobsPreview />
+            </div>
+          </div>
+        </div>
+      </Band>
 
       {/* ═══ Categories ═════════════════════════════════════════════════════ */}
       <Section aria-labelledby="categories-heading">
@@ -236,7 +324,7 @@ export default async function LandingPage() {
             title="Whatever it is, someone nearby does it"
             lede="Fifteen categories, from a leaking tap to a brand identity."
           />
-          <Button asChild variant="ghost" size="sm" className="group rounded-full">
+          <Button asChild variant="bare" size="sm" className="group">
             <Link href="/categories">
               See all
               <ArrowRight className="arrow-hover" aria-hidden="true" />
@@ -247,9 +335,7 @@ export default async function LandingPage() {
         {/* A moving rail rather than a static grid. Fifteen categories in a
             5-across grid was a wall of equal-weight tiles you had to read; in
             motion they arrive one at a time and the section stops asking for a
-            decision up front. Tiles keep the tight 8px corner and the single
-            icon colour — the rotating four-way tint was giving each an
-            arbitrary meaning the categories don't actually have. */}
+            decision up front. */}
         <div className="mt-10">
           <CategoryMarquee categories={categoryList} />
         </div>
@@ -274,18 +360,20 @@ export default async function LandingPage() {
       </Section>
 
       {/* ═══ Featured video ═════════════════════════════════════════════════ */}
-      <Section aria-labelledby="watch-heading">
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-16">
-          <VideoPlayer
-            sources={HERO_VIDEO.sources}
-            poster={HERO_VIDEO.poster}
-            title={HERO_VIDEO.title}
-            description={HERO_VIDEO.description}
-            duration={HERO_VIDEO.duration}
-            transcript={HERO_VIDEO.transcript}
-          />
+      <Band>
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr] lg:divide-x lg:divide-border">
+          <div className="border-b border-border p-4 sm:p-6 lg:border-b-0 lg:p-10">
+            <VideoPlayer
+              sources={HERO_VIDEO.sources}
+              poster={HERO_VIDEO.poster}
+              title={HERO_VIDEO.title}
+              description={HERO_VIDEO.description}
+              duration={HERO_VIDEO.duration}
+              transcript={HERO_VIDEO.transcript}
+            />
+          </div>
 
-          <div>
+          <div className="flex flex-col justify-center px-4 py-10 sm:px-6 lg:px-10">
             <SectionHead
               eyebrow="Watch"
               id="watch-heading"
@@ -293,7 +381,7 @@ export default async function LandingPage() {
               lede="A sofa that needed moving in Lekki. Posted at 1:14pm, three applications by 1:23pm, done and paid for by six."
             />
 
-            <ul className="mt-7 space-y-4">
+            <ul className="mt-8 divide-y divide-border border-t border-border">
               {[
                 { icon: Clock, label: 'Posted in under two minutes' },
                 { icon: MapPin, label: '12 hustlers nearby notified instantly' },
@@ -301,29 +389,30 @@ export default async function LandingPage() {
               ].map((item) => {
                 const Icon = item.icon
                 return (
-                  <li key={item.label} className="flex items-center gap-3">
+                  <li key={item.label} className="flex items-center gap-3 py-3.5">
                     <Icon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
-                    <span className="text-sm">{item.label}</span>
+                    <span className="text-body-sm">{item.label}</span>
                   </li>
                 )
               })}
             </ul>
           </div>
         </div>
-      </Section>
+      </Band>
 
       {/* ═══ For posters ════════════════════════════════════════════════════ */}
-      <Section aria-labelledby="posters-heading">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
-          <MediaFrame
-            src={SCENES.post}
-            alt="A job being posted and picked up by hustlers nearby"
-            aspect="wide"
-            rounded="3xl"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
+      <Band aria-labelledby="posters-heading">
+        <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-border">
+          <div className="border-b border-border lg:border-b-0">
+            <MediaFrame
+              src={SCENES.post}
+              alt="A job being posted and picked up by hustlers nearby"
+              aspect="wide"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          </div>
 
-          <div>
+          <div className="flex flex-col justify-center px-4 py-12 sm:px-6 lg:px-10">
             <SectionHead
               eyebrow="If you need something done"
               id="posters-heading"
@@ -331,47 +420,46 @@ export default async function LandingPage() {
               lede="No more calling three people who know a guy. Describe the job once, and the people who actually do it, and who are actually near you, come to you."
             />
 
-            <ul className="mt-7 space-y-3.5">
+            <ul className="mt-8 divide-y divide-border border-y border-border">
               {[
                 'Free to post, no listing fees, no subscription',
                 'Compare ratings, completed jobs and prices side by side',
                 'Message before you commit to anyone',
                 'Your money is held until you confirm the work is done',
               ].map((point) => (
-                <li key={point} className="flex gap-3">
+                <li key={point} className="flex gap-3 py-3.5">
                   <BadgeCheck
-                    className="mt-0.5 size-4 shrink-0 text-muted-foreground"
+                    className="mt-0.5 size-4 shrink-0 text-money"
                     aria-hidden="true"
                   />
-                  <span className="text-sm leading-relaxed">{point}</span>
+                  <span className="text-body-sm leading-relaxed">{point}</span>
                 </li>
               ))}
             </ul>
 
-            <Button asChild size="lg" className="group mt-8 rounded-full px-7">
+            <Button asChild size="lg" variant="primary" className="group mt-8 self-start">
               <Link href="/post">
-                Post a Job
+                Post a job
                 <ArrowRight className="arrow-hover" aria-hidden="true" />
               </Link>
             </Button>
           </div>
         </div>
-      </Section>
+      </Band>
 
       {/* ═══ For hustlers ═══════════════════════════════════════════════════ */}
-      <Section aria-labelledby="hustlers-heading">
-        <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
-          <div className="lg:order-2">
+      <Band aria-labelledby="hustlers-heading">
+        <div className="grid lg:grid-cols-2 lg:divide-x lg:divide-border">
+          <div className="border-b border-border lg:order-2 lg:border-b-0">
             <MediaFrame
               src={SCENES.hustlers}
               alt="Skilled workers available for jobs in nearby areas"
               aspect="wide"
-              rounded="3xl"
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 
-          <div className="lg:order-1">
+          <div className="flex flex-col justify-center px-4 py-12 sm:px-6 lg:order-1 lg:px-10">
             <SectionHead
               eyebrow="If you have a skill"
               id="hustlers-heading"
@@ -390,14 +478,16 @@ export default async function LandingPage() {
                 return (
                   <div key={item.title} className="border-t border-border pt-4">
                     <Icon className="size-4 text-muted-foreground" aria-hidden="true" />
-                    <p className="mt-3 font-display text-sm font-semibold">{item.title}</p>
-                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{item.body}</p>
+                    <p className="mt-3 font-display text-button-sm">{item.title}</p>
+                    <p className="mt-1.5 text-body-sm leading-relaxed text-muted-foreground">
+                      {item.body}
+                    </p>
                   </div>
                 )
               })}
             </RevealGroup>
 
-            <Button asChild size="lg" variant="ink" className="group mt-8 rounded-full px-7">
+            <Button asChild size="lg" variant="primary" className="group mt-9 self-start">
               <Link href="/signup?intent=hustle">
                 Become a hustler
                 <ArrowRight className="arrow-hover" aria-hidden="true" />
@@ -405,7 +495,7 @@ export default async function LandingPage() {
             </Button>
           </div>
         </div>
-      </Section>
+      </Band>
 
       {/* ═══ Hustler stories ════════════════════════════════════════════════ */}
       <Section aria-labelledby="stories-heading">
@@ -416,7 +506,7 @@ export default async function LandingPage() {
           lede="Short films from three of the people earning on Hustle Street across Lagos."
         />
 
-        <RevealGroup as="ul" className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealGroup as="ul" className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {HUSTLER_STORIES.map((story) => (
             <li key={story.id}>
               <StoryCard
@@ -431,17 +521,20 @@ export default async function LandingPage() {
         </RevealGroup>
       </Section>
 
-      {/* ═══ The app ════════════════════════════════════════════════════════ */}
-      <Section aria-labelledby="app-heading">
-        <SectionHead
-          eyebrow="Installs like an app"
-          id="app-heading"
-          title="Built for the phone in your hand"
-          lede="Add it to your home screen. No app store, no 80MB download. It works on a weak connection and keeps your saved jobs available offline."
-          align="center"
-        />
+      {/* ═══ The app ════════════════════════════════════════════════════════
+          Three cells, divided. The phones sit on the muted fill so they read as
+          plates on a sheet rather than as images floating on the page. */}
+      <Band aria-labelledby="app-heading">
+        <div className="gutter py-14 sm:py-20">
+          <SectionHead
+            eyebrow="Installs like an app"
+            id="app-heading"
+            title="Built for the phone in your hand"
+            lede="Add it to your home screen. No app store, no 80MB download. It works on a weak connection and keeps your saved jobs available offline."
+          />
+        </div>
 
-        <RevealGroup className="mt-14 grid gap-12 lg:grid-cols-3 lg:gap-8">
+        <RevealGroup className="grid border-t border-border md:grid-cols-3 md:divide-x md:divide-border">
           {[
             {
               src: APP_SHOTS.home,
@@ -461,60 +554,67 @@ export default async function LandingPage() {
               title: 'Chat, agree, get paid',
               body: 'Every conversation is tied to its job, its agreement and its payment.',
             },
-          ].map((shot) => (
-            <div key={shot.title} className="text-center">
-              <div className="mx-auto max-w-[240px]">
+          ].map((shot, index) => (
+            <div
+              key={shot.title}
+              className={`flex flex-col bg-surface-muted px-6 pt-10 ${
+                index < 2 ? 'border-b border-border md:border-b-0' : ''
+              }`}
+            >
+              <div className="mx-auto w-full max-w-[240px]">
                 <PhoneMockup src={shot.src} alt={shot.alt} />
               </div>
-              <h3 className="mt-8 font-display text-lg font-semibold">{shot.title}</h3>
-              <p className="mx-auto mt-2 max-w-xs text-pretty text-sm leading-relaxed text-muted-foreground">
-                {shot.body}
-              </p>
+              <div className="mt-10 border-t border-border pb-8 pt-5">
+                <h3 className="font-display text-h6">{shot.title}</h3>
+                <p className="mt-2 text-pretty text-body-sm leading-relaxed text-muted-foreground">
+                  {shot.body}
+                </p>
+              </div>
             </div>
           ))}
         </RevealGroup>
-      </Section>
+      </Band>
 
       {/* ═══ FAQ ════════════════════════════════════════════════════════════ */}
-      <Section id="faq" aria-labelledby="faq-heading">
-        <div className="mx-auto max-w-3xl">
-          <SectionHead
-            eyebrow="FAQ"
-            id="faq-heading"
-            title="Questions people actually ask"
-            align="center"
-          />
-          <div className="mt-10">
+      <Band id="faq" aria-labelledby="faq-heading">
+        <div className="grid lg:grid-cols-[0.8fr_1.2fr] lg:divide-x lg:divide-border">
+          {/* Sticky heading beside a scrolling list — the pattern that lets a
+              long accordion keep its context on a tall screen. */}
+          <div className="border-b border-border px-4 py-12 sm:px-6 lg:border-b-0 lg:px-10">
+            <div className="lg:sticky lg:top-[calc(var(--nav-height)+2.5rem)]">
+              <p className="eyebrow">FAQ</p>
+              <h2 id="faq-heading" className="mt-4 text-h3">
+                Questions people actually ask
+              </h2>
+              <p className="mt-4 text-body-sm leading-relaxed text-muted-foreground">
+                Still stuck?{' '}
+                <Link href="/help" className="link-underline text-foreground">
+                  Talk to us
+                </Link>
+                .
+              </p>
+            </div>
+          </div>
+
+          <div className="px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
             <FaqAccordion
               commissionPercent={commissionPercent}
               exampleFee={formatMoney(200_000, 'NGN')}
               exampleNet={formatMoney(200_000 - (200_000 * commissionPercent) / 100, 'NGN')}
             />
           </div>
-          <p className="mt-10 text-center text-sm text-muted-foreground">
-            Still stuck?{' '}
-            <Link href="/help" className="link-underline font-medium text-foreground">
-              Talk to us
-            </Link>
-            .
-          </p>
         </div>
-      </Section>
+      </Band>
 
       <ClosingCta>
-        <Button asChild size="lg" className="group rounded-full px-7">
+        <Button asChild size="lg" variant="brand" className="group">
           <Link href="/post">
-            Post a Job
+            Post a job
             <ArrowRight className="arrow-hover" aria-hidden="true" />
           </Link>
         </Button>
-        <Button
-          asChild
-          size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
-        >
-          <Link href="/explore">Find Work</Link>
+        <Button asChild size="lg" variant="invert-outline">
+          <Link href="/explore">Find work</Link>
         </Button>
       </ClosingCta>
 

@@ -110,7 +110,7 @@ function EmptyState({ icon, title, description, action, secondaryAction, classNa
           {icon}
         </div>
       )}
-      <h3 className="font-display text-lg font-bold tracking-tight">{title}</h3>
+      <h3 className="font-display text-lg font-medium tracking-tight">{title}</h3>
       {description && (
         <p className="max-w-sm text-pretty text-sm leading-relaxed text-muted-foreground">
           {description}
@@ -164,7 +164,7 @@ function ErrorState({
       )}
     >
       <AlertTriangle className="size-7 text-destructive" aria-hidden="true" />
-      <h3 className="font-display text-base font-bold">{title}</h3>
+      <h3 className="font-display text-base font-medium">{title}</h3>
       <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
       {onRetry && (
         <Button size="sm" variant="outline" onClick={onRetry} className="mt-1">
@@ -184,7 +184,7 @@ function OfflineState({ className }: { className?: string }) {
       )}
     >
       <WifiOff className="size-7 text-muted-foreground" aria-hidden="true" />
-      <h3 className="font-display text-base font-bold">You&rsquo;re offline</h3>
+      <h3 className="font-display text-base font-medium">You&rsquo;re offline</h3>
       <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
         Some things still work. Anything you send will go out as soon as you&rsquo;re back on.
       </p>

@@ -50,7 +50,7 @@ export default async function CategoriesPage() {
         image="/media/hero-categories.jpg"
         imageAlt="A woman standing against a painted wall in Lagos"
       >
-        <Button asChild size="lg" className="rounded-full px-7">
+        <Button asChild size="lg">
           <Link href="/explore">
             Browse all jobs
             <ArrowRight aria-hidden="true" />
@@ -125,7 +125,7 @@ export default async function CategoriesPage() {
         title="Not sure which one it fits?"
         body="Describe the job in your own words. We will route it to the people who do that kind of work."
       >
-        <Button asChild size="lg" className="rounded-full px-7">
+        <Button asChild size="lg">
           <Link href="/post">
             Post a Job
             <ArrowRight aria-hidden="true" />
@@ -134,8 +134,7 @@ export default async function CategoriesPage() {
         <Button
           asChild
           size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
+          variant="invert-outline"
         >
           <Link href="/explore">Browse jobs</Link>
         </Button>

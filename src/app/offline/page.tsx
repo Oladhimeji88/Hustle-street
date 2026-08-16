@@ -28,7 +28,7 @@ export default function OfflinePage() {
         <WifiOff className="size-8" />
       </div>
 
-      <h1 className="mt-5 font-display text-2xl font-extrabold tracking-tight">
+      <h1 className="mt-5 text-h4">
         You&rsquo;re offline
       </h1>
 

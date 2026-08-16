@@ -22,7 +22,7 @@ export default async function VerifyPage() {
         <ShieldCheck className="size-5" aria-hidden="true" />
       </div>
 
-      <h1 className="mt-6 text-display-md">Verify your identity</h1>
+      <h1 className="mt-6 text-h3">Verify your identity</h1>
       <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
         Required once, before your first withdrawal. It is what lets posters know the person coming
         to their home is who they say they are, and it is the same check that protects you from

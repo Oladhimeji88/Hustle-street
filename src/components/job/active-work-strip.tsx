@@ -44,7 +44,7 @@ export async function ActiveWorkStrip({ userId }: { userId: string }) {
 
   return (
     <section className="mt-6" aria-labelledby="active-work">
-      <h2 id="active-work" className="mb-2.5 font-display text-lg font-bold tracking-tight">
+      <h2 id="active-work" className="mb-2.5 font-display text-lg font-medium tracking-tight">
         Needs your attention
       </h2>
 
@@ -67,14 +67,14 @@ export async function ActiveWorkStrip({ userId }: { userId: string }) {
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-sm font-bold">
+                  <p className="truncate font-display text-sm font-medium">
                     {assignment.jobs?.title ?? 'Job'}
                   </p>
                   <p className="truncate text-xs text-muted-foreground">{state.detail}</p>
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <p className="font-display text-sm font-extrabold text-money">
+                  <p className="font-mono text-sm font-bold tabular-nums text-money">
                     {formatMoney(
                       isPoster ? assignment.agreed_price_minor : assignment.hustler_net_minor,
                       assignment.currency,

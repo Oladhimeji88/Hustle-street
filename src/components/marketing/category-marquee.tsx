@@ -43,7 +43,7 @@ export function CategoryMarquee({ categories }: { categories: CategoryRow[] }) {
 
   return (
     <div
-      className="marquee relative -mx-4 overflow-hidden sm:-mx-6 lg:-mx-8"
+      className="marquee relative -mx-4 overflow-hidden sm:-mx-6 lg:-mx-10"
       style={{ ['--marquee-duration' as string]: `${seconds}s` }}
     >
       {/* Feathered edges, so tiles enter and leave rather than being cut off by
@@ -59,13 +59,13 @@ export function CategoryMarquee({ categories }: { categories: CategoryRow[] }) {
                   <Link
                     href={`/explore?categories=${category.id}`}
                     tabIndex={copy === 1 ? -1 : undefined}
-                    className="lift group flex h-full flex-col rounded-[8px] border border-border bg-surface p-7 hover:border-foreground/15 hover:bg-surface-muted"
+                    className="lift group flex h-full flex-col rounded-md border border-border bg-surface p-7 hover:border-border-strong hover:bg-surface-muted"
                   >
                     <Icon className="icon-hover size-6 text-muted-foreground" aria-hidden="true" />
-                    <span className="mt-14 font-display text-lg font-semibold leading-snug tracking-tight">
+                    <span className="mt-14 font-display text-h6">
                       {category.name}
                     </span>
-                    <span className="mt-1.5 text-sm tabular-nums text-muted-foreground/70">
+                    <span className="mt-1.5 font-mono text-eyebrow-sm tabular-nums text-muted-foreground">
                       {category.job_count > 0
                         ? `${category.job_count.toLocaleString()} live`
                         : 'Be the first'}

@@ -196,7 +196,7 @@ export function PostJobWizard({ categories }: { categories: CategorySummary[] })
   return (
     <div className="mx-auto w-full max-w-xl px-4 pb-32 pt-4 sm:px-6">
       {/* Progress */}
-      <div className="sticky top-0 z-10 -mx-4 bg-background/95 px-4 pb-3 pt-2 backdrop-blur sm:-mx-6 sm:px-6">
+      <div className="sticky top-0 z-10 -mx-4 border-b border-border bg-background px-4 pb-3 pt-2 sm:-mx-6 sm:px-6">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -229,7 +229,7 @@ export function PostJobWizard({ categories }: { categories: CategorySummary[] })
         </div>
       </div>
 
-      <h1 className="mt-6 text-display-sm">{STEPS[step]}</h1>
+      <h1 className="mt-6 text-h5">{STEPS[step]}</h1>
 
       <div className="mt-5">
         {/* ── 0. Title ─────────────────────────────────────────────────── */}
@@ -482,7 +482,7 @@ export function PostJobWizard({ categories }: { categories: CategorySummary[] })
         {step === 8 && (
           <div className="space-y-3">
             <div className="rounded-2xl border border-border bg-surface p-5">
-              <h2 className="font-display text-lg font-bold leading-snug">{draft.title}</h2>
+              <h2 className="font-display text-lg font-medium leading-snug">{draft.title}</h2>
               <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-muted-foreground">
                 {draft.description}
               </p>
@@ -533,7 +533,7 @@ export function PostJobWizard({ categories }: { categories: CategorySummary[] })
 
       {/* Sticky action bar */}
       <div
-        className="fixed inset-x-0 bottom-0 border-t border-border bg-surface/95 p-4 backdrop-blur md:left-64 xl:left-72"
+        className="fixed inset-x-0 bottom-0 border-t border-border bg-surface p-4 md:left-64 xl:left-72"
         style={{ paddingBottom: 'calc(1rem + var(--safe-bottom) + var(--bottom-nav-height))' }}
       >
         <div className="mx-auto flex max-w-xl gap-2">

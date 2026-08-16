@@ -114,7 +114,7 @@ export default async function HelpPage() {
           <div className="grid gap-px bg-border md:grid-cols-2">
             <div className="bg-surface p-8 sm:p-10">
               <LifeBuoy className="size-5 text-muted-foreground" aria-hidden="true" />
-              <h2 id="contact-heading" className="mt-6 text-display-sm">
+              <h2 id="contact-heading" className="mt-6 text-h5">
                 Still stuck?
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -133,7 +133,7 @@ export default async function HelpPage() {
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
                     Fastest route for anything tied to a live job, because the thread comes with it.
                   </p>
-                  <Button asChild variant="ghost" size="sm" className="mt-3 rounded-full">
+                  <Button asChild variant="ghost" size="sm" className="mt-3">
                     <Link href="/login?next=/home">
                       Open the app
                       <ArrowUpRight aria-hidden="true" />

@@ -47,7 +47,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
     return (
       <Link
         href={`/hustlers/${hustler.username}`}
-        className="street-card flex w-[180px] shrink-0 flex-col items-center gap-2 p-4 text-center focus-visible:ring-2 focus-visible:ring-ring"
+        className="street-card flex w-[180px] shrink-0 flex-col items-center gap-2 p-4 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
       >
         <Avatar
           src={hustler.avatar_url}
@@ -57,7 +57,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
           online={hustler.available_now}
         />
         <div className="min-w-0">
-          <p className="truncate text-sm font-bold">{hustler.display_name}</p>
+          <p className="truncate font-display text-body-base font-medium">{hustler.display_name}</p>
           {hustler.headline && (
             <p className="truncate text-xs text-muted-foreground">{hustler.headline}</p>
           )}
@@ -88,7 +88,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-1.5">
-              <h3 className="truncate font-display text-base font-bold leading-tight">
+              <h3 className="truncate font-display text-base font-medium leading-tight">
                 {hustler.display_name}
               </h3>
               {hustler.identity_verified && (
@@ -136,7 +136,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
           {priceLabel && (
             <div className="shrink-0 text-right">
               <p className="text-[11px] uppercase tracking-wide text-muted-foreground">From</p>
-              <p className="font-display text-base font-extrabold text-money">{priceLabel}</p>
+              <p className="font-mono text-base font-bold tabular-nums text-money">{priceLabel}</p>
             </div>
           )}
         </div>
@@ -179,7 +179,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
                   event.stopPropagation()
                   onInvite(hustler.id)
                 }}
-                className="relative z-10 ml-auto rounded-lg bg-primary-soft px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                className="relative z-10 ml-auto rounded-lg bg-primary-soft px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 Invite
               </button>

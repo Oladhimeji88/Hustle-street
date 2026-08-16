@@ -20,7 +20,7 @@ export function LegalDoc({
   sections: { heading: string; body: React.ReactNode }[]
 }) {
   return (
-    <div className="container py-16 sm:py-20">
+    <div className="gutter py-14 sm:py-20">
       <div className="mx-auto max-w-2xl">
         <p className="eyebrow">Last updated {updated}</p>
 
@@ -49,7 +49,7 @@ export function LegalDoc({
         <div className="mt-12 space-y-12">
           {sections.map((section, index) => (
             <section key={section.heading} id={`section-${index + 1}`} className="scroll-mt-24">
-              <h2 className="flex gap-3 text-display-sm">
+              <h2 className="flex gap-3 text-h5">
                 <span className="shrink-0 tabular-nums text-muted-foreground/50">{index + 1}</span>
                 {section.heading}
               </h2>

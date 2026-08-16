@@ -42,7 +42,7 @@ export default async function ExplorePage() {
         imageAlt="A rider making their way through Lagos traffic"
       />
 
-      <section className="container py-14 sm:py-20">
+      <section className="gutter py-14 sm:py-20">
         {/* useSearchParams inside JobBrowser needs a Suspense boundary — the
             landing page's search box and the category rail both arrive here
             with a query string to seed the filters from. */}
@@ -55,7 +55,7 @@ export default async function ExplorePage() {
         title="Nothing here for you yet?"
         body="Create a profile and we will notify you the moment a job matching your skills is posted nearby."
       >
-        <Button asChild size="lg" className="rounded-full px-7">
+        <Button asChild size="lg">
           <Link href="/signup?intent=hustle">
             Become a hustler
             <ArrowRight aria-hidden="true" />
@@ -64,8 +64,7 @@ export default async function ExplorePage() {
         <Button
           asChild
           size="lg"
-          variant="outline"
-          className="rounded-full border-white/20 bg-transparent px-7 text-white hover:bg-white/10 hover:text-white"
+          variant="invert-outline"
         >
           <Link href="/how-it-works">How it works</Link>
         </Button>

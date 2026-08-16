@@ -10,6 +10,12 @@ import { cn } from '@/lib/utils'
  * Used for categories, filters, skills and quick actions. Deliberately chunky:
  * these are the main way people navigate on a phone, so they are sized for
  * thumbs, not cursors.
+ *
+ * Now a small square cell rather than a pill. A row of pills reads as tags
+ * scattered on the page; a row of 6px-cornered cells reads as a set of switches
+ * belonging to the grid, which is what a filter row actually is. Selection is
+ * ink rather than orange — orange is a brand plane in this system, and a filter
+ * being on is a state, not a brand moment.
  */
 
 export interface ChipProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onSelect'> {
@@ -23,9 +29,9 @@ export interface ChipProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonEle
 const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
   ({ className, selected, icon, count, size = 'md', onRemove, children, ...props }, ref) => {
     const sizes = {
-      sm: 'h-8 px-3 text-xs gap-1.5 [&_svg]:size-3.5',
-      md: 'h-10 px-4 text-sm gap-2 [&_svg]:size-4',
-      lg: 'h-12 px-5 text-[15px] gap-2 [&_svg]:size-4.5',
+      sm: 'h-8 px-3 text-button-sm gap-1.5 [&_svg]:size-3.5',
+      md: 'h-10 px-4 text-button-sm gap-2 [&_svg]:size-4',
+      lg: 'h-12 px-5 text-button-lg gap-2 [&_svg]:size-4',
     }
 
     return (
@@ -34,13 +40,13 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         type="button"
         aria-pressed={selected}
         className={cn(
-          'inline-flex shrink-0 items-center justify-center rounded-full border font-medium transition-all duration-150',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-          'active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50',
+          'inline-flex shrink-0 items-center justify-center rounded-md border font-display transition-colors duration-150',
+          'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+          'active:translate-y-px disabled:pointer-events-none disabled:opacity-50',
           sizes[size],
           selected
-            ? 'border-primary bg-primary text-primary-foreground shadow-sm'
-            : 'border-border bg-surface text-foreground hover:border-primary/40 hover:bg-primary-soft',
+            ? 'border-ink bg-ink text-ink-foreground'
+            : 'border-border bg-surface text-foreground hover:border-border-strong hover:bg-surface-muted',
           className,
         )}
         {...props}
@@ -50,8 +56,8 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         {count !== undefined && count > 0 && (
           <span
             className={cn(
-              'rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums',
-              selected ? 'bg-primary-foreground/20' : 'bg-muted text-muted-foreground',
+              'rounded-sm px-1.5 py-0.5 font-mono text-eyebrow-sm tabular-nums',
+              selected ? 'bg-ink-foreground/20' : 'bg-surface-muted text-muted-foreground',
             )}
           >
             {count}
@@ -66,7 +72,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
               event.stopPropagation()
               onRemove()
             }}
-            className="-mr-1 ml-0.5 rounded-full p-0.5 opacity-70 transition-opacity hover:opacity-100"
+            className="-mr-1 ml-0.5 rounded-sm p-0.5 opacity-70 transition-opacity hover:opacity-100"
           >
             <X aria-hidden="true" />
           </span>

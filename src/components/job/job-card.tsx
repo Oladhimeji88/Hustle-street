@@ -70,7 +70,7 @@ export function JobCard({
     return (
       <Link
         href={`/jobs/${job.id}`}
-        className="street-card block w-[260px] shrink-0 p-4 focus-visible:ring-2 focus-visible:ring-ring"
+        className="street-card block w-[260px] shrink-0 p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         data-surface={surface}
       >
         <div className="flex items-start justify-between gap-2">
@@ -79,10 +79,10 @@ export function JobCard({
           </Badge>
           <UrgencyBadge urgency={job.urgency} />
         </div>
-        <h3 className="mt-2.5 line-clamp-2 font-display text-[15px] font-bold leading-snug">
+        <h3 className="mt-2.5 line-clamp-2 font-display text-[15px] font-medium leading-snug">
           {job.title}
         </h3>
-        <p className="mt-2 font-display text-lg font-extrabold text-money">{budget}</p>
+        <p className="mt-2 font-mono text-lg font-bold tabular-nums text-money">{budget}</p>
         <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
           {isRemote ? <Wifi className="size-3.5" /> : <MapPin className="size-3.5" />}
           <span className="truncate">{locationLabel}</span>
@@ -122,7 +122,7 @@ export function JobCard({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between gap-2">
-              <h3 className="line-clamp-2 font-display text-[15px] font-bold leading-snug sm:text-base">
+              <h3 className="line-clamp-2 font-display text-[15px] font-medium leading-snug sm:text-base">
                 {job.title}
               </h3>
 
@@ -136,14 +136,14 @@ export function JobCard({
                   }}
                   aria-label={saved ? 'Remove from saved jobs' : 'Save this job'}
                   aria-pressed={saved}
-                  className="relative z-10 -mr-1 -mt-1 flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="relative z-10 -mr-1 -mt-1 flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   <Bookmark className={cn('size-[18px]', saved && 'fill-primary text-primary')} />
                 </button>
               )}
             </div>
 
-            <p className="mt-1.5 font-display text-lg font-extrabold leading-none text-money">
+            <p className="mt-1.5 font-mono text-lg font-bold leading-none tabular-nums text-money">
               {budget}
             </p>
 

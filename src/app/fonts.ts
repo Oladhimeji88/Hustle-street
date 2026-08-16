@@ -1,75 +1,62 @@
-import { Archivo, Figtree } from 'next/font/google'
+import { Inter, Inter_Tight, Space_Mono } from 'next/font/google'
 
 /**
- * Typography.
+ * Typography — three faces, three jobs.
  *
- * ── Body: Figtree ──────────────────────────────────────────────────────────
- * Geometric sans with a slightly rounded, friendly axis. Holds up at 12–14px on
- * the cheap Android screens that make up most of this market, and reads warmer
- * than a neutral grotesque — which suits a product about people helping people.
+ * This mirrors the type system Mistral ships: a tight neo-grotesque for every
+ * piece of chrome (headings, nav, buttons), a neutral workhorse for body copy,
+ * and a monospace reserved for labels and numerals. The separation is the point:
+ * the display face never sets a paragraph, and the body face never sets a
+ * heading, so the two never blur into one texture.
  *
- * ── Display: GRIFTER ───────────────────────────────────────────────────────
- * GRIFTER is a COMMERCIAL typeface. It is not on Google Fonts and cannot be
- * fetched at build time — it must be licensed and self-hosted.
+ * ── Display: Inter Tight ───────────────────────────────────────────────────
+ * Mistral sets its chrome in ALTMistral, a commissioned face that is not
+ * licensable. Inter Tight is the honest substitute rather than an approximation
+ * of convenience: it is a true neo-grotesque with the same narrowed advance
+ * widths, and it holds the -0.02em tracking at 500 weight that gives Mistral's
+ * headings their density. Crucially it is a *sibling* of the body face below,
+ * so the pairing stays in the same skeleton instead of reading as two brands.
  *
- * To activate it:
- *   1. Buy a webfont licence covering your expected traffic.
- *   2. Drop the files into `src/fonts/grifter/`:
- *        GRIFTERBold.woff2       (weight 700)
- *        GRIFTERBlack.woff2      (weight 900, optional)
- *   3. Swap the export at the bottom of this file from `displayFallback` to
- *      `grifter`.
+ * Everything here is set at 500. Mistral has no 700 or 800 anywhere in its type
+ * scale — weight is not how it makes a heading loud; size and tracking are.
+ * Shipping the 400/500/600 cuts only is deliberate, not an oversight.
  *
- * Until then the fallback below ships. It is deliberately chosen to sit in the
- * same territory — heavy, squarish, athletic — so swapping GRIFTER in later
- * shifts the texture without breaking any layout.
+ * ── Body: Inter ────────────────────────────────────────────────────────────
+ * The face Mistral actually sets its body copy in. Nothing to substitute.
  *
- * Shipping an unlicensed commercial font is a real legal exposure, so this is
- * opt-in rather than something wired up on your behalf.
+ * ── Mono: Space Mono ───────────────────────────────────────────────────────
+ * Also Mistral's own choice. Used for eyebrows, metadata and tabular numerals —
+ * the places where a slightly mechanical voice signals "this is data, not prose".
+ * Grotesque-flavoured rather than typewriter, so it sits beside Inter without
+ * the jarring shift a Courier-lineage mono would introduce.
  */
 
-export const body = Figtree({
+/** Body copy. Mistral's own body face. */
+export const body = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['400', '500', '600'],
 })
 
 /**
- * Stand-in for GRIFTER until the licensed files are present.
+ * Headings, nav, buttons — all chrome.
  *
- * Archivo's heaviest cut: square-ish terminals, tight apertures and a compact
- * width, which is the closest free approximation of GRIFTER's blocky,
- * sign-painted feel.
+ * 400 exists for the rare large-but-quiet line; 500 is the default every step of
+ * the scale resolves to; 600 is the ceiling, used only where a label has to
+ * separate from an adjacent one at the same size.
  */
-const displayFallback = Archivo({
+export const display = Inter_Tight({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  // 400/500 carry the headlines. Archivo only reads blocky in its heavy cuts —
-  // at these weights it is a clean, faintly condensed grotesque, which is what
-  // the quiet layout wants. 600/700 stay for the few places that need emphasis.
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
 })
 
-/*
- * The real thing. Uncomment once `src/fonts/grifter/` contains the licensed
- * files — `next/font/local` throws at build time if a path is missing, which is
- * why this cannot simply be left in place with a runtime check. Restore the
- * import along with it:
- *
- * import localFont from 'next/font/local'
- *
- * const grifter = localFont({
- *   variable: '--font-display',
- *   display: 'swap',
- *   fallback: ['Archivo', 'system-ui', 'sans-serif'],
- *   src: [
- *     { path: '../fonts/grifter/GRIFTERBold.woff2',  weight: '700', style: 'normal' },
- *     { path: '../fonts/grifter/GRIFTERBlack.woff2', weight: '900', style: 'normal' },
- *   ],
- * })
- */
-
-// Swap this to `grifter` after adding the licensed files.
-export const display = displayFallback
+/** Eyebrows, metadata, numerals. */
+export const mono = Space_Mono({
+  subsets: ['latin'],
+  variable: '--font-mono',
+  display: 'swap',
+  weight: ['400', '700'],
+})

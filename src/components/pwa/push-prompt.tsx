@@ -102,7 +102,7 @@ export function PushPermissionPrompt() {
         type="button"
         onClick={dismiss}
         aria-label="Not now"
-        className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"
+        className="absolute right-2 top-2 flex size-8 items-center justify-center rounded-md text-muted-foreground hover:bg-secondary"
       >
         <X className="size-4" />
       </button>
@@ -111,7 +111,7 @@ export function PushPermissionPrompt() {
         <Bell className="size-5" aria-hidden="true" />
       </div>
 
-      <p className="mt-2.5 font-display text-sm font-bold">Never miss a job</p>
+      <p className="mt-2.5 font-display text-sm font-medium">Never miss a job</p>
       <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
         Get alerted when a job lands near you, or when someone replies.
       </p>

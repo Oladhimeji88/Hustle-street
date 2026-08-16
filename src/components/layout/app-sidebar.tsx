@@ -101,7 +101,7 @@ export function AppSidebar({
         {SECTIONS.map((section, index) => (
           <div key={section.label ?? index} className={cn(index > 0 && 'mt-5')}>
             {section.label && (
-              <h2 className="px-3 pb-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              <h2 className="eyebrow px-3 pb-1.5">
                 {section.label}
               </h2>
             )}
@@ -123,7 +123,7 @@ export function AppSidebar({
                       aria-current={active ? 'page' : undefined}
                       className={cn(
                         'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
-                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                        'focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                         active
                           ? 'bg-primary-soft text-primary'
                           : 'text-foreground/75 hover:bg-secondary hover:text-foreground',
@@ -132,7 +132,7 @@ export function AppSidebar({
                       <Icon className="size-[18px] shrink-0" aria-hidden="true" />
                       <span className="flex-1 truncate">{item.label}</span>
                       {badge > 0 && (
-                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 text-[10px] font-bold text-destructive-foreground">
+                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 font-mono text-[10px] text-destructive-foreground">
                           {badge > 99 ? '99+' : badge}
                         </span>
                       )}

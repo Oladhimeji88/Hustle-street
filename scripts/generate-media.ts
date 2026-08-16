@@ -24,18 +24,23 @@ import sharp from 'sharp'
 
 const OUT = join(process.cwd(), 'public', 'media')
 
-// Brand palette, mirroring globals.css.
-const STREET = '#FF5A1F'
-const STREET_SOFT = '#FFE8DE'
-const INK = '#0B0F13'
-const INK_2 = '#151B22'
-const PAPER = '#FAF9F7'
-const SURFACE = '#FFFFFF'
-const MONEY = '#00A86B'
-const MONEY_SOFT = '#E1F5EC'
-const MUTED = '#8A93A0'
-const BORDER = '#E8E3DD'
-const WARNING = '#F5A524'
+// Brand palette, mirroring globals.css. Keep these in step with the tokens —
+// generated art that is one shade off reads as a different product.
+const STREET = '#FF5229' // --primary
+const STREET_SOFT = '#FFF0EB' // --primary-soft
+const INK = '#151524' // --ink
+const INK_2 = '#242433'
+const PAPER = '#FBFBF8' // --background
+// Panels sit at the same fill as the page in this system; they are told apart by
+// their border, so SURFACE is no longer a lighter white.
+const SURFACE = '#FBFBF8'
+const MONEY = '#1F6B4C' // --money
+const MONEY_SOFT = '#EAF6F0'
+const MUTED = '#686873' // --muted-foreground
+const BORDER = '#E4E3DE' // --border
+const WARNING = '#FFAF01' // --sun
+const TANGERINE = '#FF8204'
+const AZURE = '#0082E6'
 
 /* ── helpers ─────────────────────────────────────────────────────────────── */
 
@@ -86,15 +91,15 @@ const PHONE_H = 844
 /** A job card as it actually renders, at phone width. */
 function jobCard(y: number, title: string, price: string, meta: string, emoji: string, urgent = false) {
   return `
-    ${rect(16, y, PHONE_W - 32, 108, { r: 18, fill: SURFACE, stroke: BORDER })}
-    ${rect(30, y + 16, 56, 56, { r: 14, fill: STREET_SOFT })}
+    ${rect(16, y, PHONE_W - 32, 108, { r: 6, fill: SURFACE, stroke: BORDER })}
+    ${rect(30, y + 16, 56, 56, { r: 6, fill: STREET_SOFT })}
     ${text(58, y + 52, emoji, { size: 26, anchor: 'middle' })}
     ${text(98, y + 34, title, { size: 14, weight: 700 })}
-    ${text(98, y + 58, price, { size: 17, weight: 800, fill: MONEY })}
+    ${text(98, y + 58, price, { size: 17, weight: 600, fill: MONEY })}
     ${text(98, y + 80, meta, { size: 11, fill: MUTED })}
     ${
       urgent
-        ? `${rect(PHONE_W - 78, y + 14, 48, 20, { r: 10, fill: '#FDE7EA' })}
+        ? `${rect(PHONE_W - 78, y + 14, 48, 20, { r: 4, fill: '#FDE7EA' })}
            ${text(PHONE_W - 54, y + 28, 'ASAP', { size: 9, weight: 700, fill: '#C22B3E', anchor: 'middle' })}`
         : ''
     }`
@@ -118,45 +123,45 @@ function appHome() {
     <circle cx="40" cy="76" r="20" fill="${STREET_SOFT}"/>
     ${text(40, 82, 'K', { size: 16, weight: 700, fill: '#8A3A00', anchor: 'middle' })}
     ${text(70, 70, 'Welcome back', { size: 11, fill: MUTED })}
-    ${text(70, 88, 'Kemi', { size: 16, weight: 800 })}
+    ${text(70, 88, 'Kemi', { size: 16, weight: 600 })}
     <circle cx="${PHONE_W - 36}" cy="76" r="16" fill="${SURFACE}" stroke="${BORDER}"/>
     <circle cx="${PHONE_W - 30}" cy="70" r="5" fill="${STREET}"/>
 
     <!-- location pill -->
-    ${rect(20, 106, 168, 30, { r: 15, fill: SURFACE, stroke: BORDER })}
+    ${rect(20, 106, 168, 30, { r: 6, fill: SURFACE, stroke: BORDER })}
     <circle cx="38" cy="121" r="4" fill="${STREET}"/>
     ${text(50, 126, 'Lekki Phase 1', { size: 12, weight: 600 })}
 
     <!-- hero question -->
-    ${text(20, 178, 'What do you need', { size: 25, weight: 800 })}
-    ${text(20, 208, 'done?', { size: 25, weight: 800 })}
+    ${text(20, 178, 'What do you need', { size: 25, weight: 600 })}
+    ${text(20, 208, 'done?', { size: 25, weight: 600 })}
 
     <!-- search -->
-    ${rect(20, 228, PHONE_W - 40, 52, { r: 16, fill: SURFACE, stroke: BORDER })}
+    ${rect(20, 228, PHONE_W - 40, 52, { r: 6, fill: SURFACE, stroke: BORDER })}
     <circle cx="46" cy="254" r="7" fill="none" stroke="${MUTED}" stroke-width="2"/>
     <line x1="51" y1="259" x2="56" y2="264" stroke="${MUTED}" stroke-width="2" stroke-linecap="round"/>
     ${text(68, 259, 'Search for a job, service or skill…', { size: 12.5, fill: MUTED })}
 
     <!-- quick actions -->
-    ${rect(20, 294, 110, 72, { r: 18, fill: STREET })}
-    ${text(75, 330, '+', { size: 26, weight: 800, fill: '#fff', anchor: 'middle' })}
+    ${rect(20, 294, 110, 72, { r: 6, fill: STREET })}
+    ${text(75, 330, '+', { size: 26, weight: 600, fill: '#fff', anchor: 'middle' })}
     ${text(75, 352, 'Post a Job', { size: 11, weight: 700, fill: '#fff', anchor: 'middle' })}
-    ${rect(140, 294, 110, 72, { r: 18, fill: SURFACE, stroke: BORDER })}
+    ${rect(140, 294, 110, 72, { r: 6, fill: SURFACE, stroke: BORDER })}
     ${text(195, 352, 'Find Work', { size: 11, weight: 700, anchor: 'middle' })}
-    ${rect(260, 294, 110, 72, { r: 18, fill: SURFACE, stroke: BORDER })}
+    ${rect(260, 294, 110, 72, { r: 6, fill: SURFACE, stroke: BORDER })}
     ${text(315, 352, 'Hustlers', { size: 11, weight: 700, anchor: 'middle' })}
 
     <!-- category chips -->
     ${chips
       .map((label, i) => {
         const x = 20 + i * 92
-        return `${rect(x, 388, 84, 34, { r: 17, fill: SURFACE, stroke: BORDER })}
+        return `${rect(x, 388, 84, 34, { r: 6, fill: SURFACE, stroke: BORDER })}
                 ${text(x + 42, 410, label, { size: 11, weight: 600, anchor: 'middle' })}`
       })
       .join('')}
 
     <!-- section header -->
-    ${text(20, 452, 'Jobs near you', { size: 18, weight: 800 })}
+    ${text(20, 452, 'Jobs near you', { size: 18, weight: 600 })}
     ${text(PHONE_W - 20, 452, 'See all', { size: 12, weight: 600, fill: STREET, anchor: 'end' })}
 
     ${jobCard(470, 'Help move a sofa', '₦25,000', '1.8 km · Lekki · 3 applicants', '📦', true)}
@@ -180,27 +185,27 @@ function appHome() {
       })
       .join('')}
     <circle cx="${PHONE_W / 2}" cy="${PHONE_H - 52}" r="27" fill="${STREET}"/>
-    ${text(PHONE_W / 2, PHONE_H - 43, '+', { size: 28, weight: 800, fill: '#fff', anchor: 'middle' })}
+    ${text(PHONE_W / 2, PHONE_H - 43, '+', { size: 28, weight: 600, fill: '#fff', anchor: 'middle' })}
   </svg>`
 }
 
 function appDiscover() {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${PHONE_W}" height="${PHONE_H}" viewBox="0 0 ${PHONE_W} ${PHONE_H}">
     ${phoneChrome()}
-    ${text(20, 78, 'Discover', { size: 24, weight: 800 })}
+    ${text(20, 78, 'Discover', { size: 24, weight: 600 })}
 
     <!-- filter chips -->
     ${['Nearest', 'Under ₦20k', 'Today', 'Remote']
       .map((label, i) => {
         const x = 20 + i * 88
         const on = i === 0
-        return `${rect(x, 98, 80, 32, { r: 16, fill: on ? STREET : SURFACE, stroke: on ? STREET : BORDER })}
+        return `${rect(x, 98, 80, 32, { r: 6, fill: on ? STREET : SURFACE, stroke: on ? STREET : BORDER })}
                 ${text(x + 40, 119, label, { size: 10.5, weight: 600, fill: on ? '#fff' : INK, anchor: 'middle' })}`
       })
       .join('')}
 
     <!-- map panel -->
-    ${rect(16, 146, PHONE_W - 32, 200, { r: 20, fill: '#E9EFEA' })}
+    ${rect(16, 146, PHONE_W - 32, 200, { r: 6, fill: '#E9EFEA' })}
     <path d="M16 300 Q 120 250 200 288 T 374 262" stroke="#CBD6CE" stroke-width="14" fill="none"/>
     <path d="M90 146 Q 130 220 96 346" stroke="#CBD6CE" stroke-width="10" fill="none"/>
     <path d="M250 146 Q 232 240 288 346" stroke="#D6DED8" stroke-width="8" fill="none"/>
@@ -214,7 +219,7 @@ function appDiscover() {
       .map(([x, y]) => `<circle cx="${x}" cy="${y}" r="13" fill="${STREET}" stroke="#fff" stroke-width="3"/>`)
       .join('')}
     <circle cx="220" cy="272" r="17" fill="${MONEY}" stroke="#fff" stroke-width="3"/>
-    ${text(220, 278, '₦', { size: 14, weight: 800, fill: '#fff', anchor: 'middle' })}
+    ${text(220, 278, '₦', { size: 14, weight: 600, fill: '#fff', anchor: 'middle' })}
 
     ${text(20, 384, '24 jobs nearby', { size: 15, weight: 700 })}
     ${text(PHONE_W - 20, 384, 'Nearest ▾', { size: 12, weight: 600, fill: MUTED, anchor: 'end' })}
@@ -228,11 +233,11 @@ function appDiscover() {
 
 function appChat() {
   const bubbleIn = (y: number, w: number, lines: string[]) => `
-    ${rect(20, y, w, 22 + lines.length * 19, { r: 18, fill: SURFACE, stroke: BORDER })}
+    ${rect(20, y, w, 22 + lines.length * 19, { r: 6, fill: SURFACE, stroke: BORDER })}
     ${lines.map((l, i) => text(36, y + 28 + i * 19, l, { size: 12.5 })).join('')}`
 
   const bubbleOut = (y: number, w: number, lines: string[]) => `
-    ${rect(PHONE_W - 20 - w, y, w, 22 + lines.length * 19, { r: 18, fill: STREET })}
+    ${rect(PHONE_W - 20 - w, y, w, 22 + lines.length * 19, { r: 6, fill: STREET })}
     ${lines
       .map((l, i) => text(PHONE_W - 36, y + 28 + i * 19, l, { size: 12.5, fill: '#fff', anchor: 'end' }))
       .join('')}`
@@ -250,12 +255,12 @@ function appChat() {
     ${text(84, 98, 'Available now', { size: 11, fill: MONEY })}
 
     <!-- job context strip -->
-    ${rect(16, 134, PHONE_W - 32, 56, { r: 14, fill: STREET_SOFT })}
+    ${rect(16, 134, PHONE_W - 32, 56, { r: 6, fill: STREET_SOFT })}
     ${text(32, 158, 'Help move a sofa', { size: 12.5, weight: 700 })}
     ${text(32, 178, 'Agreed ₦25,000', { size: 11.5, weight: 600, fill: '#8A3A00' })}
 
     <!-- system: payment secured -->
-    ${rect(78, 206, PHONE_W - 156, 34, { r: 17, fill: MONEY_SOFT })}
+    ${rect(78, 206, PHONE_W - 156, 34, { r: 6, fill: MONEY_SOFT })}
     ${text(PHONE_W / 2, 228, '🔒  Payment secured', { size: 11.5, weight: 600, fill: '#0B5138', anchor: 'middle' })}
 
     ${bubbleIn(258, 244, ['Good afternoon. I can be there', 'by 4pm with my vehicle.'])}
@@ -264,18 +269,18 @@ function appChat() {
     ${bubbleOut(504, 150, ['See you at 4.'])}
 
     <!-- system: submitted -->
-    ${rect(64, 568, PHONE_W - 128, 34, { r: 17, fill: '#FFF4E0' })}
+    ${rect(64, 568, PHONE_W - 128, 34, { r: 6, fill: '#FFF4E0' })}
     ${text(PHONE_W / 2, 590, '✓  Marked as done', { size: 11.5, weight: 600, fill: '#7A5200', anchor: 'middle' })}
 
     <!-- confirm CTA -->
-    ${rect(16, 622, PHONE_W - 32, 92, { r: 18, fill: SURFACE, stroke: BORDER })}
+    ${rect(16, 622, PHONE_W - 32, 92, { r: 6, fill: SURFACE, stroke: BORDER })}
     ${text(32, 650, 'Confirm to release payment', { size: 13, weight: 700 })}
     ${text(32, 670, 'Auto-releases in 71 hours', { size: 11, fill: MUTED })}
-    ${rect(32, 682, PHONE_W - 64, 20, { r: 10, fill: MONEY })}
+    ${rect(32, 682, PHONE_W - 64, 20, { r: 4, fill: MONEY })}
     ${text(PHONE_W / 2, 696, 'Confirm & release ₦25,000', { size: 11, weight: 700, fill: '#fff', anchor: 'middle' })}
 
     <!-- composer -->
-    ${rect(16, PHONE_H - 76, PHONE_W - 88, 46, { r: 23, fill: SURFACE, stroke: BORDER })}
+    ${rect(16, PHONE_H - 76, PHONE_W - 88, 46, { r: 6, fill: SURFACE, stroke: BORDER })}
     ${text(40, PHONE_H - 47, 'Message…', { size: 12.5, fill: MUTED })}
     <circle cx="${PHONE_W - 40}" cy="${PHONE_H - 53}" r="23" fill="${STREET}"/>
     <path d="M${PHONE_W - 48} ${PHONE_H - 53} l16 -7 -6 7 6 7 z" fill="#fff"/>
@@ -330,16 +335,16 @@ function videoPoster(title: string, subtitle: string, duration: string, w = 1280
     <circle cx="${w / 2}" cy="${h / 2 - 30}" r="62" fill="#ffffff" opacity="0.94"/>
     <path d="M${w / 2 - 18} ${h / 2 - 60} l46 30 -46 30 z" fill="${INK}"/>
 
-    ${text(w / 2, h / 2 + 76, title, { size: 42, weight: 800, fill: PAPER, anchor: 'middle' })}
+    ${text(w / 2, h / 2 + 76, title, { size: 42, weight: 600, fill: PAPER, anchor: 'middle' })}
     ${text(w / 2, h / 2 + 116, subtitle, { size: 21, weight: 500, fill: PAPER, anchor: 'middle', opacity: 0.62 })}
 
-    ${rect(w - 132, h - 76, 96, 38, { r: 19, fill: '#000000', opacity: 0.55 })}
+    ${rect(w - 132, h - 76, 96, 38, { r: 6, fill: '#000000', opacity: 0.55 })}
     ${text(w - 84, h - 51, duration, { size: 16, weight: 700, fill: PAPER, anchor: 'middle' })}
   </svg>`
 }
 
 /** Portrait poster for a hustler story video. */
-function storyPoster(name: string, trade: string, area: string, accent: string) {
+function storyPoster(name: string, _trade: string, _area: string, accent: string) {
   const w = 720
   const h = 960
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
@@ -351,16 +356,17 @@ function storyPoster(name: string, trade: string, area: string, accent: string) 
     </defs>
     ${rect(0, 0, w, h, { fill: accent })}
     <circle cx="${w * 0.5}" cy="${h * 0.34}" r="150" fill="#ffffff" opacity="0.9"/>
-    ${text(w * 0.5, h * 0.4, name.charAt(0), { size: 140, weight: 800, fill: accent, anchor: 'middle' })}
+    ${text(w * 0.5, h * 0.4, name.charAt(0), { size: 140, weight: 600, fill: accent, anchor: 'middle' })}
     ${rect(0, 0, w, h, { fill: 'url(#s)' })}
 
     <circle cx="${w / 2}" cy="${h * 0.62}" r="44" fill="#ffffff" opacity="0.92"/>
     <path d="M${w / 2 - 13} ${h * 0.62 - 21} l33 21 -33 21 z" fill="${INK}"/>
 
-    ${text(44, h - 108, name, { size: 40, weight: 800, fill: PAPER })}
-    ${text(44, h - 68, trade, { size: 23, weight: 600, fill: STREET })}
-    ${text(44, h - 36, area, { size: 19, weight: 500, fill: PAPER, opacity: 0.6 })}
   </svg>`
+  // Name, trade and area are deliberately NOT drawn here. `StoryCard` renders
+  // them as real text over the poster, and baking a second copy into the image
+  // put two overlapping sets of type in the same corner. Text belongs to the
+  // component, which can restyle and translate it; the image cannot.
 }
 
 /** Coverage map: abstract Lagos with labelled area pins. */
@@ -426,9 +432,9 @@ async function main() {
     720,
   )
 
-  await render(storyPoster('Blessing Adeyemi', 'Makeup Artist', 'Victoria Island', '#B4459A'), 'story-blessing.png', 720, 960)
-  await render(storyPoster('Ibrahim Musa', 'Plumber', 'Yaba', '#1E7FBF'), 'story-ibrahim.png', 720, 960)
-  await render(storyPoster('Ngozi Eze', 'Web Developer', 'Ikeja', '#0F9D6B'), 'story-ngozi.png', 720, 960)
+  await render(storyPoster('Blessing Adeyemi', 'Makeup Artist', 'Victoria Island', TANGERINE), 'story-blessing.png', 720, 960)
+  await render(storyPoster('Ibrahim Musa', 'Plumber', 'Yaba', AZURE), 'story-ibrahim.png', 720, 960)
+  await render(storyPoster('Ngozi Eze', 'Web Developer', 'Ikeja', MONEY), 'story-ngozi.png', 720, 960)
 
   await render(coverageMap(), 'coverage-lagos.png', 1400, 900)
 

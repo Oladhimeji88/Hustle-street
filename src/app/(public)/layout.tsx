@@ -8,7 +8,14 @@ export default async function PublicLayout({ children }: { children: React.React
   return (
     <div className="flex min-h-dvh flex-col">
       <SiteHeader signedIn={Boolean(user)} />
-      <main id="main" className="flex-1">
+      {/*
+       * `.ruled` is the site's spine — a 1728px column with a hairline down each
+       * side. Applying it here rather than per-section is what makes the two
+       * vertical rules continuous from the header to the footer instead of
+       * restarting at every band. Sections inside only supply their own bottom
+       * rule and their gutter.
+       */}
+      <main id="main" className="ruled flex-1">
         {children}
       </main>
       <SiteFooter />

@@ -60,7 +60,7 @@ export default async function HomePage() {
           />
           <span className="min-w-0">
             <span className="block text-xs text-muted-foreground">Welcome back</span>
-            <span className="block truncate font-display text-base font-bold">{firstName}</span>
+            <span className="block truncate font-display text-base font-medium">{firstName}</span>
           </span>
         </Link>
 
@@ -72,7 +72,7 @@ export default async function HomePage() {
           >
             <Bell className="size-5" aria-hidden="true" />
             {(unreadNotifications ?? 0) > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex size-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 text-[9px] font-bold text-destructive-foreground">
+              <span className="absolute right-1.5 top-1.5 flex size-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 font-mono text-[9px] text-destructive-foreground">
                 {unreadNotifications! > 9 ? '9+' : unreadNotifications}
               </span>
             )}
@@ -86,7 +86,7 @@ export default async function HomePage() {
 
       {/* ── Hero ────────────────────────────────────────────────────────── */}
       <section className="mt-5" aria-labelledby="home-hero">
-        <h1 id="home-hero" className="text-display-sm">
+        <h1 id="home-hero" className="text-h5">
           What do you need done?
         </h1>
 

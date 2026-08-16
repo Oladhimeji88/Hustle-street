@@ -1,5 +1,50 @@
 import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { extendTailwindMerge } from 'tailwind-merge'
+
+/**
+ * The type scale's custom `text-*` steps, declared so tailwind-merge can tell a
+ * size from a colour.
+ *
+ * This is load-bearing, not housekeeping. tailwind-merge resolves conflicts by
+ * class group, and `text-*` is ambiguous — it is the prefix for both font size
+ * and text colour. Out of the box it only recognises Tailwind's own size names
+ * (`text-sm`, `text-lg`, …), so a custom step like `text-button-sm` fell through
+ * to the colour group. Two classes then landed in the same group:
+ *
+ *   text-ink-foreground   (from a button's `variant`)
+ *   text-button-sm        (from its `size`)
+ *
+ * and the later one silently won — which is how every ink-filled button ended up
+ * with an invisible label, ink text on an ink fill.
+ *
+ * Listing the scale here puts the sizes in `font-size` where they belong, leaving
+ * everything else under `text-` to resolve as a colour. Any new step added to
+ * `fontSize` in tailwind.config.ts must be added here too.
+ */
+const FONT_SIZES = [
+  'display',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'body-lg',
+  'body-base',
+  'body-sm',
+  'button-lg',
+  'button-sm',
+  'eyebrow',
+  'eyebrow-sm',
+]
+
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [{ text: FONT_SIZES }],
+    },
+  },
+})
 
 /** Tailwind-aware class merge used by every component in the design system. */
 export function cn(...inputs: ClassValue[]) {

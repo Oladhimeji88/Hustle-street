@@ -4,23 +4,38 @@ import { BadgeCheck, Clock, Flame, ShieldCheck, Wifi } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { ApplicationStatus, JobStatus, TransactionStatus } from '@/types/database'
 
+/**
+ * Status badges — small mono-set cells.
+ *
+ * Two changes from the pill version. The shape is a 4px-cornered rectangle, so a
+ * badge sits inside the grid rather than floating on it. And the label is set in
+ * the mono face, which is doing real work here: it marks the text as *state read
+ * off a record* rather than as prose someone wrote, which is exactly what a
+ * status is. Uppercase with open tracking keeps it legible at 11px.
+ *
+ * `primary` uses `primary-text` rather than `primary` — the raw orange only
+ * clears AA at large sizes, and a badge is the smallest text on the page.
+ */
 const badgeVariants = cva(
-  'inline-flex items-center gap-1 rounded-full font-medium whitespace-nowrap [&_svg]:shrink-0',
+  'inline-flex items-center gap-1 rounded-sm font-mono uppercase tracking-[0.06em] whitespace-nowrap [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         neutral: 'bg-secondary text-secondary-foreground',
-        primary: 'bg-primary-soft text-primary',
+        primary: 'bg-primary-soft text-primary-text',
         money: 'bg-money-soft text-money',
         warning: 'bg-warning-soft text-warning-foreground',
         destructive: 'bg-destructive-soft text-destructive',
         outline: 'border border-border text-muted-foreground',
-        solid: 'bg-foreground text-background',
+        solid: 'bg-ink text-ink-foreground',
+        /* The brand plane, for the one badge per screen that is a brand moment
+           rather than a status. Ink label — see the note in button.tsx. */
+        brand: 'bg-primary text-primary-foreground',
       },
       size: {
-        sm: 'px-2 py-0.5 text-[11px] [&_svg]:size-3',
-        md: 'px-2.5 py-1 text-xs [&_svg]:size-3.5',
-        lg: 'px-3 py-1.5 text-sm [&_svg]:size-4',
+        sm: 'px-1.5 py-0.5 text-eyebrow-sm [&_svg]:size-3',
+        md: 'px-2 py-0.5 text-eyebrow-sm [&_svg]:size-3.5',
+        lg: 'px-2.5 py-1 text-eyebrow [&_svg]:size-4',
       },
     },
     defaultVariants: { variant: 'neutral', size: 'md' },

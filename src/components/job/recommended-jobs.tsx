@@ -45,11 +45,11 @@ export function RecommendedJobs() {
             {job.reason}
           </Badge>
 
-          <h3 className="line-clamp-2 font-display text-[15px] font-bold leading-snug">
+          <h3 className="line-clamp-2 font-display text-[15px] font-medium leading-snug">
             {job.title}
           </h3>
 
-          <p className="font-display text-lg font-extrabold text-money">
+          <p className="font-mono text-lg font-bold tabular-nums text-money">
             {formatBudget(job.budget_min_minor, job.budget_max_minor, job.currency)}
           </p>
 

@@ -110,7 +110,7 @@ export function SignUpForm() {
         >
           <Mail className="size-6" />
         </div>
-        <h1 className="mt-4 font-display text-2xl font-extrabold tracking-tight">Check your email</h1>
+        <h1 className="mt-4 text-h4">Check your email</h1>
         <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">
           We sent a confirmation link to{' '}
           <span className="font-medium text-foreground">{form.getValues('email')}</span>. Click it to
@@ -134,7 +134,7 @@ export function SignUpForm() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-extrabold tracking-tight">Create your account</h1>
+      <h1 className="text-h4">Create your account</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">
         One account to post jobs and to hustle.
       </p>
@@ -326,7 +326,7 @@ export function SignInForm() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-extrabold tracking-tight">Welcome back</h1>
+      <h1 className="text-h4">Welcome back</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">Log in to keep hustling.</p>
 
       <Tabs defaultValue="email" className="mt-6">
@@ -587,7 +587,7 @@ export function RequestPasswordResetForm() {
         >
           <Mail className="size-6" />
         </div>
-        <h1 className="mt-4 font-display text-2xl font-extrabold tracking-tight">Check your email</h1>
+        <h1 className="mt-4 text-h4">Check your email</h1>
         <p className="mt-2 text-pretty text-sm leading-relaxed text-muted-foreground">
           If an account exists for that address, we&rsquo;ve sent a link to reset your password.
         </p>
@@ -600,7 +600,7 @@ export function RequestPasswordResetForm() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-extrabold tracking-tight">Reset your password</h1>
+      <h1 className="text-h4">Reset your password</h1>
       <p className="mt-1.5 text-sm text-muted-foreground">
         We&rsquo;ll email you a link to choose a new one.
       </p>
@@ -656,7 +656,7 @@ export function NewPasswordForm() {
 
   return (
     <div>
-      <h1 className="font-display text-2xl font-extrabold tracking-tight">Choose a new password</h1>
+      <h1 className="text-h4">Choose a new password</h1>
 
       <form
         onSubmit={form.handleSubmit(async (values) => {

@@ -96,7 +96,7 @@ export function LocationBar() {
       <SheetTrigger asChild>
         <button
           type="button"
-          className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-sm transition-colors hover:border-primary/40"
+          className="inline-flex max-w-full items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-sm transition-colors hover:border-primary/40"
         >
           <MapPin className="size-4 shrink-0 text-primary" aria-hidden="true" />
           <span className="truncate font-medium">{label}</span>

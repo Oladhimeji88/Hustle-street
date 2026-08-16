@@ -36,12 +36,12 @@ const Label = React.forwardRef<
 Label.displayName = 'Label'
 
 const inputBase = cn(
-  'flex w-full rounded-xl border border-input bg-surface px-3.5 text-foreground',
+  'flex w-full rounded-md border border-input bg-surface px-3.5 text-foreground',
   'placeholder:text-muted-foreground/70',
   'transition-colors duration-150',
-  'focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25',
+  'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring',
   'disabled:cursor-not-allowed disabled:bg-muted disabled:opacity-70',
-  'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:ring-destructive/25',
+  'aria-[invalid=true]:border-destructive aria-[invalid=true]:focus-visible:outline-destructive',
 )
 
 export interface InputProps
@@ -105,7 +105,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {addonStart && (
           <span
             className={cn(
-              'inline-flex items-center rounded-l-xl border border-r-0 border-input bg-muted px-3.5 text-muted-foreground',
+              'inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3.5 text-muted-foreground',
               heights[inputSize],
             )}
             aria-hidden="true"
@@ -123,7 +123,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {addonEnd && (
           <span
             className={cn(
-              'inline-flex items-center rounded-r-xl border border-l-0 border-input bg-muted px-3.5 text-muted-foreground',
+              'inline-flex items-center rounded-r-md border border-l-0 border-input bg-muted px-3.5 text-muted-foreground',
               heights[inputSize],
             )}
             aria-hidden="true"
