@@ -170,7 +170,7 @@ export function PageHero({
  * Numbered editorial step. Shared by /how-it-works and the landing page so the
  * two descriptions of the same process cannot drift apart visually.
  *
- * The index is set in the mono face at full contrast rather than as a faded
+ * The index is set in the label face at full contrast rather than as a faded
  * display numeral. A step number is data — a position in a sequence — and the
  * mono says so.
  */
@@ -189,7 +189,7 @@ export function Step({
   // animating parent to trigger the variant, so it simply renders as-is.
   return (
     <RevealItem as="li" className="border-t border-border pt-5">
-      <span className="font-mono text-eyebrow-sm tabular-nums text-primary-text">
+      <span className="font-label text-eyebrow-sm tabular-nums text-primary-text">
         {String(index).padStart(2, '0')}
       </span>
       <h3 className="mt-3 font-display text-h6">{title}</h3>

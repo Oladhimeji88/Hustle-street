@@ -47,7 +47,7 @@ const FOOTER_SECTIONS = [
  * and the four link columns are divided by the same vertical hairlines the header
  * uses, so the rules run unbroken from the top of the page to the bottom.
  *
- * Column headings are set in the mono face. On a footer this matters more than it
+ * Column headings are set in the label face. On a footer this matters more than it
  * sounds — it separates "category of link" from "link" without needing a weight
  * change or a colour change, which is what keeps twenty small links legible as
  * four groups rather than as one list.
@@ -70,7 +70,7 @@ export function SiteFooter() {
             <p className="mt-4 max-w-xs text-pretty text-body-sm leading-relaxed text-muted-foreground">
               The digital street where people who need things done meet people ready to hustle.
             </p>
-            <p className="mt-5 font-mono text-eyebrow-sm uppercase tracking-[0.08em] text-muted-foreground">
+            <p className="mt-5 font-label text-eyebrow-sm uppercase tracking-[0.12em] text-muted-foreground">
               Built in Lagos
             </p>
           </div>
@@ -86,7 +86,7 @@ export function SiteFooter() {
                 index < 2 ? 'border-b border-border lg:border-b-0' : '',
               ].join(' ')}
             >
-              <h2 className="font-mono text-eyebrow-sm uppercase tracking-[0.08em] text-muted-foreground">
+              <h2 className="font-label text-eyebrow-sm uppercase tracking-[0.12em] text-muted-foreground">
                 {section.title}
               </h2>
               <ul className="mt-4 space-y-2.5">
@@ -107,7 +107,7 @@ export function SiteFooter() {
 
         {/* Legal row. */}
         <div className="flex flex-col gap-3 border-b border-border px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-10">
-          <p className="font-mono text-eyebrow-sm text-muted-foreground">
+          <p className="font-label text-eyebrow-sm text-muted-foreground">
             © {year} Hustle Street
           </p>
           <p className="max-w-xl text-pretty text-eyebrow-sm leading-relaxed text-muted-foreground">

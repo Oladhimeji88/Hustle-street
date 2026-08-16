@@ -112,7 +112,7 @@ export function NearbyJobsPreview() {
                       .join(' · ')}
                   </span>
                 </span>
-                <span className="shrink-0 font-mono text-sm font-bold tabular-nums text-money">
+                <span className="shrink-0 font-label text-sm font-semibold tabular-nums text-money">
                   {formatBudget(job.budget_min_minor, job.budget_max_minor, job.currency, job.budget_kind)}
                 </span>
               </Link>

@@ -118,7 +118,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-sans)'],
         display: ['var(--font-display)'],
-        mono: ['var(--font-mono)'],
+        label: ['var(--font-label)'],
       },
       /**
        * The type scale, lifted from Mistral's own tokens.

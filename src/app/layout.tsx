@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { body, display, mono } from './fonts'
+import { body, display, label } from './fonts'
 import { publicEnv } from '@/lib/config/env'
 import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/toast'
@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en-NG"
       suppressHydrationWarning
-      className={`${display.variable} ${body.variable} ${mono.variable}`}
+      className={`${display.variable} ${body.variable} ${label.variable}`}
     >
       <body>
         {/* Keyboard users must be able to skip the nav on every page. */}

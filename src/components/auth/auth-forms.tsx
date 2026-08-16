@@ -539,7 +539,7 @@ export function PhoneAuthForm({ next = '/home' }: { next?: string }) {
           placeholder="000000"
           autoComplete="one-time-code"
           autoFocus
-          className="text-center font-mono text-2xl tracking-[0.4em]"
+          className="text-center font-label text-2xl tracking-[0.4em]"
         />
       </Field>
 

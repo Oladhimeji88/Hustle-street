@@ -72,7 +72,7 @@ export default async function HomePage() {
           >
             <Bell className="size-5" aria-hidden="true" />
             {(unreadNotifications ?? 0) > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex size-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 font-mono text-[9px] text-destructive-foreground">
+              <span className="absolute right-1.5 top-1.5 flex size-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 font-label text-[9px] text-destructive-foreground">
                 {unreadNotifications! > 9 ? '9+' : unreadNotifications}
               </span>
             )}

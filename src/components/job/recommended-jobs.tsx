@@ -49,7 +49,7 @@ export function RecommendedJobs() {
             {job.title}
           </h3>
 
-          <p className="font-mono text-lg font-bold tabular-nums text-money">
+          <p className="font-label text-lg font-semibold tabular-nums text-money">
             {formatBudget(job.budget_min_minor, job.budget_max_minor, job.currency)}
           </p>
 

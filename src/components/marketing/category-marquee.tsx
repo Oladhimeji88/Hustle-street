@@ -65,7 +65,7 @@ export function CategoryMarquee({ categories }: { categories: CategoryRow[] }) {
                     <span className="mt-14 font-display text-h6">
                       {category.name}
                     </span>
-                    <span className="mt-1.5 font-mono text-eyebrow-sm tabular-nums text-muted-foreground">
+                    <span className="mt-1.5 font-label text-eyebrow-sm tabular-nums text-muted-foreground">
                       {category.job_count > 0
                         ? `${category.job_count.toLocaleString()} live`
                         : 'Be the first'}

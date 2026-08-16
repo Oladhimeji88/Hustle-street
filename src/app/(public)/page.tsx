@@ -90,7 +90,7 @@ const BLOCKS = [
   { tone: 'bg-surface-muted', grow: 'lg:flex-[1]', label: 'Errands', count: '3.1k' },
 ]
 
-/** Divided figures. Mono numerals, one cell each, vertical rules between them. */
+/** Divided figures. Tabular numerals, one cell each, vertical rules between them. */
 const FIGURES = [
   { value: '12k+', label: 'Jobs completed' },
   { value: '4.8', label: 'Average rating' },
@@ -218,7 +218,7 @@ export default async function LandingPage() {
               key={block.label}
               className={`tech-dot tech-dot-tl relative flex flex-1 flex-col justify-end overflow-hidden p-3 outline outline-1 -outline-offset-1 outline-border sm:p-4 ${block.tone} ${block.grow}`}
             >
-              <span className="font-mono text-eyebrow-sm uppercase tracking-[0.08em] text-ink/70">
+              <span className="font-label text-eyebrow-sm uppercase tracking-[0.12em] text-ink/70">
                 {block.count}
               </span>
               <span className="font-display text-button-sm text-ink">{block.label}</span>
@@ -228,13 +228,13 @@ export default async function LandingPage() {
       </section>
 
       {/* ═══ Figures ════════════════════════════════════════════════════════
-          A row of cells divided by vertical rules. Mono numerals, because these
+          A row of cells divided by vertical rules. Tabular numerals, because these
           are readings rather than headlines. */}
       <Band>
         <RevealGroup className="grid grid-cols-2 divide-x divide-y divide-border lg:grid-cols-4 lg:divide-y-0">
           {FIGURES.map((figure) => (
             <div key={figure.label} className="px-4 py-7 sm:px-6 lg:px-10">
-              <p className="font-mono text-h4 tabular-nums">{figure.value}</p>
+              <p className="font-label text-h4 tabular-nums">{figure.value}</p>
               <p className="mt-1.5 text-body-sm text-muted-foreground">{figure.label}</p>
             </div>
           ))}

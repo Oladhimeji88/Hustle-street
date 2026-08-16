@@ -82,7 +82,7 @@ export function JobCard({
         <h3 className="mt-2.5 line-clamp-2 font-display text-[15px] font-medium leading-snug">
           {job.title}
         </h3>
-        <p className="mt-2 font-mono text-lg font-bold tabular-nums text-money">{budget}</p>
+        <p className="mt-2 font-label text-lg font-semibold tabular-nums text-money">{budget}</p>
         <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
           {isRemote ? <Wifi className="size-3.5" /> : <MapPin className="size-3.5" />}
           <span className="truncate">{locationLabel}</span>
@@ -143,7 +143,7 @@ export function JobCard({
               )}
             </div>
 
-            <p className="mt-1.5 font-mono text-lg font-bold leading-none tabular-nums text-money">
+            <p className="mt-1.5 font-label text-lg font-semibold leading-none tabular-nums text-money">
               {budget}
             </p>
 

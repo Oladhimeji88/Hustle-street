@@ -136,7 +136,7 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
           {priceLabel && (
             <div className="shrink-0 text-right">
               <p className="text-[11px] uppercase tracking-wide text-muted-foreground">From</p>
-              <p className="font-mono text-base font-bold tabular-nums text-money">{priceLabel}</p>
+              <p className="font-label text-base font-semibold tabular-nums text-money">{priceLabel}</p>
             </div>
           )}
         </div>

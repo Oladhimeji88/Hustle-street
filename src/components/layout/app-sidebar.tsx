@@ -132,7 +132,7 @@ export function AppSidebar({
                       <Icon className="size-[18px] shrink-0" aria-hidden="true" />
                       <span className="flex-1 truncate">{item.label}</span>
                       {badge > 0 && (
-                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 font-mono text-[10px] text-destructive-foreground">
+                        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1.5 font-label text-[10px] text-destructive-foreground">
                           {badge > 99 ? '99+' : badge}
                         </span>
                       )}

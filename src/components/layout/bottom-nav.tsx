@@ -106,7 +106,7 @@ export function BottomNav({
                   <Icon className="size-[22px]" aria-hidden="true" />
                   {badge > 0 && (
                     <span
-                      className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 font-mono text-[9px] text-destructive-foreground"
+                      className="absolute -right-2 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-destructive px-1 font-label text-[9px] text-destructive-foreground"
                       aria-label={`${badge} unread`}
                     >
                       {badge > 99 ? '99+' : badge}

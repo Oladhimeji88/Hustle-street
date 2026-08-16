@@ -195,7 +195,7 @@ export function StoryCard({
           {/* Orange measures 4.98:1 against the ink scrim, so it can be type
               here — which it cannot be on paper. */}
           <p className="mt-0.5 font-display text-button-sm text-primary">{trade}</p>
-          <p className="mt-0.5 font-mono text-eyebrow-sm text-ink-foreground/60">{area}</p>
+          <p className="mt-0.5 font-label text-eyebrow-sm text-ink-foreground/60">{area}</p>
         </div>
       </div>
 

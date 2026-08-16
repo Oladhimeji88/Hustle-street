@@ -74,7 +74,7 @@ export async function ActiveWorkStrip({ userId }: { userId: string }) {
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <p className="font-mono text-sm font-bold tabular-nums text-money">
+                  <p className="font-label text-sm font-semibold tabular-nums text-money">
                     {formatMoney(
                       isPoster ? assignment.agreed_price_minor : assignment.hustler_net_minor,
                       assignment.currency,

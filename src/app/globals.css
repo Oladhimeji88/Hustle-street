@@ -385,16 +385,20 @@
      carry two spans, each with its own `tech-dot-*` pair. */
 
   /* ── Labels ─────────────────────────────────────────────────────────────
-     The eyebrow is mono, not small-caps sans. That single swap is most of what
-     signals the technical register: it says "field label" rather than
-     "marketing kicker". Tracking is near-zero because the mono is already wide. */
+     The eyebrow sits in its own face (`--font-label`, Figtree) rather than the
+     body one. Having a third face at all is what makes it read as a field label
+     instead of a marketing kicker.
+
+     Tracking is 0.12em, up from the 0.08em this wanted when the slot held a
+     monospace. A mono brings its own width; a geometric sans does not, and
+     uppercase at 11px closes up and becomes a smudge without the extra air. */
   .eyebrow {
-    @apply font-mono text-[0.6875rem] uppercase tracking-[0.08em] text-muted-foreground;
+    @apply font-label text-[0.6875rem] uppercase tracking-[0.12em] text-muted-foreground;
   }
 
   /* Larger eyebrow, for a section head rather than a cell. */
   .eyebrow-lg {
-    @apply font-mono text-[0.8125rem] tracking-[0.02em] text-muted-foreground;
+    @apply font-label text-[0.8125rem] tracking-[0.02em] text-muted-foreground;
   }
 
   /* ── Panels ─────────────────────────────────────────────────────────────

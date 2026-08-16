@@ -9,15 +9,19 @@ import type { ApplicationStatus, JobStatus, TransactionStatus } from '@/types/da
  *
  * Two changes from the pill version. The shape is a 4px-cornered rectangle, so a
  * badge sits inside the grid rather than floating on it. And the label is set in
- * the mono face, which is doing real work here: it marks the text as *state read
+ * the label face, which is doing real work here: it marks the text as *state read
  * off a record* rather than as prose someone wrote, which is exactly what a
- * status is. Uppercase with open tracking keeps it legible at 11px.
+ * status is.
+ *
+ * Tracking is 0.1em — it was 0.06em while this slot held a monospace, which
+ * supplied its own width. Figtree does not, and these are the smallest uppercase
+ * strings in the product.
  *
  * `primary` uses `primary-text` rather than `primary` — the raw orange only
  * clears AA at large sizes, and a badge is the smallest text on the page.
  */
 const badgeVariants = cva(
-  'inline-flex items-center gap-1 rounded-sm font-mono uppercase tracking-[0.06em] whitespace-nowrap [&_svg]:shrink-0',
+  'inline-flex items-center gap-1 rounded-sm font-label uppercase tracking-[0.1em] whitespace-nowrap [&_svg]:shrink-0',
   {
     variants: {
       variant: {

@@ -170,7 +170,7 @@ export function VideoPlayer({
             )}
 
             {hasVideo && duration && (
-              <span className="absolute bottom-3 right-3 rounded-md bg-ink/80 px-2 py-1 font-mono text-eyebrow-sm tabular-nums text-ink-foreground">
+              <span className="absolute bottom-3 right-3 rounded-md bg-ink/80 px-2 py-1 font-label text-eyebrow-sm tabular-nums text-ink-foreground">
                 {duration}
               </span>
             )}

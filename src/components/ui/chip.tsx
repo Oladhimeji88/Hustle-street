@@ -56,7 +56,7 @@ const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         {count !== undefined && count > 0 && (
           <span
             className={cn(
-              'rounded-sm px-1.5 py-0.5 font-mono text-eyebrow-sm tabular-nums',
+              'rounded-sm px-1.5 py-0.5 font-label text-eyebrow-sm tabular-nums',
               selected ? 'bg-ink-foreground/20' : 'bg-surface-muted text-muted-foreground',
             )}
           >
