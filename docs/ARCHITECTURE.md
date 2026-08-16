@@ -304,5 +304,6 @@ roadmap for evading them.
 - **Query defaults tuned for mobile networks**: one retry, no refetch on window
   focus (which fires on every app switch on a phone), refetch on reconnect.
 - **Emoji category icons** — zero extra requests on a slow connection.
-- **`next/font`** self-hosts Plus Jakarta Sans and Inter, so there is no
-  render-blocking request to a font CDN.
+- **`next/font`** self-hosts Inter Tight, Inter and Space Mono, so there is no
+  render-blocking request to a font CDN. Only the 400/500/600 cuts ship — the
+  type scale has no weight above 500, so heavier files would be dead payload.

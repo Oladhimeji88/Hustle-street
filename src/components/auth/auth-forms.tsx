@@ -215,11 +215,11 @@ export function SignUpForm() {
           label={
             <>
               I agree to the{' '}
-              <Link href="/terms" className="text-primary hover:underline" target="_blank">
+              <Link href="/terms" className="text-primary-text hover:underline" target="_blank">
                 Terms
               </Link>{' '}
               and{' '}
-              <Link href="/privacy" className="text-primary hover:underline" target="_blank">
+              <Link href="/privacy" className="text-primary-text hover:underline" target="_blank">
                 Privacy Policy
               </Link>
             </>
@@ -244,7 +244,7 @@ export function SignUpForm() {
 
       <p className="mt-5 text-center text-sm text-muted-foreground">
         Already have an account?{' '}
-        <Link href="/login" className="font-semibold text-primary hover:underline">
+        <Link href="/login" className="font-medium text-primary-text hover:underline">
           Log in
         </Link>
       </p>
@@ -387,7 +387,7 @@ export function SignInForm() {
             <div className="flex justify-end">
               <Link
                 href="/reset-password"
-                className="text-sm font-medium text-primary hover:underline"
+                className="text-body-sm font-medium text-primary-text hover:underline"
               >
                 Forgot password?
               </Link>
@@ -412,7 +412,7 @@ export function SignInForm() {
 
       <p className="mt-5 text-center text-sm text-muted-foreground">
         New here?{' '}
-        <Link href="/signup" className="font-semibold text-primary hover:underline">
+        <Link href="/signup" className="font-medium text-primary-text hover:underline">
           Create an account
         </Link>
       </p>
@@ -559,7 +559,7 @@ export function PhoneAuthForm({ next = '/home' }: { next?: string }) {
           type="button"
           disabled={resendIn > 0}
           onClick={() => void sendCode(phoneNumber)}
-          className="font-medium text-primary hover:underline disabled:text-muted-foreground disabled:no-underline"
+          className="font-medium text-primary-text hover:underline disabled:text-muted-foreground disabled:no-underline"
         >
           {resendIn > 0 ? `Resend in ${resendIn}s` : 'Resend code'}
         </button>
@@ -637,7 +637,7 @@ export function RequestPasswordResetForm() {
 
       <p className="mt-5 text-center text-sm text-muted-foreground">
         Remembered it?{' '}
-        <Link href="/login" className="font-semibold text-primary hover:underline">
+        <Link href="/login" className="font-medium text-primary-text hover:underline">
           Log in
         </Link>
       </p>

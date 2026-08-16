@@ -251,3 +251,54 @@ situation with evidence and a human decision.
 that are genuinely hard to get right, while leaving all styling to us — which is
 what "avoid generic SaaS styling" requires. A full component library would have
 brought its own visual identity.
+
+---
+
+## 21. The primary button is ink, and orange is a plane
+
+**Decision.** The design system was rebuilt on a hairline grid over warm paper,
+with near-square geometry and no elevation. As part of that, `variant="primary"`
+became near-black and the brand orange moved to its own `brand` variant.
+
+**Why.** Orange was previously the colour of every action, which meant it was the
+colour of "button" rather than the colour of the product. Reserving it for one or
+two moments per screen is what makes it register at all.
+
+Contrast forced the same conclusion independently. The brand orange (`#FF5229`)
+measures **3.12:1** on paper and **2.91:1** on the soft orange fill — fine for an
+icon under WCAG 1.4.11, never legible enough for type. So the palette carries two
+cuts, and which one you reach for is not a matter of taste:
+
+| Use | Token | Ratio |
+| --- | --- | --- |
+| Flat plane, block fill, standalone icon | `primary` | 3.12:1 on paper |
+| Any orange **text** or link | `primary-text` (`#B75002`) | 4.87:1 on paper |
+| Label **on** an orange plane | `primary-foreground` (ink) | 6.15:1 |
+
+White on orange measures 3.24:1 and fails for a button label, which is why the
+orange button is labelled in ink rather than white.
+
+**What was given up.** Orange CTAs were a recognisable Hustle Street asset, and
+the top-of-funnel "Post a job" button keeps them. Everywhere else the action is
+ink, and the brand shows up as the block sequence under the hero, the ramp in the
+footer and the band on the auth panel.
+
+---
+
+## 22. Custom `text-*` scale steps must be declared to `tailwind-merge`
+
+**Decision.** `src/lib/utils.ts` maintains a `FONT_SIZES` list mirroring the
+`fontSize` keys in `tailwind.config.ts`, wired in through `extendTailwindMerge`.
+
+**Why.** `text-` is the prefix for both font size and text colour, so
+`tailwind-merge` disambiguates by matching against the sizes it knows. It knows
+Tailwind's built-in names, not ours — so `text-button-sm` fell through to the
+colour group and collided with `text-ink-foreground` in the same `cn()` call. The
+later class won and the colour was silently dropped, which shipped every
+ink-filled button with an invisible ink-on-ink label.
+
+Nothing about the failure is visible at the type level or in a build: the class
+string looks right in the source and simply arrives short in the DOM.
+
+**Consequence.** Adding a step to `fontSize` without adding it to `FONT_SIZES`
+reintroduces the bug for that step. Both lists live with a comment saying so.

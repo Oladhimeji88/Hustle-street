@@ -379,26 +379,10 @@
     right: -2px;
   }
 
-  /* All four corners at once, for the hero's anchor cells. Two pseudo-elements
-     carry two marks each via a box-shadow trick, so no extra DOM is needed. */
-  .tech-dots-all {
-    @apply relative;
-  }
-  .tech-dots-all::before,
-  .tech-dots-all::after {
-    content: '';
-    @apply absolute z-20 block size-1 bg-ink;
-  }
-  .tech-dots-all::before {
-    top: -2px;
-    left: -2px;
-    box-shadow: calc(100% + 2px) 0 0 hsl(var(--ink));
-  }
-  .tech-dots-all::after {
-    bottom: -2px;
-    left: -2px;
-    box-shadow: calc(100% + 2px) 0 0 hsl(var(--ink));
-  }
+  /* A four-corner variant is deliberately absent. `box-shadow` offsets must be
+     lengths, so the obvious one-element trick (`box-shadow: calc(100% + 2px) 0`)
+     is invalid CSS and fails silently. A cell that wants all four marks should
+     carry two spans, each with its own `tech-dot-*` pair. */
 
   /* ── Labels ─────────────────────────────────────────────────────────────
      The eyebrow is mono, not small-caps sans. That single swap is most of what
