@@ -55,9 +55,12 @@ const config: Config = {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
           soft: 'hsl(var(--primary-soft))',
-          /* The readable cut of the orange. Use for orange type and links —
-             `primary` itself only clears AA at large sizes. */
+          /* The readable cut of the orange. Use for orange type and links on a
+             light ground — `primary` itself is a plane, not a text colour. */
           text: 'hsl(var(--primary-text))',
+          /* The same job on a dark ground: scrims, ink panels, photo overlays.
+             10.66:1 on ink, and fixed across both themes. */
+          invert: 'hsl(var(--primary-invert))',
         },
         /* Secondary brand planes, for block sequences that need more than one
            colour. Flat fills only — none of these are text colours. */

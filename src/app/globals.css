@@ -27,10 +27,10 @@
  *
  * ── Colour roles ────────────────────────────────────────────────────────────
  *
- *   street  #FF5229   hustle orange. A BLOCK FILL and an accent, not a link
- *                     colour: it measures 3.12:1 on paper, which clears AA for
- *                     large text only. `--primary-text` below is the darker cut
- *                     to reach for whenever orange has to be read as a word.
+ *   street  #E02900   hustle orange. A BLOCK FILL and an accent, not a link
+ *                     colour. It takes a WHITE label at 4.68:1. For orange read
+ *                     as a word, reach for `--primary-text` on a light ground
+ *                     and `--primary-invert` on a dark one — never this.
  *   ink     #09090B   near-black. Every primary action. This is the largest
  *                     departure from the old system, where the primary button
  *                     was orange — but a black action with orange reserved for
@@ -64,33 +64,42 @@
     --popover-foreground: 240 6% 10%;
 
     /* ── Brand orange ───────────────────────────────────────────────────────
-       Full saturation, unlike the burnt 44% the old system dropped to for
-       contrast. It can be full-strength here precisely because it is no longer
-       doing the job of a text colour: it fills blocks and marks accents, and
-       `--primary-text` handles the cases that need to be legible as type. */
-    --primary: 11 100% 58%; /* #FF5229 */
-    /*
-     * White on orange, by design decision.
+     * Full saturation, and darkened to 44% lightness so that white can label it.
      *
-     * Worth knowing what this costs: white on #FF5229 measures **3.24:1**, which
-     * clears WCAG AA for *large* text (3:1) but not for normal-size text (4.5:1).
-     * A 14px button label is normal-size, so orange buttons are below AA on
-     * contrast. Ink would have measured 6.15:1.
+     * The previous note here said to keep the plane at 58% and accept that white
+     * button labels sat at 3.24:1 — below AA for normal-size text — on the
+     * grounds that the labels are short and every orange CTA has an ink-filled
+     * equivalent. That trade has been taken off the table: white labels were the
+     * requirement, so the plane moved instead of the label.
      *
-     * Two things keep this from being reckless. Orange is never the only path to
-     * an action — every orange CTA on the site has an ink-filled equivalent
-     * elsewhere in the flow — and the labels are short, high-frequency words
-     * ("Post a job") rather than content anyone has to read carefully.
+     * Same hue, same full saturation, lightness 58% → 44%. White now measures
+     * **4.68:1**, which clears AA at any size.
      *
-     * If AA on these buttons becomes a requirement, do not change this token —
-     * change `--primary` to `11 100% 44%` (#E02900), where white reaches 4.68:1.
-     * Same hue, same saturation, and it keeps white labels.
+     * What this changes elsewhere, stated plainly rather than discovered later:
+     *
+     *   - orange as an ICON on paper: 3.15:1 → 4.52:1. Better; it was already
+     *     under the 3:1 non-text floor at some sizes and is now clear of it.
+     *   - orange as TYPE on paper: 3.15:1 → 4.52:1, though `--primary-text`
+     *     remains the correct token for that and nothing should be using this.
+     *   - orange as TYPE on a dark ground: 5.53:1 → 3.86:1. This is the one
+     *     regression, and it is why `--primary-invert` exists below. The two
+     *     call sites that did this have been moved onto it.
      */
+    --primary: 11 100% 44%; /* #E02900 */
     --primary-foreground: 0 0% 100%;
     --primary-soft: 15 100% 96%; /* #FFF0EB */
     /* The readable cut. 4.87:1 on paper — use for orange links and orange body
        text, never `--primary`. */
     --primary-text: 26 98% 36%; /* #B75002 */
+    /* Orange as type on a dark ground: a video scrim, an ink panel, a photo
+       overlay. 10.66:1 on `--ink`.
+
+       Fixed rather than theme-dependent, for the same reason `--ink` and
+       `--border-invert` are: the grounds it sits on are dark in both themes, so
+       a token that flipped with the theme would be correct in one of them and
+       invisible in the other. `--primary-text` is the light-ground counterpart;
+       neither is a substitute for the other. */
+    --primary-invert: 17 100% 80%; /* #FFB598 */
 
     /* Secondary brand planes, for a block sequence that needs more than one
        colour. Straight from Mistral's own set. */
@@ -176,14 +185,17 @@
     --popover: 240 17% 17%;
     --popover-foreground: 0 0% 98%;
 
-    /* Orange holds at full strength on navy — it reads brighter against dark, so
-       it needs no lift. The label stays white, matching light mode: the orange
-       plane is the same colour in both themes, so its label should be too. */
-    --primary: 11 100% 58%;
+    /* The orange plane is the same colour in both themes, so it takes the same
+       44% cut and the same white label. Holding 58% here would have meant a
+       button that passes AA in light mode and fails it in dark, which is the
+       kind of split nobody remembers to check. */
+    --primary: 11 100% 44%; /* #E02900 */
     --primary-foreground: 0 0% 100%;
     --primary-soft: 240 20% 18%;
     /* On dark, the *light* cut is the readable one. */
     --primary-text: 17 100% 80%; /* #FFB598 */
+    /* Same value as light mode by definition — see the note on the light block. */
+    --primary-invert: 17 100% 80%; /* #FFB598 */
 
     --tangerine: 30 100% 51%;
     --sun: 41 100% 50%;

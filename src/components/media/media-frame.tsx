@@ -192,9 +192,11 @@ export function StoryCard({
         />
         <div className="absolute inset-x-0 bottom-0 p-4">
           <p className="font-display text-h6 text-ink-foreground">{name}</p>
-          {/* Orange measures 4.98:1 against the ink scrim, so it can be type
-              here — which it cannot be on paper. */}
-          <p className="mt-0.5 font-display text-button-sm text-primary">{trade}</p>
+          {/* The light cut of the orange, because this is orange as type on a
+              dark ground. The plane colour would measure 3.86:1 here since it
+              was darkened to carry white button labels; `primary-invert` is
+              10.66:1 and is the token that exists for exactly this. */}
+          <p className="mt-0.5 font-display text-button-sm text-primary-invert">{trade}</p>
           <p className="mt-0.5 font-label text-eyebrow-sm text-ink-foreground/60">{area}</p>
         </div>
       </div>

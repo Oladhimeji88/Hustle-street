@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ShieldCheck, Star, Zap } from 'lucide-react'
+import Image from 'next/image'
 import { Logo } from '@/components/layout/logo'
 
 /**
@@ -41,16 +41,42 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/*
-       * The dark half. Two radial gradients used to bloom behind this copy; they
-       * are gone, because a soft glow is the one thing this design language has no
-       * vocabulary for. What replaces them is flat: the brand ramp as a vertical
-       * band down the left edge, and a border-left hairline tying the panel to the
-       * grid. Colour arrives as an object with edges, not as light.
+       * The dark half, now a single full-bleed photograph rather than a headline
+       * and three feature rows.
+       *
+       * Losing the copy loses the argument it was making, and that is the point:
+       * the three claims it made — posting takes two minutes, money is held until
+       * the job is done, reviews are earned — are the same three the rest of the
+       * site makes at length. Repeating them beside a login form was re-selling
+       * someone who has already decided. A photograph of the work does the one
+       * job left worth doing here, which is to say what this is.
+       *
+       * The brand ramp stays. It is the element that ties the panel to the grid
+       * on every other page, and it now doubles as the edge that stops the image
+       * bleeding into the form column.
        */}
       <aside
-        className="relative hidden overflow-hidden border-l border-border-invert bg-ink text-ink-foreground lg:flex lg:flex-col lg:justify-center"
-        aria-label="Why Hustle Street"
+        className="relative hidden overflow-hidden border-l border-border-invert bg-ink lg:block"
+        aria-label="Hustle Street"
       >
+        <Image
+          src="/media/scene-hustlers.jpg"
+          alt=""
+          fill
+          sizes="50vw"
+          priority
+          className="object-cover"
+        />
+
+        {/*
+         * A flat scrim, not a gradient. The image is uncontrolled — it can be
+         * swapped for a lighter one — and the ramp is a set of saturated bands
+         * that need a consistent ground to read against. A wash at a fixed
+         * opacity keeps that stable; a gradient would leave the top band on bare
+         * photograph.
+         */}
+        <div className="absolute inset-0 bg-ink/25" aria-hidden="true" />
+
         {/* The ramp. Five flat bands, full height, 12px wide. */}
         <div className="absolute inset-y-0 left-0 flex w-3 flex-col" aria-hidden="true">
           <div className="w-full flex-1 bg-sun" />
@@ -58,57 +84,6 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <div className="w-full flex-1 bg-primary" />
           <div className="w-full flex-1 bg-primary" />
           <div className="w-full flex-1 bg-money-block" />
-        </div>
-
-        <div className="relative max-w-md pl-20 pr-12">
-          <p className="text-h3">
-            Need it done?
-            <br />
-            Find someone nearby.
-            <br />
-            {/* Orange on the navy measures 4.98:1 — it can be type here, which it
-                cannot be on paper. */}
-            <span className="text-primary">Ready to hustle?</span>
-            <br />
-            Find your next job.
-          </p>
-
-          {/* Hairline rows rather than floating list items, matching the bands
-              that structure every other page. */}
-          <ul className="mt-12 divide-y divide-border-invert border-y border-border-invert">
-            {[
-              {
-                icon: Zap,
-                title: 'Post in two minutes',
-                body: 'Say what you need. Nearby hustlers get notified straight away.',
-              },
-              {
-                icon: ShieldCheck,
-                title: 'Money held until it’s done',
-                body: 'Payment is secured up front and released when you confirm.',
-              },
-              {
-                icon: Star,
-                title: 'Reviews you can trust',
-                body: 'Only people who completed a job together can review each other.',
-              },
-            ].map((item) => {
-              const Icon = item.icon
-              return (
-                <li key={item.title} className="flex gap-4 py-5">
-                  <div className="flex size-9 shrink-0 items-center justify-center border border-border-invert">
-                    <Icon className="size-4 text-primary" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <p className="font-display text-button-sm">{item.title}</p>
-                    <p className="mt-1 text-body-sm leading-relaxed text-ink-foreground/60">
-                      {item.body}
-                    </p>
-                  </div>
-                </li>
-              )
-            })}
-          </ul>
         </div>
       </aside>
     </div>
