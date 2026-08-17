@@ -3,11 +3,11 @@
 import * as React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Bookmark, MapPin, Users, Wifi } from 'lucide-react'
+import { Bookmark, MapPin, Wifi } from 'lucide-react'
 import { cn, countLabel } from '@/lib/utils'
 import { formatBudget } from '@/lib/money'
 import { formatDistanceShort } from '@/lib/geo'
-import { formatSchedule, timeAgo } from '@/lib/format'
+import { formatSchedule } from '@/lib/format'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge, UrgencyBadge } from '@/components/ui/badge'
 import { RatingDisplay } from '@/components/ui/rating'
@@ -25,8 +25,16 @@ import type { JobSearchResult } from '@/types/database'
  *   5. What are my odds?     (applicant count)
  *   6. Can I trust them?     (poster rating + verification)
  *
- * Everything else is noise. The layout is deliberately dense: on a 360px screen
- * a user should see three of these without scrolling.
+ * Everything else is noise — and that list is now enforced rather than merely
+ * stated. The card had grown a posted-at timestamp, an applicant-count badge and
+ * a "Be the first to apply" nudge, none of which answer one of the six: the
+ * timestamp restated the schedule line, and the nudge fired on every job with no
+ * applicants, which is most of them. They are gone, the count moved into the
+ * situational line as text, and the space they freed went into padding.
+ *
+ * The result is fewer elements at more generous spacing rather than a shorter
+ * card, which is the trade that was wanted: density of *information* was never
+ * the problem, density of *marks* was.
  */
 
 export interface JobCardProps {
@@ -98,22 +106,22 @@ export function JobCard({
         <span className="sr-only">View job: {job.title}</span>
       </Link>
 
-      <div className="relative p-4">
-        <div className="flex gap-3.5">
+      <div className="relative p-5">
+        <div className="flex gap-4">
           {job.cover_image ? (
-            <div className="relative size-[68px] shrink-0 overflow-hidden rounded-xl bg-muted">
+            <div className="relative size-[72px] shrink-0 overflow-hidden rounded-xl bg-muted">
               <Image
                 src={job.cover_image}
                 alt=""
                 fill
-                sizes="68px"
+                sizes="72px"
                 className="object-cover"
                 unoptimized={job.cover_image.startsWith('http') === false}
               />
             </div>
           ) : (
             <div
-              className="flex size-[68px] shrink-0 items-center justify-center rounded-xl bg-primary-soft text-2xl"
+              className="flex size-[72px] shrink-0 items-center justify-center rounded-xl bg-primary-soft text-2xl"
               aria-hidden="true"
             >
               {CATEGORY_EMOJI[job.category_slug] ?? '🛠️'}
@@ -136,18 +144,24 @@ export function JobCard({
                   }}
                   aria-label={saved ? 'Remove from saved jobs' : 'Save this job'}
                   aria-pressed={saved}
-                  className="relative z-10 -mr-1 -mt-1 flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                  className="relative z-10 -mr-1.5 -mt-1.5 flex size-9 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   <Bookmark className={cn('size-[18px]', saved && 'fill-primary text-primary')} />
                 </button>
               )}
             </div>
 
-            <p className="mt-1.5 font-label text-lg font-semibold leading-none tabular-nums text-money">
+            <p className="mt-2 font-label text-lg font-semibold leading-none tabular-nums text-money">
               {budget}
             </p>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+            {/*
+             * One line for everything situational: where, when, and how many
+             * people are already in. These were a metadata row plus two badges;
+             * they are the same three facts either way, and as sentence-cased
+             * text they read in one pass instead of three.
+             */}
+            <p className="mt-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1">
                 {isRemote ? (
                   <Wifi className="size-3.5" aria-hidden="true" />
@@ -158,29 +172,32 @@ export function JobCard({
               </span>
               <span aria-hidden="true">·</span>
               <span>{scheduleLabel}</span>
-            </div>
+              {job.application_count > 0 && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{countLabel(job.application_count, 'applicant')}</span>
+                </>
+              )}
+            </p>
           </div>
         </div>
 
-        <div className="mt-3 flex flex-wrap items-center gap-1.5">
+        {/*
+         * Two badges at most, and the second only when it is actually saying
+         * something. This row used to run to four: category, urgency, an
+         * applicant count, and a "Be the first to apply" nudge. The count moved
+         * into the line above, and the nudge went entirely — it fired on every
+         * job with no applicants, which on a quiet board is most of them, so it
+         * marked nothing out. A badge that is always on is decoration.
+         */}
+        <div className="mt-4 flex flex-wrap items-center gap-1.5">
           <Badge variant="neutral" size="sm">
             {job.category_name}
           </Badge>
           <UrgencyBadge urgency={job.urgency} />
-          {job.application_count > 0 && (
-            <Badge variant="outline" size="sm">
-              <Users aria-hidden="true" />
-              {countLabel(job.application_count, 'applicant')}
-            </Badge>
-          )}
-          {job.application_count === 0 && job.published_at && (
-            <Badge variant="money" size="sm">
-              Be the first to apply
-            </Badge>
-          )}
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-3 border-t border-border pt-3">
+        <div className="mt-4 flex items-center justify-between gap-3 border-t border-border pt-4">
           <div className="flex min-w-0 items-center gap-2">
             <Avatar
               src={job.poster_avatar}
@@ -204,13 +221,6 @@ export function JobCard({
           </div>
           <JobContactActions jobId={job.id} posterName={job.poster_name} />
         </div>
-
-        <time
-          className="mt-2 block text-xs text-muted-foreground"
-          dateTime={job.published_at ?? undefined}
-        >
-          {timeAgo(job.published_at)}
-        </time>
       </div>
     </article>
   )

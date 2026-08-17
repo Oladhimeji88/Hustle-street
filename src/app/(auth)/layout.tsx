@@ -5,9 +5,10 @@ import { Logo } from '@/components/layout/logo'
 /**
  * Auth layout.
  *
- * Split screen on desktop: the form on the left where the eye lands, a panel of
- * reasons to bother on the right. On mobile the panel disappears entirely —
- * someone on a phone signing up does not need to be re-sold.
+ * Split screen on desktop: the form on the left where the eye lands, an image on
+ * the right. On mobile the panel disappears entirely — someone on a phone
+ * signing up does not need the decoration, and it is the half that carries no
+ * information, so dropping it costs nothing.
  */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
