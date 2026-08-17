@@ -69,10 +69,24 @@
        doing the job of a text colour: it fills blocks and marks accents, and
        `--primary-text` handles the cases that need to be legible as type. */
     --primary: 11 100% 58%; /* #FF5229 */
-    /* Ink on orange, not white. White measures 3.24:1 and fails AA for a 14px
-       button label; ink measures 6.15:1 and passes comfortably. It is also how
-       Mistral labels its own orange planes. */
-    --primary-foreground: 240 10% 4%;
+    /*
+     * White on orange, by design decision.
+     *
+     * Worth knowing what this costs: white on #FF5229 measures **3.24:1**, which
+     * clears WCAG AA for *large* text (3:1) but not for normal-size text (4.5:1).
+     * A 14px button label is normal-size, so orange buttons are below AA on
+     * contrast. Ink would have measured 6.15:1.
+     *
+     * Two things keep this from being reckless. Orange is never the only path to
+     * an action — every orange CTA on the site has an ink-filled equivalent
+     * elsewhere in the flow — and the labels are short, high-frequency words
+     * ("Post a job") rather than content anyone has to read carefully.
+     *
+     * If AA on these buttons becomes a requirement, do not change this token —
+     * change `--primary` to `11 100% 44%` (#E02900), where white reaches 4.68:1.
+     * Same hue, same saturation, and it keeps white labels.
+     */
+    --primary-foreground: 0 0% 100%;
     --primary-soft: 15 100% 96%; /* #FFF0EB */
     /* The readable cut. 4.87:1 on paper — use for orange links and orange body
        text, never `--primary`. */
@@ -163,9 +177,10 @@
     --popover-foreground: 0 0% 98%;
 
     /* Orange holds at full strength on navy — it reads brighter against dark, so
-       it needs no lift. Ink stays the label colour. */
+       it needs no lift. The label stays white, matching light mode: the orange
+       plane is the same colour in both themes, so its label should be too. */
     --primary: 11 100% 58%;
-    --primary-foreground: 240 10% 4%;
+    --primary-foreground: 0 0% 100%;
     --primary-soft: 240 20% 18%;
     /* On dark, the *light* cut is the readable one. */
     --primary-text: 17 100% 80%; /* #FFB598 */
