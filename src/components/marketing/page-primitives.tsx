@@ -51,9 +51,9 @@ export function Band({ children, className, ...props }: React.ComponentProps<'se
 /**
  * Eyebrow + heading + optional lede.
  *
- * The eyebrow is mono and uppercase. That single choice carries most of the
- * technical register: it reads as a field label on a drawing rather than as a
- * marketing kicker, which is what lets the heading beneath it be a plain sentence.
+ * The eyebrow is uppercase and set in the label face. That single choice carries
+ * most of the register: it reads as a field label rather than as a marketing
+ * kicker, which is what lets the heading beneath it be a plain sentence.
  */
 export function SectionHead({
   eyebrow,
@@ -171,8 +171,8 @@ export function PageHero({
  * two descriptions of the same process cannot drift apart visually.
  *
  * The index is set in the label face at full contrast rather than as a faded
- * display numeral. A step number is data — a position in a sequence — and the
- * mono says so.
+ * display numeral. A step number is data — a position in a sequence — and giving
+ * it the label face rather than the display one says so.
  */
 export function Step({
   index,
