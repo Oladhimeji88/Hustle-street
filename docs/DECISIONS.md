@@ -273,10 +273,20 @@ cuts, and which one you reach for is not a matter of taste:
 | --- | --- | --- |
 | Flat plane, block fill, standalone icon | `primary` | 3.12:1 on paper |
 | Any orange **text** or link | `primary-text` (`#B75002`) | 4.87:1 on paper |
-| Label **on** an orange plane | `primary-foreground` (ink) | 6.15:1 |
+| Label **on** an orange plane | `primary-foreground` (white) | 3.24:1 |
 
-White on orange measures 3.24:1 and fails for a button label, which is why the
-orange button is labelled in ink rather than white.
+**The label on an orange plane is a deliberate exception.** White on `#FF5229`
+measures 3.24:1 — AA for large text, below the 4.5:1 that a normal-size button
+label needs. Ink would have measured 6.15:1 and was the original choice; white
+was chosen afterwards for brand reasons, with the trade-off understood.
+
+What keeps it defensible: orange is never the only route to an action (every
+orange CTA has an ink-filled equivalent elsewhere in the flow), and the labels
+are short, repeated words rather than content anyone reads carefully.
+
+If AA on these buttons becomes a requirement, change `--primary` to
+`11 100% 44%` (`#E02900`) rather than the foreground token — white reaches
+4.68:1 there, at the same hue and saturation.
 
 **What was given up.** Orange CTAs were a recognisable Hustle Street asset, and
 the top-of-funnel "Post a job" button keeps them. Everywhere else the action is

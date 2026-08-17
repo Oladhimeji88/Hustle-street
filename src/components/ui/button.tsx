@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils'
  * as the product's colour rather than as a widget style.
  *
  * It is also the only way the flat-plane treatment works: an orange CTA sitting
- * on an orange block is invisible, whereas ink on orange is 6.15:1.
+ * on an orange block is invisible, whereas the ink fill reads against anything.
  *
  * ── Labels are set in the display face ─────────────────────────────────────
  *
@@ -49,9 +49,11 @@ const buttonVariants = cva(
       variant: {
         /* The default action. Near-black, the darkest thing on the page. */
         primary: 'bg-ink text-ink-foreground hover:bg-ink/88',
-        /* The brand plane. Ink label, not white — white measures 3.24:1 on this
-           orange and fails AA at button sizes. Ink measures 6.15:1, and matches
-           how the orange blocks label themselves. */
+        /* The brand plane. The label is white by design decision; note that
+           white on this orange measures 3.24:1, which clears AA for large text
+           but not for a normal-size button label. See the note on
+           `--primary-foreground` in globals.css for the reasoning and for the
+           darker orange to switch to if AA here becomes a requirement. */
         brand: 'bg-primary text-primary-foreground hover:bg-primary/88',
         money: 'bg-money text-money-foreground hover:bg-money/88',
         /* A filled cell. Reads as part of the grid rather than as a control. */

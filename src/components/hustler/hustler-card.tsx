@@ -181,8 +181,8 @@ export function HustlerCard({ hustler, reason, onInvite, variant = 'default', cl
                 }}
                 /* At rest the label is the readable orange on the soft fill
                    (4.55:1); on hover the fill becomes the full-strength brand
-                   plane and the label flips to ink (6.15:1). Bare `text-primary`
-                   on `bg-primary-soft` measures 2.91:1 and fails outright. */
+                   plane and the label flips to white. Bare `text-primary` on
+                   `bg-primary-soft` measures 2.91:1 and fails outright. */
                 className="relative z-10 ml-auto rounded-md bg-primary-soft px-3 py-1.5 font-display text-button-sm text-primary-text transition-colors hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
               >
                 Invite

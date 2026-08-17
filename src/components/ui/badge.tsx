@@ -33,7 +33,7 @@ const badgeVariants = cva(
         outline: 'border border-border text-muted-foreground',
         solid: 'bg-ink text-ink-foreground',
         /* The brand plane, for the one badge per screen that is a brand moment
-           rather than a status. Ink label — see the note in button.tsx. */
+           rather than a status. White label — see the note in button.tsx. */
         brand: 'bg-primary text-primary-foreground',
       },
       size: {
