@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:mistral.ai)",
+      "Bash(curl -sL \"https://mistral.ai/\" -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/131.0.0.0 Safari/537.36\" -o mistral.html)",
+      "Bash(python -c ' *)",
+      "Bash(sed -i 's/className=\"mt-8 rounded-full px-6\"/className=\"mt-8\"/' \"src/app/\\(public\\)/about/page.tsx\")",
+      "Bash(sed -i 's/className=\"mt-3 rounded-full\"/className=\"mt-3\"/' \"src/app/\\(public\\)/help/page.tsx\")",
+      "Bash(sed -i 's/variant=\"ink\" className=\"rounded-full px-7\"/variant=\"ink\"/' \"src/app/\\(public\\)/how-it-works/page.tsx\")",
+      "Bash(sed -i 's/className=\"ml-auto rounded-full\"/className=\"ml-auto\"/' src/components/hustler/hustler-browser.tsx src/components/job/job-browser.tsx)",
+      "Bash(sed -i 's/justify-center rounded-full/justify-center rounded-md/' src/components/ui/dialog.tsx src/components/ui/sheet.tsx src/components/pwa/install-prompt.tsx src/components/pwa/push-prompt.tsx src/components/auth/liveness-capture.tsx src/components/job/job-contact-actions.tsx)",
+      "Bash(sed -i \"s/rounded-t-3xl/rounded-t-lg/; s/rounded-b-3xl/rounded-b-lg/; s|bg-foreground/45 backdrop-blur-\\\\[2px\\\\]|bg-ink/50|\" src/components/ui/sheet.tsx)",
+      "Bash(sed -i \"s/focus-visible:ring-2 focus-visible:ring-ring/focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring/g\" src/components/ui/sheet.tsx)",
+      "Bash(awk -F: '{print $2}')",
+      "Bash(sed -i 's|<div className=\"container pb-4\">|<div className=\"gutter pb-4\">|' \"src/app/\\(public\\)/cookies/page.tsx\")",
+      "Bash(sed -i 's|<section className=\"container py-14 sm:py-20\">|<section className=\"gutter py-14 sm:py-20\">|' \"src/app/\\(public\\)/explore/page.tsx\" \"src/app/\\(public\\)/hustlers/page.tsx\")",
+      "Bash(sed -i 's|<div className=\"container py-16 sm:py-20\">|<div className=\"gutter py-14 sm:py-20\">|' src/components/marketing/legal-doc.tsx)",
+      "Bash(./node_modules/.bin/tsc --noEmit)",
+      "Bash(sed -i 's|<p className=\"truncate text-sm font-bold\">{hustler.display_name}</p>|<p className=\"truncate font-display text-body-base font-medium\">{hustler.display_name}</p>|' src/components/hustler/hustler-card.tsx)",
+      "Bash(sed -i 's|<p className=\"text-xs font-bold uppercase tracking-wide text-muted-foreground\">|<p className=\"eyebrow\">|' src/components/media/video-player.tsx)",
+      "Bash(sed -i 's|mt-2 rounded-xl bg-surface-muted p-4|mt-2 rounded-md bg-surface-muted p-4|' src/components/media/video-player.tsx)",
+      "Bash(./node_modules/.bin/next build *)",
+      "Bash(echo \"typecheck exit: $?\")",
+      "Bash(./node_modules/.bin/next start *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3111/)",
+      "Bash(node --input-type=module -e ' *)",
+      "Bash(grep -nB2 -A8 'accent' scripts/generate-media.ts)",
+      "Bash(sort -t' ' -k2 -n)",
+      "Bash(./node_modules/.bin/tsx scripts/generate-media.ts)",
+      "Bash(break)",
+      "Bash(rm -rf .next/cache/images)",
+      "Bash(./node_modules/.bin/vitest run *)"
+    ]
+  }
+}
